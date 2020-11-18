@@ -1,28 +1,42 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
-
 Vue.use(VueRouter);
 
-const routes = [
+const baseRoutes = [
   {
     path: "/",
-    name: "Home",
-    component: Home
+    name: "Home"
   },
   {
     path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
+    name: "About"
   }
 ];
 
 const router = new VueRouter({
-  routes
+  baseRoutes
 });
 
 export default router;
+
+const routeMap = {}; //用于建立完整路由的路由池
+
+function registerRoute(name, route) {
+  routeMap[name] = route;
+}
+
+function parseRoutes(menu) {
+  if (!menu) return;
+  return menu.map(m => ({
+    ...routeMap[m.url],
+    children: parseRoutes(m.submenu)
+  }));
+}
+
+function loadRouters(menuList) {
+  let temp = parseRoutes(menuList);
+  console.log(temp);
+  router.addRoutes(temp); // 追加路由，错误页面必须最后装入
+}
+
+export { routeMap, registerRoute, loadRouters };
