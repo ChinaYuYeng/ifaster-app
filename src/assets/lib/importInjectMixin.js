@@ -1,10 +1,25 @@
-// componentName是动态设定组件的name，主要是为了保证route的name和component的name一致，来实现keep-alive的缓存功能，因为include使用的是route的name
+// 注入额外的配置项
 export default function lazyImport(file, mixins = {}) {
+  console.log(file);
   return () =>
-    import(`@/business/${file}`).then(component => {
-      return {
-        mixins: [mixins],
-        ...component.default
-      };
-    });
+    import(`@/business/views${file}`)
+      .then(component => {
+        let option = component.default;
+        option.mixins
+          ? option.mixins.concat(mixins)
+          : (option.mixins = [mixins]);
+        option.name = file
+          .split("/")
+          .slice(0, -1)
+          .join("-");
+        return option;
+      })
+      .catch(err => {
+        console.log(err.toString());
+        return {
+          render() {
+            return <div>组件加载出错！{err.toString()}</div>;
+          }
+        };
+      });
 }

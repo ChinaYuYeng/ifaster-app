@@ -1,14 +1,11 @@
 <template>
-  <div>
-    <router-view />
-  </div>
+  <div></div>
 </template>
 
 <script>
 export default {
-  name: "system/user",
   created() {
-    console.log(this.test, this.testtest, this);
+    console.log(this, "login");
   }
 };
 </script>

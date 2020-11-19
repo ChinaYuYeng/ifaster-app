@@ -2,10 +2,15 @@ import Vue from "vue";
 import Vuex from "vuex";
 Vue.use(Vuex);
 
+let root = {};
 let modules = {};
 let Store = null;
 
 export function registerModule(path, module) {
+  if (!path) {
+    root = module;
+    return;
+  }
   path = path
     .split("/")
     .join("/modules/")
@@ -17,6 +22,7 @@ export function registerModule(path, module) {
       (collection[pathName] = pathName == "modules" ? {} : { namespaced: true })
     );
   }, modules)[name] = { ...module, namespaced: true };
+  console.log(modules);
 }
 
 export function getStore() {
@@ -24,6 +30,7 @@ export function getStore() {
     return Store;
   }
   return (Store = new Vuex.Store({
+    ...root,
     modules
   }));
 }

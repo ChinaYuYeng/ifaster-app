@@ -6,8 +6,10 @@
 <script>
 export default {
   created() {
-    console.log(this);
-    this.$router.push("/system/user");
+    console.log(this, "oioioi");
+    this.$store.dispatch("menu");
+    this.$router.push("/");
+    this.$store.dispatch("loginout");
   }
 };
 </script>

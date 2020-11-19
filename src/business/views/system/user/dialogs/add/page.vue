@@ -4,7 +4,10 @@
 
 <script>
 export default {
-  name: "system/user/dialogs/add"
+  name: "system/user/dialogs/add",
+  created() {
+    console.log(this);
+  }
 };
 </script>
 

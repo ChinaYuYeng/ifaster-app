@@ -1,9 +1,9 @@
-export default function(request, importInjectMixin, { mapGetters }) {
+export default function(request /*{ mapGetters }, importInjectMixin*/) {
   const apis = {
-    login() {
+    user() {
       console.log("user", request);
     },
-    loginout() {
+    userout() {
       console.log("userout");
     }
   };
@@ -27,18 +27,18 @@ export default function(request, importInjectMixin, { mapGetters }) {
   const route = {
     name: "",
     path: "/system/user",
-    meta: {},
-    component: importInjectMixin("views/system/user/page.vue", {
-      beforeCreate() {
-        this.$api = apis;
-      },
-      computed: {
-        ...mapGetters(["test"]),
-        testtest() {
-          return "121313";
-        }
-      }
-    })
+    meta: {}
+    // component: importInjectMixin("views/system/user/page.vue", {
+    //   beforeCreate() {
+    //     this.$api = apis;
+    //   },
+    //   computed: {
+    //     ...mapGetters(["test"]),
+    //     testtest() {
+    //       return "121313";
+    //     }
+    //   }
+    // })
   };
   return {
     apis,

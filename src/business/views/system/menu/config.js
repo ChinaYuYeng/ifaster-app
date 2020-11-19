@@ -21,7 +21,7 @@ export default function() {
 
   const route = {
     name: "",
-    path: "/menu",
+    path: "/system/menu",
     meta: {}
   };
   return {

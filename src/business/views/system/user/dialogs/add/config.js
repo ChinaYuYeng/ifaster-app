@@ -1,9 +1,9 @@
-export default function() {
+export default function(/*request, { mapGetters }, importInjectMixin*/) {
   const apis = {
-    login() {
+    add() {
       console.log("userdialogs");
     },
-    loginout() {
+    addout() {
       console.log("userdialogs");
     }
   };
@@ -23,6 +23,14 @@ export default function() {
     name: "",
     path: "add",
     meta: {}
+    // component: importInjectMixin("views/system/user/dialogs/add/page.vue", {
+    //   beforeCreate() {
+    //     this.$api = apis;
+    //   },
+    //   computed: {
+    //     ...mapGetters(["test"])
+    //   }
+    // })
   };
   return {
     apis,
