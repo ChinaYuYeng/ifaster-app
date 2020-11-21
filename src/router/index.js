@@ -30,7 +30,9 @@ function parseRoutes(menu) {
   if (!menu) return;
   return menu.map(m => ({
     ...routeMap[m.url],
-    children: parseRoutes(m.submenu)
+    // path:m.path,
+    // meta:m,
+    children: m.submenu ? parseRoutes(m.submenu) : []
   }));
 }
 
@@ -40,4 +42,4 @@ function loadRouters(menuList) {
   router.addRoutes(temp); // 追加路由，错误页面必须最后装入
 }
 
-export { routeMap, registerRoute, loadRouters };
+export { registerRoute, loadRouters };

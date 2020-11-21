@@ -6,9 +6,8 @@
 <script>
 export default {
   created() {
-    console.log(this, "oioioi");
     this.$store.dispatch("menu");
-    this.$router.push("/");
+    this.$router.push("/system/user");
     this.$store.dispatch("loginout");
   }
 };

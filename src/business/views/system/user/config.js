@@ -5,7 +5,8 @@ export default function(request /*{ mapGetters }, importInjectMixin*/) {
     },
     userout() {
       console.log("userout");
-    }
+    },
+    iii() {}
   };
 
   const store = {
@@ -40,9 +41,17 @@ export default function(request /*{ mapGetters }, importInjectMixin*/) {
     //   }
     // })
   };
+  const mixin = {
+    provide: {
+      page: function() {
+        return this;
+      }
+    }
+  };
   return {
     apis,
     store,
-    route
+    route,
+    mixin
   };
 }

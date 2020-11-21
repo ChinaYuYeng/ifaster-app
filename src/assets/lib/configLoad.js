@@ -1,10 +1,12 @@
-import importInjectMixin from "./importInjectMixin";
+import { asyncImport, syncImport } from "./importInjectMixin";
 import router, { registerRoute } from "@/router";
 import { registerModule, getStore } from "@/store";
 import request from "@/api/request";
 import { registerApi } from "@/api";
 import { createNamespacedHelpers } from "vuex";
 
+const importComp =
+  process.env.NODE_ENV !== "production" ? syncImport : asyncImport;
 const contexts = require.context("@/business/views", true, /config\.js$/);
 contexts.keys().map(item => {
   let currentPath = item.match(/\.\/(?:(.+)\/)?config\.js$/)[1] || "";
@@ -14,12 +16,12 @@ contexts.keys().map(item => {
   const config = contexts(item).default(
     request,
     { mapGetters, mapActions, mapMutations },
-    importInjectMixin
+    importComp
   );
 
   const apis = {
     root: config?.apis?.root,
-    scope: config?.apis?.scope || config?.apis || {}
+    scope: config?.apis?.scope || config?.apis?.root ? {} : config?.apis || {}
   };
   registerApi(apis.root);
 
@@ -52,12 +54,13 @@ contexts.keys().map(item => {
     case "merge":
       registerRoute(currentPath, {
         path: currentPath,
-        component: importInjectMixin(
+        component: importComp(
           (currentPath == "/" ? "" : currentPath) + "/page.vue",
           {
             beforeCreate() {
-              this.$api = config.apis.scope;
-              this.$vuexMap = { mapGetters, mapActions, mapMutations };
+              Object.defineProperty(this, "$api", {
+                value: Object.assign(Object.create(this.$api), apis.scope)
+              });
             },
             //   concat({})是为了没数据的时候防止assign报错
             computed: {
@@ -67,7 +70,7 @@ contexts.keys().map(item => {
               ...mapActions(Object.assign.apply({}, mutationsAlias.concat({}))),
               ...mapMutations(Object.assign.apply({}, actionAlias.concat({})))
             },
-            provide: config?.provide || {}
+            ...(config.mixin || {})
           }
         ),
         ...raw

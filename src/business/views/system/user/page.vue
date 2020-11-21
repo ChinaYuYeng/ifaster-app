@@ -6,9 +6,15 @@
 
 <script>
 export default {
-  name: "system/user",
+  name: "system-user",
   created() {
-    console.log(this.test, this.testtest, this);
+    console.log(this.$api.user);
+    console.log(this.$api.loadMenu);
+    console.log(this);
+    console.log("oouuuul77777888899997");
+  },
+  mounted() {
+    console.log("iam mountedddddd");
   }
 };
 </script>

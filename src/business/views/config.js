@@ -79,18 +79,18 @@ export default function(request) {
       }
     }
   };
-  //   const route = {
-  //     strategy: "replace",
-  //     raw: {
-  //       path: "/",
-  //       redirect: "/system/user"
-  //     }
-  //   };
+  const route = {
+    strategy: "replace",
+    raw: {
+      path: "/",
+      redirect: "/system/user"
+    }
+  };
 
   configAxios(request);
 
   return {
-    // route,
+    route,
     store,
     apis
   };

@@ -1,15 +1,15 @@
 import Vue from "vue";
 let globleApi = {};
-Vue.prototype.$api = globleApi;
-// Object.defineProperty(Vue.prototype, "$api", {
-//   configurable: false, //不能被重新变更
-//   set(val) {
-//     globleApi = val
-//   },
-//   get() {
-//     return globleApi;
-//   }
-// });
+// Vue.prototype.$api = globleApi;
+Object.defineProperty(Vue.prototype, "$api", {
+  configurable: true,
+  set() {
+    console.warn("$api is readyonly");
+  },
+  get() {
+    return globleApi;
+  }
+});
 
 export const registerApi = function(apis) {
   if (!apis) return;
