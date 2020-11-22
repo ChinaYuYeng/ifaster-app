@@ -83,7 +83,7 @@ export default function(request) {
     strategy: "replace",
     raw: {
       path: "/",
-      redirect: "/system/user"
+      redirect: "/system"
     }
   };
 

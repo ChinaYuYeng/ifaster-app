@@ -1,12 +1,12 @@
-import { asyncImport, syncImport } from "./importInjectMixin";
+import { asyncImport } from "./importInjectMixin";
 import router, { registerRoute } from "@/router";
 import { registerModule, getStore } from "@/store";
 import request from "@/api/request";
 import { registerApi } from "@/api";
 import { createNamespacedHelpers } from "vuex";
 
-const importComp =
-  process.env.NODE_ENV !== "production" ? syncImport : asyncImport;
+const importComp = asyncImport;
+// process.env.NODE_ENV !== "production" ? syncImport : asyncImport;
 const contexts = require.context("@/business/views", true, /config\.js$/);
 contexts.keys().map(item => {
   let currentPath = item.match(/\.\/(?:(.+)\/)?config\.js$/)[1] || "";

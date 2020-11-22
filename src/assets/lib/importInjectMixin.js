@@ -22,7 +22,7 @@ export function asyncImport(file, mixins = {}) {
       });
 }
 
-// 同步注入，主要用于开发环境，配合webpack热更新，异步无法热更新
+// 同步注入
 export function syncImport(file, mixins) {
   try {
     let option = require(`@/business/views${file}`).default;

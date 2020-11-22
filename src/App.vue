@@ -7,7 +7,6 @@
 export default {
   created() {
     this.$store.dispatch("menu");
-    this.$router.push("/system/user");
     this.$store.dispatch("loginout");
   }
 };
