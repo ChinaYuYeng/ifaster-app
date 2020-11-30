@@ -7,10 +7,7 @@ export function asyncImport(file, mixins = {}) {
         option.mixins
           ? option.mixins.concat(mixins)
           : (option.mixins = [mixins]);
-        option.name = file
-          .split("/")
-          .slice(1, -1)
-          .join("-");
+        option.reserveMixin = mixins;
         return option;
       })
       .catch(err => {
@@ -27,10 +24,6 @@ export function syncImport(file, mixins) {
   try {
     let option = require(`@/business/views${file}`).default;
     option.mixins ? option.mixins.concat(mixins) : (option.mixins = [mixins]);
-    option.name = file
-      .split("/")
-      .slice(1, -1)
-      .join("-");
     return option;
   } catch (err) {
     return {

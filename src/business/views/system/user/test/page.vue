@@ -1,21 +1,21 @@
 <template>
   <div>
-    <button @click="change">tiao111</button>
+    <button @click="change" class="test">tiawwo111</button>
     <router-view />
   </div>
 </template>
 
 <script>
 export default {
-  name: "system-user",
   created() {
+    debugger;
     console.log(this.$api.user);
     console.log(this.$api.loadMenu);
     console.log(this);
-    console.log("oouuuul7111");
+    console.log("oroppp");
   },
   mounted() {
-    console.log("iam mountedddddd");
+    console.log("iam ounte");
   },
   methods: {
     change() {
@@ -25,4 +25,8 @@ export default {
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.test {
+  font-size: 60px;
+}
+</style>

@@ -23,7 +23,6 @@ const routeMap = {}; //用于建立完整路由的路由池
 
 function registerRoute(name, route) {
   routeMap[name] = route;
-  console.log(routeMap);
 }
 
 function parseRoutes(menu) {

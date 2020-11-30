@@ -48,10 +48,12 @@ export default function(request /*{ mapGetters }, importInjectMixin*/) {
       }
     }
   };
+
   return {
     apis,
     store,
     route,
-    mixin
+    mixin,
+    compPath: "./test/page.vue"
   };
 }

@@ -19,22 +19,22 @@ export default function(/*request, { mapGetters }, importInjectMixin*/) {
     }
   };
 
-  const route = {
-    name: "",
-    path: "add",
-    meta: {}
-    // component: importInjectMixin("views/system/user/dialogs/add/page.vue", {
-    //   beforeCreate() {
-    //     this.$api = apis;
-    //   },
-    //   computed: {
-    //     ...mapGetters(["test"])
-    //   }
-    // })
-  };
+  // const route = {
+  //   name: "",
+  //   path: "add",
+  //   meta: {}
+  // component: importInjectMixin("views/system/user/dialogs/add/page.vue", {
+  //   beforeCreate() {
+  //     this.$api = apis;
+  //   },
+  //   computed: {
+  //     ...mapGetters(["test"])
+  //   }
+  // })
+  // };
   return {
     apis,
-    store,
-    route
+    store
+    // route
   };
 }

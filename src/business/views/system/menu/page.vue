@@ -1,12 +1,11 @@
 <template>
-  <div>ittt77777</div>
+  <div>ittt777776</div>
 </template>
 
 <script>
 export default {
-  name: "system/menu",
   created() {
-    console.log("menu cr....oolllld2ooo2");
+    console.log("menu cr....old");
   }
 };
 </script>
