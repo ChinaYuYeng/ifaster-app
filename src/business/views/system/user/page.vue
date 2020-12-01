@@ -6,13 +6,16 @@
 </template>
 
 <script>
+import base from "@/business/mixins/base";
 export default {
+  mixins: [base],
   created() {
     debugger;
     console.log(this.$api.user);
     console.log(this.$api.loadMenu);
     console.log(this);
-    console.log("oroppp");
+    console.log("orp");
+    this.fetchData();
   },
   mounted() {
     console.log("iam ounte");

@@ -4,9 +4,7 @@ export function asyncImport(file, mixins = {}) {
     import(`@/business/views${file}`)
       .then(component => {
         let option = component.default;
-        option.mixins
-          ? option.mixins.concat(mixins)
-          : (option.mixins = [mixins]);
+        option.mixins ? option.mixins.push(mixins) : (option.mixins = [mixins]);
         option.reserveMixin = mixins;
         return option;
       })
@@ -23,7 +21,8 @@ export function asyncImport(file, mixins = {}) {
 export function syncImport(file, mixins) {
   try {
     let option = require(`@/business/views${file}`).default;
-    option.mixins ? option.mixins.concat(mixins) : (option.mixins = [mixins]);
+    option.mixins ? option.mixins.push(mixins) : (option.mixins = [mixins]);
+    option.reserveMixin = mixins;
     return option;
   } catch (err) {
     return {

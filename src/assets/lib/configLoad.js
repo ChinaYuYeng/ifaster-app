@@ -26,11 +26,11 @@ contexts.keys().map(item => {
    *
    * }
    */
-  const config = contexts(item).default(
-    request,
-    { mapGetters, mapActions, mapMutations },
-    importComp
-  );
+  const config = contexts(item).default(request, {
+    mapGetters,
+    mapActions,
+    mapMutations
+  });
 
   const apis = {
     root: config?.apis?.root,
@@ -48,16 +48,20 @@ contexts.keys().map(item => {
 
   const raw = route.raw;
   const strategy = route.strategy;
+  // 如果不转换名字，那么需要开发者自我约束规范命名，转换名字会让开发者不熟悉
   const getAlias = Object.keys(store?.getters || {}).map(key => ({
-    [`get${key.slice(0, 1).toUpperCase()}${key.slice(1)}`]: key
+    // [`get${key.slice(0, 1).toUpperCase()}${key.slice(1)}`]
+    [key]: key
   }));
   const mutationsAlias = Object.keys(store?.actions || {})
     .filter(key => typeof store.actions[key] === "function") //过滤掉注册到root的action
     .map(key => ({
-      [`action${key.slice(0, 1).toUpperCase()}${key.slice(1)}`]: key
+      // [`action${key.slice(0, 1).toUpperCase()}${key.slice(1)}`]
+      [key]: key
     }));
   const actionAlias = Object.keys(store?.mutations || {}).map(key => ({
-    [`commit${key.slice(0, 1).toUpperCase()}${key.slice(1)}`]: key
+    // [`commit${key.slice(0, 1).toUpperCase()}${key.slice(1)}`]
+    [key]: key
   }));
   currentPath = "/" + currentPath;
   switch (strategy) {
@@ -88,7 +92,7 @@ contexts.keys().map(item => {
               ...mapActions(Object.assign.apply({}, mutationsAlias.concat({}))),
               ...mapMutations(Object.assign.apply({}, actionAlias.concat({})))
             },
-            ...(config.mixin || {})
+            mixins: [config.mixin || {}]
           }
         ),
         ...raw

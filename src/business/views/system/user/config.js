@@ -14,12 +14,12 @@ export default function(request /*{ mapGetters }, importInjectMixin*/) {
       test: "1213"
     },
     getters: {
-      test(state) {
+      getTest(state) {
         return state.test;
       }
     },
     actions: {
-      testAction() {
+      doTest() {
         console.log("action");
       }
     }
@@ -46,6 +46,20 @@ export default function(request /*{ mapGetters }, importInjectMixin*/) {
       page: function() {
         return this;
       }
+    },
+    created() {
+      debugger;
+      this.yy();
+    },
+    data() {
+      return {
+        username: ""
+      };
+    },
+    methods: {
+      yy() {
+        this.doTest();
+      }
     }
   };
 
@@ -53,7 +67,7 @@ export default function(request /*{ mapGetters }, importInjectMixin*/) {
     apis,
     store,
     route,
-    mixin,
-    compPath: "./test/page.vue"
+    mixin
+    // compPath: "./page.vue"
   };
 }
