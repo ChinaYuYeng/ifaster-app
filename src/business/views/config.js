@@ -80,18 +80,18 @@ export default function(request) {
     }
   };
   // 因为该配置文件没有对应点页面，因此route重定向到别点地方
-  // const route = {
-  //   strategy: "replace",
-  //   raw: {
-  //     path: "/",
-  //     redirect: "/system"
-  //   }
-  // };
+  const route = {
+    strategy: "replace",
+    raw: {
+      path: "/",
+      redirect: "/system"
+    }
+  };
 
   configAxios(request);
 
   return {
-    // route,
+    route,
     store,
     apis
   };

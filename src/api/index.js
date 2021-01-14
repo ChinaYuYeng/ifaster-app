@@ -1,6 +1,5 @@
 import Vue from "vue";
 let globleApi = {};
-// Vue.prototype.$api = globleApi;
 Object.defineProperty(Vue.prototype, "$api", {
   configurable: true,
   set() {

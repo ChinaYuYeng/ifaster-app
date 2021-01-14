@@ -7,7 +7,6 @@ import { createNamespacedHelpers } from "vuex";
 import { parseFilePath } from "@/assets/util/tool";
 
 const importComp = asyncImport;
-// process.env.NODE_ENV !== "production" ? syncImport : asyncImport;
 const contexts = require.context("@/business/views", true, /config\.js$/);
 contexts.keys().map(item => {
   let currentPath = item.match(/\.\/(?:(.+)\/)?config\.js$/)[1] || "";
@@ -48,19 +47,15 @@ contexts.keys().map(item => {
 
   const raw = route.raw;
   const strategy = route.strategy;
-  // 如果不转换名字，那么需要开发者自我约束规范命名，转换名字会让开发者不熟悉
   const getAlias = Object.keys(store?.getters || {}).map(key => ({
-    // [`get${key.slice(0, 1).toUpperCase()}${key.slice(1)}`]
     [key]: key
   }));
   const mutationsAlias = Object.keys(store?.actions || {})
-    .filter(key => typeof store.actions[key] === "function") //过滤掉注册到root的action
+    .filter(key => typeof store.actions[key] === "function")
     .map(key => ({
-      // [`action${key.slice(0, 1).toUpperCase()}${key.slice(1)}`]
       [key]: key
     }));
   const actionAlias = Object.keys(store?.mutations || {}).map(key => ({
-    // [`commit${key.slice(0, 1).toUpperCase()}${key.slice(1)}`]
     [key]: key
   }));
   currentPath = "/" + currentPath;
@@ -84,7 +79,6 @@ contexts.keys().map(item => {
                 value: Object.assign(Object.create(this.$api), apis.scope)
               });
             },
-            //   concat({})是为了没数据的时候防止assign报错
             computed: {
               ...mapGetters(Object.assign.apply({}, getAlias.concat({})))
             },
