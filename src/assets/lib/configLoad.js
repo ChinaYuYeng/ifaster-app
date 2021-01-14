@@ -53,13 +53,13 @@ contexts.keys().map(item => {
     // [`get${key.slice(0, 1).toUpperCase()}${key.slice(1)}`]
     [key]: key
   }));
-  const mutationsAlias = Object.keys(store?.actions || {})
-    .filter(key => typeof store.actions[key] === "function") //过滤掉注册到root的action
+  const actionAlias = Object.keys(store?.actions || {})
+    .filter(key => typeof store.actions[key] === "function") //过滤掉注册到root的action,注册到root的action是一个{}
     .map(key => ({
       // [`action${key.slice(0, 1).toUpperCase()}${key.slice(1)}`]
       [key]: key
     }));
-  const actionAlias = Object.keys(store?.mutations || {}).map(key => ({
+  const mutationsAlias = Object.keys(store?.mutations || {}).map(key => ({
     // [`commit${key.slice(0, 1).toUpperCase()}${key.slice(1)}`]
     [key]: key
   }));
@@ -89,8 +89,10 @@ contexts.keys().map(item => {
               ...mapGetters(Object.assign.apply({}, getAlias.concat({})))
             },
             methods: {
-              ...mapActions(Object.assign.apply({}, mutationsAlias.concat({}))),
-              ...mapMutations(Object.assign.apply({}, actionAlias.concat({})))
+              ...mapActions(Object.assign.apply({}, actionAlias.concat({}))),
+              ...mapMutations(
+                Object.assign.apply({}, mutationsAlias.concat({}))
+              )
             },
             mixins: [config.mixin || {}]
           }
