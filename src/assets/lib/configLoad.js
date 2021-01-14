@@ -50,12 +50,12 @@ contexts.keys().map(item => {
   const getAlias = Object.keys(store?.getters || {}).map(key => ({
     [key]: key
   }));
-  const mutationsAlias = Object.keys(store?.actions || {})
-    .filter(key => typeof store.actions[key] === "function")
+  const actionAlias = Object.keys(store?.actions || {})
+    .filter(key => typeof store.actions[key] === "function") //过滤掉注册到root的action,注册到root的action是一个{}
     .map(key => ({
       [key]: key
     }));
-  const actionAlias = Object.keys(store?.mutations || {}).map(key => ({
+  const mutationsAlias = Object.keys(store?.mutations || {}).map(key => ({
     [key]: key
   }));
   currentPath = "/" + currentPath;
@@ -83,8 +83,10 @@ contexts.keys().map(item => {
               ...mapGetters(Object.assign.apply({}, getAlias.concat({})))
             },
             methods: {
-              ...mapActions(Object.assign.apply({}, mutationsAlias.concat({}))),
-              ...mapMutations(Object.assign.apply({}, actionAlias.concat({})))
+              ...mapActions(Object.assign.apply({}, actionAlias.concat({}))),
+              ...mapMutations(
+                Object.assign.apply({}, mutationsAlias.concat({}))
+              )
             },
             mixins: [config.mixin || {}]
           }
