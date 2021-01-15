@@ -1,5 +1,15 @@
+import Vue from "vue";
+import Vant from "vant";
+import "vant/lib/index.css";
 import { getStore } from "@/store";
 import { loadRouters } from "@/router";
+Vue.use(Vant);
+
+// 设置rem
+document
+  .querySelector("html")
+  .setAttribute("style", "font-size:calc(100vw / 750 * 100);");
+
 function configAxios({ request }) {
   request.defaults.timeout = 2 * 60 * 1000;
   request.defaults.baseURL = "";
@@ -37,6 +47,9 @@ export default function(request) {
         return [
           {
             url: "/"
+          },
+          {
+            url: "/home"
           },
           {
             url: "/login"

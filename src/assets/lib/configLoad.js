@@ -21,7 +21,7 @@ contexts.keys().map(item => {
    *  route:{strategy:'',raw:{}}或者route:{}这种默认是raw的值,
    *  apis:{root:{},scope:{}} 或者 apis:{}, 这种默认是scope,
    *  mixin:{}需要注入到*.vue中的minxin
-   *  compPath:string 需要加载的组件地址(支持相对地址)
+   *  compPath:string 需要加载的组件地址(支持相对地址)默认是./page.vue
    *
    * }
    */
