@@ -3,6 +3,12 @@ function resolve(dir) {
   return path.join(__dirname, dir);
 }
 module.exports = {
+  configureWebpack: {
+    module: {
+      // 解决require方法报错，在configLoad.js 中
+      unknownContextCritical: false
+    }
+  },
   chainWebpack: config => {
     config.resolve.alias.set("@@", resolve("src/business"));
     config.module
