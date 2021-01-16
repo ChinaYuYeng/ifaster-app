@@ -5,11 +5,11 @@ import request from "@/api/request";
 import { registerApi } from "@/api";
 import { createNamespacedHelpers } from "vuex";
 import { parseFilePath } from "@/assets/util/tool";
-import { entryVars } from "@@/entry";
 
-const importComp = asyncImport;
 // process.env.NODE_ENV !== "production" ? syncImport : asyncImport;
-const contexts = require.context("@" + entryVars, true, /config\.js$/);
+const importComp = asyncImport;
+// ‘@/business/views‘ 必须是字符串，无法使用变量
+const contexts = require.context("@/business/views", true, /config\.js$/);
 contexts.keys().map(item => {
   let currentPath = item.match(/\.\/(?:(.+)\/)?config\.js$/)[1] || "";
   let name = currentPath.split("/").join("-") || "root";
@@ -81,6 +81,7 @@ contexts.keys().map(item => {
                 value: Object.assign(Object.create(this.$api), apis.scope)
               });
             },
+            // concat({})是为了没数据的时候防止assign报错
             computed: {
               ...mapGetters(Object.assign.apply({}, getAlias.concat({})))
             },
@@ -99,7 +100,7 @@ contexts.keys().map(item => {
 });
 
 const store = getStore();
-export { router, store };
+export { request, router, store };
 // 这个方法配合上面的加载组件过程中主动注入mixins的逻辑
 export default function(Vue) {
   const oldInit = Vue.prototype._init;

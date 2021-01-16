@@ -1,6 +1,8 @@
+import { loadRouters } from "@/router";
 // 业务逻辑的入口，初始化设置
-// 在business除了entry.js 其他文件可任意删除或者修改而不影响系统正确运行
-export default function(router, store) {
+// entry.js 和 views文件夹（内部文件除外）被引用了,不能删除
+export default function(request, router, store) {
+  loadRouters([{ url: "/login" }]);
   router.beforeEach((to, from, next) => {
     next();
   });
@@ -8,8 +10,33 @@ export default function(router, store) {
   router.afterEach(to => {
     console.log(to, store);
   });
-}
 
-export const entryVars = {
-  viewsPath: "/business/views"
-};
+  // 请求拦截器
+  request.interceptors.request.use(
+    config => {
+      // 在请求发送之前做一些处理
+
+      return config;
+    },
+    error => {
+      // 发送失败
+      Promise.reject(error);
+    }
+  );
+
+  // 响应拦截器
+  request.interceptors.response.use(
+    response => {
+      let res = response.data;
+      // 登录验证
+      if (res.login === 0) {
+        //   exitLogin();
+        // store.dispatch("d2admin/account/logout", {});
+      }
+      return res;
+    },
+    error => {
+      return Promise.reject(error);
+    }
+  );
+}

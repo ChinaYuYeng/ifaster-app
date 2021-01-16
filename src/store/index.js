@@ -1,6 +1,10 @@
 import Vue from "vue";
 import Vuex from "vuex";
 Vue.use(Vuex);
+/**
+ * 整个store的module的规则：
+ * 以business下的views为root，内部的文件夹结构是module的命名空间
+ */
 
 let root = {};
 let modules = {};

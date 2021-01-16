@@ -1,9 +1,9 @@
 import Vue from "vue";
-import wrapVueInit, { router, store } from "@/assets/lib/configLoad";
+import wrapVueInit, { request, router, store } from "@/assets/lib/configLoad";
 import entry from "@@/entry";
 import App from "./App.vue";
 
-entry(router, store);
+entry(request.instance, router, store);
 wrapVueInit(Vue);
 
 Vue.config.productionTip = false;
