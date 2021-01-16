@@ -1,16 +1,39 @@
+/* 业务逻辑的入口，初始化设置
+ entry.js 和 views文件夹（内部文件除外）被引用了,不能删除*/
+import Vue from "vue";
 import { loadRouters } from "@/router";
-// 业务逻辑的入口，初始化设置
-// entry.js 和 views文件夹（内部文件除外）被引用了,不能删除
-export default function(request, router, store) {
+import Vant from "vant";
+import "vant/lib/index.less";
+Vue.use(Vant);
+
+/* 设置rem */
+function setRem() {
+  document
+    .querySelector("html")
+    .setAttribute("style", "font-size:calc(100vw / 750 * 100);");
+}
+
+/* 开启登录路由 */
+function setLoginRouter() {
   loadRouters([{ url: "/login" }]);
+}
+
+/* 路由拦截 */
+function routerControll(router, store) {
   router.beforeEach((to, from, next) => {
+    console.log("current route", to);
     next();
   });
 
   router.afterEach(to => {
     console.log(to, store);
   });
+}
 
+/*  接口拦截 */
+function requestInterceptor(request) {
+  request.defaults.timeout = 2 * 60 * 1000;
+  request.defaults.baseURL = "";
   // 请求拦截器
   request.interceptors.request.use(
     config => {
@@ -39,4 +62,11 @@ export default function(request, router, store) {
       return Promise.reject(error);
     }
   );
+}
+
+export default function(request, router, store) {
+  setRem();
+  setLoginRouter();
+  routerControll(router, store);
+  requestInterceptor(request);
 }
