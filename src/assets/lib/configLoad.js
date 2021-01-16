@@ -5,9 +5,11 @@ import request from "@/api/request";
 import { registerApi } from "@/api";
 import { createNamespacedHelpers } from "vuex";
 import { parseFilePath } from "@/assets/util/tool";
+import { entryVars } from "@@/entry";
 
 const importComp = asyncImport;
-const contexts = require.context("@/business/views", true, /config\.js$/);
+// process.env.NODE_ENV !== "production" ? syncImport : asyncImport;
+const contexts = require.context("@" + entryVars, true, /config\.js$/);
 contexts.keys().map(item => {
   let currentPath = item.match(/\.\/(?:(.+)\/)?config\.js$/)[1] || "";
   let name = currentPath.split("/").join("-") || "root";
@@ -21,7 +23,7 @@ contexts.keys().map(item => {
    *  route:{strategy:'',raw:{}}或者route:{}这种默认是raw的值,
    *  apis:{root:{},scope:{}} 或者 apis:{}, 这种默认是scope,
    *  mixin:{}需要注入到*.vue中的minxin
-   *  compPath:string 需要加载的组件地址(支持相对地址)默认是./page.vue
+   *  compPath:string 需要加载的组件地址(支持相对地址),默认是./page.vue
    *
    * }
    */
@@ -98,3 +100,27 @@ contexts.keys().map(item => {
 
 const store = getStore();
 export { router, store };
+// 这个方法配合上面的加载组件过程中主动注入mixins的逻辑
+export default function(Vue) {
+  const oldInit = Vue.prototype._init;
+  process.env.NODE_ENV !== "production" &&
+    (Vue.prototype._init = function(options) {
+      // 在开发环境下解决vue-loader热加载动态注入mixin丢失的问题
+      if (options._isComponent) {
+        const Ctor = this.constructor;
+        if (!Ctor.options.__file) {
+          // 这里mixin注入的位置和import首次加载的位置保持一致
+          (Ctor.extendOptions.mixins || (Ctor.extendOptions.mixins = [])).push(
+            options._parentVnode.componentOptions.Ctor.extendOptions
+              .reserveMixin || {}
+          );
+          Ctor.options = Vue.util.mergeOptions(
+            Ctor.superOptions,
+            Ctor.extendOptions,
+            this
+          );
+        }
+      }
+      oldInit.call(this, options);
+    });
+}

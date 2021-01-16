@@ -4,11 +4,7 @@
   </div>
 </template>
 <script>
-export default {
-  created() {
-    this.$store.dispatch("menu");
-  }
-};
+export default {};
 </script>
 <style lang="less">
 #app {
