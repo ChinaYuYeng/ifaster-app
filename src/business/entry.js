@@ -4,6 +4,7 @@ import Vue from "vue";
 import { loadRouters } from "@/router";
 import Vant from "vant";
 import "vant/lib/index.less";
+import "@@/style/main.less";
 Vue.use(Vant);
 
 /* 设置rem */

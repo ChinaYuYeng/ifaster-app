@@ -26,7 +26,7 @@ module.exports = {
         modifyVars: {
           // 或者可以通过 less 文件覆盖（文件路径为绝对路径）
           hack: `true; @import "${resolve(
-            "./src/business/style/vant-theme.less"
+            "./src/assets/theme/vant-theme.less"
           )}"`
         }
       }
