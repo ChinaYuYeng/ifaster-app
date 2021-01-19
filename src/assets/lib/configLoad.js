@@ -25,11 +25,16 @@ contexts.keys().map(item => {
    *
    * }
    */
-  const config = contexts(item).default(request, {
-    mapGetters,
-    mapActions,
-    mapMutations
-  });
+  const config =
+    contexts(item).default &&
+    contexts(item).default(request, {
+      mapGetters,
+      mapActions,
+      mapMutations
+    });
+
+  // 判空，避免未 export default 方法 或者 方法未返回对象
+  if (!config) return;
 
   const apis = {
     root: config?.apis?.root,
