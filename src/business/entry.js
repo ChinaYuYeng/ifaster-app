@@ -5,13 +5,12 @@ import { loadRouters } from "@/router";
 import Vant from "vant";
 import "vant/lib/index.less";
 import "@@/style/main.less";
+import "@@/components";
 Vue.use(Vant);
 
 /* 设置rem */
 function setRem() {
-  document
-    .querySelector("html")
-    .setAttribute("style", "font-size:calc(100vw / 750 * 100);");
+  document.querySelector("html").setAttribute("style", "font-size:calc(100vw / 750 * 100);");
 }
 
 /* 开启登录路由 */
@@ -22,8 +21,14 @@ function setLoginRouter() {
 /* 路由拦截 */
 function routerControll(router, store) {
   router.beforeEach((to, from, next) => {
-    console.log("current route", to);
-    next();
+    if (store.getters["login/getLogined"]) {
+      console.log("current route", to);
+      next();
+    } else if (to.path === "/login") {
+      next();
+    } else {
+      next({ path: "/login" });
+    }
   });
 
   router.afterEach(to => {
@@ -35,24 +40,18 @@ function routerControll(router, store) {
 function requestInterceptor(request) {
   request.defaults.timeout = 2 * 60 * 1000;
   request.defaults.baseURL = "";
-  // 请求拦截器
   request.interceptors.request.use(
     config => {
-      // 在请求发送之前做一些处理
-
       return config;
     },
     error => {
-      // 发送失败
       Promise.reject(error);
     }
   );
 
-  // 响应拦截器
   request.interceptors.response.use(
     response => {
       let res = response.data;
-      // 登录验证
       if (res.login === 0) {
         //   exitLogin();
         // store.dispatch("d2admin/account/logout", {});

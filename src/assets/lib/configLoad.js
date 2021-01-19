@@ -13,9 +13,7 @@ const contexts = require.context("@/business/views", true, /config\.js$/);
 contexts.keys().map(item => {
   let currentPath = item.match(/\.\/(?:(.+)\/)?config\.js$/)[1] || "";
   let name = currentPath.split("/").join("-") || "root";
-  const { mapGetters, mapActions, mapMutations } = createNamespacedHelpers(
-    currentPath
-  );
+  const { mapGetters, mapActions, mapMutations } = createNamespacedHelpers(currentPath);
   /**
    * config的结构
    * config:{
@@ -68,32 +66,23 @@ contexts.keys().map(item => {
     case "merge":
       registerRoute(currentPath, {
         path: currentPath,
-        component: importComp(
-          parseFilePath(
-            (currentPath == "/" ? "" : currentPath) +
-              "/" +
-              (config.compPath ? config.compPath : "page.vue")
-          ),
-          {
-            name: name,
-            beforeCreate() {
-              Object.defineProperty(this, "$api", {
-                value: Object.assign(Object.create(this.$api), apis.scope)
-              });
-            },
-            // concat({})是为了没数据的时候防止assign报错
-            computed: {
-              ...mapGetters(Object.assign.apply({}, getAlias.concat({})))
-            },
-            methods: {
-              ...mapActions(Object.assign.apply({}, actionAlias.concat({}))),
-              ...mapMutations(
-                Object.assign.apply({}, mutationsAlias.concat({}))
-              )
-            },
-            mixins: [config.mixin || {}]
-          }
-        ),
+        component: importComp(parseFilePath((currentPath == "/" ? "" : currentPath) + "/" + (config.compPath ? config.compPath : "page.vue")), {
+          name: name,
+          beforeCreate() {
+            Object.defineProperty(this, "$api", {
+              value: Object.assign(Object.create(this.$api), apis.scope)
+            });
+          },
+          // concat({})是为了没数据的时候防止assign报错
+          computed: {
+            ...mapGetters(Object.assign.apply({}, getAlias.concat({})))
+          },
+          methods: {
+            ...mapActions(Object.assign.apply({}, actionAlias.concat({}))),
+            ...mapMutations(Object.assign.apply({}, mutationsAlias.concat({})))
+          },
+          mixins: [config.mixin || {}]
+        }),
         ...raw
       });
   }
@@ -112,14 +101,9 @@ export default function(Vue) {
         if (!Ctor.options.__file) {
           // 这里mixin注入的位置和import首次加载的位置保持一致
           (Ctor.extendOptions.mixins || (Ctor.extendOptions.mixins = [])).push(
-            options._parentVnode.componentOptions.Ctor.extendOptions
-              .reserveMixin || {}
+            options._parentVnode.componentOptions.Ctor.extendOptions.reserveMixin || {}
           );
-          Ctor.options = Vue.util.mergeOptions(
-            Ctor.superOptions,
-            Ctor.extendOptions,
-            this
-          );
+          Ctor.options = Vue.util.mergeOptions(Ctor.superOptions, Ctor.extendOptions, this);
         }
       }
       oldInit.call(this, options);

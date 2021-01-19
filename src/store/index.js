@@ -21,10 +21,7 @@ export function registerModule(path, module) {
     .split("/");
   const name = path.slice(-1)[0];
   path.slice(0, -1).reduce((collection, pathName) => {
-    return (
-      collection[pathName] ||
-      (collection[pathName] = pathName == "modules" ? {} : { namespaced: true })
-    );
+    return collection[pathName] || (collection[pathName] = pathName == "modules" ? {} : { namespaced: true });
   }, modules)[name] = { ...module, namespaced: true };
   console.log(modules);
 }
