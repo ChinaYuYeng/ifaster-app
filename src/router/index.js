@@ -25,18 +25,24 @@ function registerRoute(name, route) {
   routeMap[name] = route;
 }
 
-function parseRoutes(menu) {
-  if (!menu) return;
-  return menu.map(m => ({
-    ...routeMap[m.url],
-    // path:m.path,
-    // meta:m,
-    children: m.submenu ? parseRoutes(m.submenu) : []
-  }));
-}
+// function parseRoutes(menu) {
+//   if (!menu) return;
+//   return menu.map(m => ({
+//     ...routeMap[m.url],
+//     // path:m.path,
+//     // meta:m,
+//     children: m.submenu ? parseRoutes(m.submenu) : routeMap[m.url].children || []
+//   }));
+// }
 
-function loadRouters(menuList) {
-  let temp = parseRoutes(menuList);
+// function loadRouters(menuList) {
+//   let temp = parseRoutes(menuList);
+//   console.log(temp);
+//   router.addRoutes(temp); // 追加路由，错误页面必须最后装入
+// }
+
+function loadRouters(matchMenuToRoute) {
+  let temp = (matchMenuToRoute && matchMenuToRoute.call(this, routeMap)) || Object.values(routeMap).filter(v => v.path[0] === "/");
   console.log(temp);
   router.addRoutes(temp); // 追加路由，错误页面必须最后装入
 }

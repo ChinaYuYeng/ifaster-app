@@ -15,7 +15,10 @@ function setRem() {
 
 /* 开启登录路由 */
 function setLoginRouter() {
-  loadRouters([{ url: "/login" }]);
+  loadRouters();
+  //   routeMap => {
+  //   return [routeMap["/login"]];
+  // }
 }
 
 /* 路由拦截 */

@@ -6,6 +6,20 @@ import { registerApi } from "@/api";
 import { createNamespacedHelpers } from "vuex";
 import { parseFilePath } from "@/assets/util/tool";
 
+function traverse(route, cb, path = []) {
+  if (route) {
+    path.push(route.path);
+    route.fullPath = path.join("/");
+    cb(route);
+  } else {
+    return;
+  }
+
+  if (route.children) {
+    route.children.forEach(subRoute => traverse(subRoute, cb, [...path]));
+  }
+}
+
 // process.env.NODE_ENV !== "production" ? syncImport : asyncImport;
 const importComp = asyncImport;
 // ‘@/business/views‘ 必须是字符串，无法使用变量
@@ -18,10 +32,11 @@ contexts.keys().map(item => {
    * config的结构
    * config:{
    *  store:{}, vuex的module
-   *  route:{strategy:'',raw:{}}或者route:{}这种默认是raw的值,
+   *  routes:[{strategy:'',raw:{component,path}}]或者routes:[{}]这种整个对象默认是raw的值,
+   *          component可以是组件对象，也可以是需要加载的组件地址(只支持相对地址),默认是./page.vue
+   *          path 是路由地址
    *  apis:{root:{},scope:{}} 或者 apis:{}, 这种默认是scope,
    *  mixin:{}需要注入到*.vue中的minxin
-   *  compPath:string 需要加载的组件地址(支持相对地址),默认是./page.vue
    *
    * }
    */
@@ -45,13 +60,6 @@ contexts.keys().map(item => {
   const store = config?.store || {};
   registerModule(currentPath, store);
 
-  const route = {
-    strategy: config?.route?.strategy || "merge",
-    raw: config?.route?.raw || config?.route || {}
-  };
-
-  const raw = route.raw;
-  const strategy = route.strategy;
   const getAlias = Object.keys(store?.getters || {}).map(key => ({
     [key]: key
   }));
@@ -63,34 +71,53 @@ contexts.keys().map(item => {
   const mutationsAlias = Object.keys(store?.mutations || {}).map(key => ({
     [key]: key
   }));
-  currentPath = "/" + currentPath;
-  switch (strategy) {
-    case "replace":
-      registerRoute(currentPath, raw);
-      break;
-    case "merge":
-      registerRoute(currentPath, {
-        path: currentPath,
-        component: importComp(parseFilePath((currentPath == "/" ? "" : currentPath) + "/" + (config.compPath ? config.compPath : "page.vue")), {
-          name: name,
-          beforeCreate() {
-            Object.defineProperty(this, "$api", {
-              value: Object.assign(Object.create(this.$api), apis.scope)
-            });
-          },
-          // concat({})是为了没数据的时候防止assign报错
-          computed: {
-            ...mapGetters(Object.assign.apply({}, getAlias.concat({})))
-          },
-          methods: {
-            ...mapActions(Object.assign.apply({}, actionAlias.concat({}))),
-            ...mapMutations(Object.assign.apply({}, mutationsAlias.concat({})))
-          },
-          mixins: [config.mixin || {}]
-        }),
-        ...raw
-      });
-  }
+
+  // const routes = Array.isArray(config.routes) ? config.routes : [config.routes || {}];
+
+  // const routes = treeFlatten(config.routes);
+
+  traverse(config.routes || {}, r => {
+    const route = {
+      strategy: r?.strategy || "merge",
+      raw: r?.raw || r || {}
+    };
+
+    const raw = route.raw;
+    const strategy = route.strategy;
+
+    currentPath = "/" + currentPath;
+    raw.path = raw.path || currentPath;
+    raw.fullPath = raw.fullPath || currentPath;
+    switch (strategy) {
+      case "replace":
+        registerRoute(raw.fullPath, raw);
+        break;
+      case "merge":
+        registerRoute(raw.fullPath, {
+          ...raw,
+          component:
+            Object.prototype.toString.call(raw.component) === "[object Object]"
+              ? raw.component
+              : importComp(parseFilePath((currentPath == "/" ? "" : currentPath) + "/" + (raw.component || "page.vue")), {
+                  name: name,
+                  beforeCreate() {
+                    Object.defineProperty(this, "$api", {
+                      value: Object.assign(Object.create(this.$api), apis.scope)
+                    });
+                  },
+                  // concat({})是为了没数据的时候防止assign报错
+                  computed: {
+                    ...mapGetters(Object.assign.apply({}, getAlias.concat({})))
+                  },
+                  methods: {
+                    ...mapActions(Object.assign.apply({}, actionAlias.concat({}))),
+                    ...mapMutations(Object.assign.apply({}, mutationsAlias.concat({})))
+                  },
+                  mixins: [config.mixin || {}]
+                })
+        });
+    }
+  });
 });
 
 const store = getStore();
