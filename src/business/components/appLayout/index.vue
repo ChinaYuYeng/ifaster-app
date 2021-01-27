@@ -1,5 +1,5 @@
 <template>
-  <div class="layout__main">
+  <div class="layout__main" v-if="showContent">
     <HeaderNav v-if="showHeader" @click="showSearch = true"></HeaderNav>
     <BodyContent :onRefresh="onRefresh" :isScroll="isScroll">
       <slot name="body-top" slot="top"></slot>
@@ -11,6 +11,7 @@
       <slot name="search"></slot>
     </Search>
   </div>
+  <router-view v-else></router-view>
 </template>
 
 <script>
@@ -31,6 +32,21 @@ export default {
     return {
       showSearch: false
     };
+  },
+  inject: ["$pagePath"],
+  created() {
+    console.log(this.$router, "ldfkdkfl");
+  },
+  computed: {
+    /* 是否显示当前页面，或者提供router-view */
+    showContent() {
+      debugger;
+      let path = this.$route.fullPath;
+      let index = path.indexOf("?");
+      path = index >= 0 ? path.slice(0, index) : path;
+      console.log(this.$pagePath);
+      return path === this.$pagePath;
+    }
   },
   components: {
     HeaderNav,

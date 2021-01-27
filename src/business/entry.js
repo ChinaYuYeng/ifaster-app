@@ -33,7 +33,6 @@ function routerControll(router, store) {
       next({ path: "/login" });
     }
   });
-
   router.afterEach(to => {
     console.log(to, store);
   });
