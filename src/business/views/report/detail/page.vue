@@ -50,7 +50,10 @@
 
 <script>
 export default {
-  created() {}
+  inject: ["parent"],
+  created() {
+    console.log(this.parent);
+  }
 };
 </script>
 

@@ -34,17 +34,12 @@ export default {
     };
   },
   inject: ["$pagePath"],
-  created() {
-    console.log(this.$router, "ldfkdkfl");
-  },
   computed: {
     /* 是否显示当前页面，或者提供router-view */
     showContent() {
-      debugger;
       let path = this.$route.fullPath;
       let index = path.indexOf("?");
       path = index >= 0 ? path.slice(0, index) : path;
-      console.log(this.$pagePath);
       return path === this.$pagePath;
     }
   },

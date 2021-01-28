@@ -9,14 +9,10 @@ import { parseFilePath } from "@/assets/util/tool";
 function traverse(route, cb, path = []) {
   if (route) {
     path.push(route.path);
-    route.fullPath = path.join("/");
-    cb(route);
-  } else {
-    return;
-  }
-
-  if (route.children) {
-    route.children.forEach(subRoute => traverse(subRoute, cb, [...path]));
+    cb(route, path.join("/"));
+    if (route.children) {
+      route.children.forEach(subRoute => traverse(subRoute, cb, [...path]));
+    }
   }
 }
 
@@ -26,7 +22,6 @@ const importComp = asyncImport;
 const contexts = require.context("@/business/views", true, /config\.js$/);
 contexts.keys().map(item => {
   let currentPath = item.match(/\.\/(?:(.+)\/)?config\.js$/)[1] || "";
-  let name = currentPath.split("/").join("-") || "root";
   const { mapGetters, mapActions, mapMutations } = createNamespacedHelpers(currentPath);
   /**
    * config的结构
@@ -72,17 +67,21 @@ contexts.keys().map(item => {
   }));
 
   currentPath = "/" + currentPath;
-  traverse(config.routes || {}, r => {
-    r.path = r.path || currentPath;
-    r.fullPath = r.fullPath || currentPath;
-    r.component =
-      Object.prototype.toString.call(r.component) === "[object Object]"
-        ? r.component
-        : importComp(parseFilePath((currentPath == "/" ? "" : currentPath) + "/" + (r.component || "page.vue")), {
-            name: name,
+  traverse(config.routes || {}, (route, fullPath) => {
+    route.path = route.path || currentPath;
+    fullPath = fullPath || currentPath;
+    route.component =
+      Object.prototype.toString.call(route.component) === "[object Function]"
+        ? route.component()
+        : importComp(parseFilePath((currentPath == "/" ? "" : currentPath) + "/" + (route.component || "page.vue")), {
+            name: fullPath.split("/").join("-") || "root",
             beforeCreate() {
               Object.defineProperty(this, "$api", {
                 value: Object.assign(Object.create(this.$api), apis.scope)
+              });
+              // 当前页面的默认路径，用来判断当前路由是否在这个页面上
+              Object.defineProperty(this, "$pagePath", {
+                value: fullPath
               });
             },
             // concat({})是为了没数据的时候防止assign报错
@@ -93,13 +92,14 @@ contexts.keys().map(item => {
               ...mapActions(Object.assign.apply({}, actionAlias.concat({}))),
               ...mapMutations(Object.assign.apply({}, mutationsAlias.concat({})))
             },
-            // 用于判断是否有子页面
-            provide: {
-              $pagePath: r.fullPath
+            // 如果报mergeData溢出，可能和这个选项的合并策略有关
+            provide() {
+              return {
+                $pagePath: this.$pagePath
+              };
             }
           });
-    registerRoute(r.fullPath, r);
-    delete r.fullPath;
+    registerRoute(fullPath, route);
   });
 });
 

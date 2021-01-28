@@ -42,8 +42,11 @@ function registerRoute(name, route) {
 // }
 
 function loadRouters(matchMenuToRoute) {
-  let temp = (matchMenuToRoute && matchMenuToRoute.call(this, routeMap)) || Object.values(routeMap).filter(v => v.path[0] === "/");
-  console.log(temp);
+  let temp =
+    (matchMenuToRoute && matchMenuToRoute.call(this, routeMap)) ||
+    Object.entries(routeMap)
+      .filter(v => /^\/[^/]+$/.test(v[0]))
+      .map(v => v[1]);
   router.addRoutes(temp); // 追加路由，错误页面必须最后装入
 }
 

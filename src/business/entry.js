@@ -13,7 +13,7 @@ function setRem() {
   document.querySelector("html").setAttribute("style", "font-size:calc(100vw / 750 * 100);");
 }
 
-/* 开启登录路由 */
+/* 开启路由 */
 function setLoginRouter() {
   loadRouters();
   //   routeMap => {
@@ -25,7 +25,6 @@ function setLoginRouter() {
 function routerControll(router, store) {
   router.beforeEach((to, from, next) => {
     if (store.getters["login/getLogined"]) {
-      console.log("current route", to);
       next();
     } else if (to.path === "/login") {
       next();
@@ -33,8 +32,8 @@ function routerControll(router, store) {
       next({ path: "/login" });
     }
   });
-  router.afterEach(to => {
-    console.log(to, store);
+  router.afterEach(() => {
+    // console.log(to, store);
   });
 }
 

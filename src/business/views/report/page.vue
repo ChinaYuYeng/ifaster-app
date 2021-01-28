@@ -82,8 +82,10 @@ export default {
   mounted() {
     this.initChart();
   },
-  provide: {
-    parent: this
+  provide() {
+    return {
+      parent: this
+    };
   },
   methods: {
     onSearch() {},
