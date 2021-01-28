@@ -89,8 +89,19 @@ export default function() {
       }
     }
   };
+
   const routes = {
-    path: "/login"
+    path: "/login",
+    children: [
+      {
+        path: "login",
+        component: "./login-register/login.vue"
+      },
+      {
+        path: "register",
+        component: "./login-register/register.vue"
+      }
+    ]
   };
 
   return {
