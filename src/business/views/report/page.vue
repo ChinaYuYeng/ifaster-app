@@ -4,13 +4,13 @@
       <span class="report__title">统计数据</span>
       <canvas id="report__chart"></canvas>
     </template>
-    <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+    <LoadList :loadData="onLoad">
       <van-cell
         is-link
         style="padding:6px 0;align-items: center;"
         v-for="item in datalist"
         :key="item.date"
-        @click="$router.push({ path: '/report/detail' })"
+        @click="$router.push({ name: '/report/statement', params: item })"
       >
         <van-grid>
           <van-grid-item>
@@ -30,7 +30,7 @@
           </van-grid-item>
         </van-grid>
       </van-cell>
-    </van-list>
+    </LoadList>
     <template #search>
       <Search :formData="searchForm"></Search>
     </template>
@@ -90,15 +90,17 @@ export default {
   methods: {
     onSearch() {},
     onLoad() {
-      setTimeout(() => {
-        this.datalist.push({
-          date: new Date().toDateString(),
-          income: "123",
-          pay: "123",
-          assignment: "1212"
-        });
-        this.loading = false;
-      }, 1000);
+      return new Promise(resolve => {
+        setTimeout(() => {
+          this.datalist.push({
+            date: new Date().toDateString(),
+            income: "123",
+            pay: "123",
+            assignment: "1212"
+          });
+          resolve();
+        }, 1000);
+      });
     },
     onRefresh() {},
     initChart() {
