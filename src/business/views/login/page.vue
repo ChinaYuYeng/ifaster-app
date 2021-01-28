@@ -10,8 +10,8 @@
       <p>快充业务简介文章，快充业务简介文案快充业务简介文案快充业务简介文案快充业务 简介文案快充业务简介文案快充业务简介文案快充业务简介文案</p>
     </div>
     <BtnGroup direction="column" width="70%">
-      <button text="登录" block @click="$router.push({ path: '/login/login' })">dfdfd</button>
-      <button text="登录" block @click="$router.push({ path: '/login/register' })">dfdfd</button>
+      <button class="btn" block @click="$router.push({ path: '/login/login' })">登 录</button>
+      <button class="btn register" block @click="$router.push({ path: '/login/register' })">注 册</button>
     </BtnGroup>
   </AppLayout>
 </template>
@@ -33,45 +33,50 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.login__wrap {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 .top-bar img {
   width: 35%;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
-  margin-top: 3rem;
+  margin-top: 1.5rem;
+  // margin-top: 3rem;
 }
 .text-bar {
   width: 70%;
   text-align: center;
   margin-left: 15%;
-  margin-top: 2rem;
 }
 .text-bar .title {
-  font-size: 1rem;
+  font-size: 20px;
   color: #455d78;
   font-weight: 600;
 }
 .text-bar p {
-  font-size: 0.7rem;
+  font-size: 15px;
   color: #455d78;
 }
 .btn {
-  width: 60%;
-  margin-left: 20%;
-  margin-top: 2rem;
-  font-size: 0.8rem;
-  padding: 0.5rem 0;
+  width: 90%;
+  font-size: 15px;
+  margin-top: 20px;
+  padding: 10px 0;
   border: 1px solid #55babb;
   border-radius: 7px;
   color: #fff;
   background-color: #55babb;
+  position: relative;
+  left: 20%;
+}
+.btn.register {
+  width: 90%;
+  font-size: 15px;
+  margin-top: 20px;
+  padding: 10px 0;
+  border: 1px solid #55babb;
+  border-radius: 7px;
+  color: #55babb;
+  background-color: #fff;
+  position: relative;
+  left: 20%;
 }
 </style>
