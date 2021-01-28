@@ -6,7 +6,7 @@
       <slot></slot>
       <slot name="body-bottom" slot="bottom"></slot>
     </BodyContent>
-    <FooterMenu></FooterMenu>
+    <FooterMenu v-if="showFooter"></FooterMenu>
     <Search :show.sync="showSearch">
       <slot name="search"></slot>
     </Search>
@@ -26,7 +26,11 @@ export default {
       default: true
     },
     onRefresh: Function,
-    isScroll: Boolean
+    isScroll: Boolean,
+    showFooter: {
+      type: Boolean,
+      default: true
+    }
   },
   data: function() {
     return {

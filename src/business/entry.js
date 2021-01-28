@@ -22,15 +22,15 @@ function setLoginRouter() {
 }
 
 /* 路由拦截 */
-function routerControll(router, store) {
+function routerControll(router) {
   router.beforeEach((to, from, next) => {
-    if (store.getters["login/getLogined"]) {
-      next();
-    } else if (to.path === "/login") {
-      next();
-    } else {
-      next({ path: "/login" });
-    }
+    next();
+    // if (store.getters["login/getLogined"]) {
+    // } else if (to.path === "/login") {
+    //   next();
+    // } else {
+    //   next({ path: "/login" });
+    // }
   });
   router.afterEach(() => {
     // console.log(to, store);
