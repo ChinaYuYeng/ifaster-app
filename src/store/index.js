@@ -23,7 +23,7 @@ export function registerModule(path, module) {
   path.slice(0, -1).reduce((collection, pathName) => {
     return collection[pathName] || (collection[pathName] = pathName == "modules" ? {} : { namespaced: true });
   }, modules)[name] = { ...module, namespaced: true };
-  console.log(modules);
+  // console.log(modules);
 }
 
 export function getStore() {

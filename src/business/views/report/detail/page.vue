@@ -1,5 +1,6 @@
 <template>
   <AppLayout ref="report__wrap">
+    这是详情
     <!-- <template slot="body-top">
       <Panel>
         <van-cell is-link style="padding:6px 0;align-items: center;">
@@ -49,8 +50,9 @@
 
 <script>
 export default {
+  inject: ["parent"],
   created() {
-    debugger;
+    console.log(this.parent);
   }
 };
 </script>

@@ -9,14 +9,10 @@ import { parseFilePath } from "@/assets/util/tool";
 function traverse(route, cb, path = []) {
   if (route) {
     path.push(route.path);
-    route.fullPath = path.join("/");
-    cb(route);
-  } else {
-    return;
-  }
-
-  if (route.children) {
-    route.children.forEach(subRoute => traverse(subRoute, cb, [...path]));
+    cb(route, path.join("/"));
+    if (route.children) {
+      route.children.forEach(subRoute => traverse(subRoute, cb, [...path]));
+    }
   }
 }
 
@@ -26,17 +22,15 @@ const importComp = asyncImport;
 const contexts = require.context("@/business/views", true, /config\.js$/);
 contexts.keys().map(item => {
   let currentPath = item.match(/\.\/(?:(.+)\/)?config\.js$/)[1] || "";
-  let name = currentPath.split("/").join("-") || "root";
   const { mapGetters, mapActions, mapMutations } = createNamespacedHelpers(currentPath);
   /**
    * config的结构
    * config:{
    *  store:{}, vuex的module
-   *  routes:[{strategy:'',raw:{component,path}}]或者routes:[{}]这种整个对象默认是raw的值,
-   *          component可以是组件对象，也可以是需要加载的组件地址(只支持相对地址),默认是./page.vue
+   *  routes:{path,component} 支持vue-router可以配置的全部属性，component是必须的可以是路径，或者组件
+   *          component可以是组件，也可以是需要加载的组件地址(只支持相对地址),默认是./page.vue
    *          path 是路由地址
    *  apis:{root:{},scope:{}} 或者 apis:{}, 这种默认是scope,
-   *  mixin:{}需要注入到*.vue中的minxin
    *
    * }
    */
@@ -72,51 +66,40 @@ contexts.keys().map(item => {
     [key]: key
   }));
 
-  // const routes = Array.isArray(config.routes) ? config.routes : [config.routes || {}];
-
-  // const routes = treeFlatten(config.routes);
-
-  traverse(config.routes || {}, r => {
-    const route = {
-      strategy: r?.strategy || "merge",
-      raw: r?.raw || r || {}
-    };
-
-    const raw = route.raw;
-    const strategy = route.strategy;
-
-    currentPath = "/" + currentPath;
-    raw.path = raw.path || currentPath;
-    raw.fullPath = raw.fullPath || currentPath;
-    switch (strategy) {
-      case "replace":
-        registerRoute(raw.fullPath, raw);
-        break;
-      case "merge":
-        registerRoute(raw.fullPath, {
-          ...raw,
-          component:
-            Object.prototype.toString.call(raw.component) === "[object Object]"
-              ? raw.component
-              : importComp(parseFilePath((currentPath == "/" ? "" : currentPath) + "/" + (raw.component || "page.vue")), {
-                  name: name,
-                  beforeCreate() {
-                    Object.defineProperty(this, "$api", {
-                      value: Object.assign(Object.create(this.$api), apis.scope)
-                    });
-                  },
-                  // concat({})是为了没数据的时候防止assign报错
-                  computed: {
-                    ...mapGetters(Object.assign.apply({}, getAlias.concat({})))
-                  },
-                  methods: {
-                    ...mapActions(Object.assign.apply({}, actionAlias.concat({}))),
-                    ...mapMutations(Object.assign.apply({}, mutationsAlias.concat({})))
-                  },
-                  mixins: [config.mixin || {}]
-                })
-        });
-    }
+  currentPath = "/" + currentPath;
+  traverse(config.routes || {}, (route, fullPath) => {
+    route.path = route.path || currentPath;
+    fullPath = fullPath || currentPath;
+    route.component =
+      Object.prototype.toString.call(route.component) === "[object Function]"
+        ? route.component()
+        : importComp(parseFilePath((currentPath == "/" ? "" : currentPath) + "/" + (route.component || "page.vue")), {
+            name: fullPath.split("/").join("-") || "root",
+            beforeCreate() {
+              Object.defineProperty(this, "$api", {
+                value: Object.assign(Object.create(this.$api), apis.scope)
+              });
+              // 当前页面的默认路径，用来判断当前路由是否在这个页面上
+              Object.defineProperty(this, "$pagePath", {
+                value: fullPath
+              });
+            },
+            // concat({})是为了没数据的时候防止assign报错
+            computed: {
+              ...mapGetters(Object.assign.apply({}, getAlias.concat({})))
+            },
+            methods: {
+              ...mapActions(Object.assign.apply({}, actionAlias.concat({}))),
+              ...mapMutations(Object.assign.apply({}, mutationsAlias.concat({})))
+            },
+            // 如果报mergeData溢出，可能和这个选项的合并策略有关
+            provide() {
+              return {
+                $pagePath: this.$pagePath
+              };
+            }
+          });
+    registerRoute(fullPath, route);
   });
 });
 

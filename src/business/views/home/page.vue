@@ -10,7 +10,7 @@
             <small>历史充电收益</small>
             <h5>12</h5>
             <small>当前充电收益</small>
-            <van-button round size="mini" @click="routeTo('/report?type=charge')">
+            <van-button round size="mini" @click="routeTo('/report')">
               查看详情
             </van-button>
           </div>
@@ -22,7 +22,7 @@
             <small>历史充电收益</small>
             <h5>12</h5>
             <small>当前充电收益</small>
-            <van-button round size="mini" @click="routeTo('/report?type=hire')">查看详情</van-button>
+            <van-button round size="mini" @click="routeTo('/report')">查看详情</van-button>
           </div>
         </van-col>
       </van-row>
@@ -88,7 +88,12 @@
 import UserInfo from "@@/components/userInfo";
 import Links from "./components/links";
 export default {
-  components: { UserInfo, Links }
+  components: { UserInfo, Links },
+  methods: {
+    routeTo(path) {
+      this.$router.push({ path });
+    }
+  }
 };
 </script>
 
