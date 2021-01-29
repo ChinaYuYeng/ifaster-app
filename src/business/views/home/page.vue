@@ -30,7 +30,7 @@
     <van-row gutter="5" class="mtop10">
       <van-col span="12">
         <Panel>
-          <div slot="header">
+          <div slot="header" @click="routeTo('/pile')">
             电桩管理
           </div>
           <van-row>
