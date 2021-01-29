@@ -71,6 +71,12 @@
     ></Links>
     <Links
       :links="[
+        { icon: '&#xe611;', title: '收费设置', path: '/charge' },
+        { icon: '&#xe630;', title: '结算记录' }
+      ]"
+    ></Links>
+    <Links
+      :links="[
         { icon: '&#xe62e;', title: '还车申请' },
         { icon: '&#xe62e;', title: '充电订单管理' }
       ]"
