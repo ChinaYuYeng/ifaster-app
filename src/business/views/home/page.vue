@@ -66,7 +66,7 @@
     <Links
       :links="[
         { icon: '&#xe62e;', title: '还车申请' },
-        { icon: '&#xe62e;', title: '充电订单管理' }
+        { icon: '&#xe62e;', title: '充电订单管理', path: '/order' }
       ]"
     ></Links>
     <Links
