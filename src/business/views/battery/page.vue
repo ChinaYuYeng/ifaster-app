@@ -17,13 +17,13 @@ export default {
     return {
       bac,
       msg: "img",
-      path: "/pile/detail",
+      path: "/battery/detail",
       data: "id",
       list: [
-        { label: "电桩编号1", prop: "axc" },
-        { label: "电桩编号2", prop: "sss" },
-        { label: "电桩编号3", prop: "abc" },
-        { label: "电桩编号4", prop: "id" }
+        { label: "电池编号1", prop: "axc" },
+        { label: "电池编号2", prop: "sss" },
+        { label: "电池编号3", prop: "abc" },
+        { label: "电池编号4", prop: "id" }
       ],
       dataform: [
         { axc: "1", sss: "2", abc: "123", aaa: "ee", img: require("./testImg/index-bac.png"), id: "1" },
@@ -37,9 +37,9 @@ export default {
       ]
     };
   },
-  // components: {
-  //   Search
-  // },
+  //   components: {
+  //     Search
+  //   },
   methods: {
     onLoad() {
       return new Promise(resolve => {
