@@ -6,6 +6,7 @@ import Vant from "vant";
 import "vant/lib/index.less";
 import "@@/style/main.less";
 import "@@/components";
+import "@@/mixins";
 Vue.use(Vant);
 
 /* 设置rem */
