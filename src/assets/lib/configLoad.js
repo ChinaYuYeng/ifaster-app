@@ -8,6 +8,7 @@ import { parseFilePath } from "@/assets/util/tool";
 
 function traverse(route, cb, path = []) {
   if (route) {
+    if (!route.path) throw new Error("children route need path,please set something");
     path.push(route.path);
     cb(route, path.join("/"));
     if (route.children) {
@@ -67,9 +68,8 @@ contexts.keys().map(item => {
   }));
 
   currentPath = "/" + currentPath;
-  traverse(config.routes || {}, (route, fullPath) => {
-    route.path = route.path || currentPath;
-    fullPath = fullPath || currentPath;
+  // 设置默认path
+  traverse({ path: currentPath, ...(config.routes || {}) }, (route, fullPath) => {
     route.name = fullPath;
     route.component =
       Object.prototype.toString.call(route.component) === "[object Function]"
