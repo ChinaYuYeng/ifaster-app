@@ -70,11 +70,16 @@ contexts.keys().map(item => {
   traverse(config.routes || {}, (route, fullPath) => {
     route.path = route.path || currentPath;
     fullPath = fullPath || currentPath;
+    route.name = fullPath;
     route.component =
       Object.prototype.toString.call(route.component) === "[object Function]"
         ? route.component()
         : importComp(parseFilePath((currentPath == "/" ? "" : currentPath) + "/" + (route.component || "page.vue")), {
-            name: fullPath.split("/").join("-") || "root",
+            name:
+              fullPath
+                .split("/")
+                .filter(v => v)
+                .join("-") || "root",
             beforeCreate() {
               Object.defineProperty(this, "$api", {
                 value: Object.assign(Object.create(this.$api), apis.scope)

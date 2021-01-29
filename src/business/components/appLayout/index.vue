@@ -1,6 +1,6 @@
 <template>
   <div class="layout__main" v-if="showContent">
-    <HeaderNav v-if="showHeader" @click="showSearch = true"></HeaderNav>
+    <HeaderNav v-if="showHeader" @click="showSearch = true" :showIcon="showSearchIcon"></HeaderNav>
     <BodyContent :onRefresh="onRefresh" :isScroll="isScroll">
       <slot name="body-top" slot="top"></slot>
       <slot></slot>
@@ -45,6 +45,9 @@ export default {
       let index = path.indexOf("?");
       path = index >= 0 ? path.slice(0, index) : path;
       return path === this.$pagePath;
+    },
+    showSearchIcon() {
+      return !!this.$slots.search;
     }
   },
   components: {
