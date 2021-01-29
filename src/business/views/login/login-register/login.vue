@@ -22,7 +22,7 @@
       </div>
       <div class="btn-bar">
         <!-- <button class="btn login">登 录</button> -->
-        <submitBtn text="登录" :width="width" to="/home" class="btn login"></submitBtn>
+        <submitBtn text="登录" :width="width" :onSubmit="submit" class="btn login"></submitBtn>
         <button class="btn register" @click="gotoRegister()">新用户注册</button>
       </div>
       <van-popup v-model="show">
@@ -50,6 +50,9 @@ export default {
   methods: {
     showPopup() {
       this.show = true;
+    },
+    submit() {
+      this.$router.push("/home");
     },
     gotoRegister() {
       this.$router.push("/login/register");

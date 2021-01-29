@@ -10,8 +10,8 @@
       <p>快充业务简介文章，快充业务简介文案快充业务简介文案快充业务简介文案快充业务 简介文案快充业务简介文案快充业务简介文案快充业务简介文案</p>
     </div>
     <BtnGroup direction="column" width="70%">
-      <button class="btn" block @click="$router.push({ path: '/login/login' })">登 录</button>
-      <button class="btn register" block @click="$router.push({ path: '/login/register' })">注 册</button>
+      <button class="btn" @click="$router.push({ path: '/login/login' })">登 录</button>
+      <button class="btn register" @click="$router.push({ path: '/login/register' })">注 册</button>
     </BtnGroup>
   </AppLayout>
 </template>
