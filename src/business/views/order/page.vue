@@ -30,14 +30,23 @@
         </div>
       </Panel>
     </LoadList>
+    <template #search>
+      <Search :formData="searchForm"></Search>
+    </template>
   </AppLayout>
 </template>
 
 <script>
+import Search from "./components/search";
 export default {
+  components: { Search },
   data() {
     return {
       item: this.$route.params,
+      searchForm: {
+        type: 1,
+        date: new Date().toUTCString()
+      },
       datalist: [
         {
           date: "2021-01-16",
@@ -66,7 +75,13 @@ export default {
       ]
     };
   },
+  provide() {
+    return {
+      parent: this
+    };
+  },
   methods: {
+    onSearch() {},
     onLoad() {
       return new Promise(resolve => {
         setTimeout(() => {

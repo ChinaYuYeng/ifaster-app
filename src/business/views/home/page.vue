@@ -29,8 +29,8 @@
     </Panel>
     <van-row gutter="5" class="mtop10">
       <van-col span="12">
-        <Panel>
-          <div slot="header" @click="routeTo('/pile')">
+        <Panel @click.native="routeTo('/pile')">
+          <div slot="header">
             电桩管理
           </div>
           <van-row>
@@ -65,7 +65,7 @@
     </van-row>
     <Links
       :links="[
-        { icon: '&#xe62e;', title: '还车申请' },
+        { icon: '&#xe62e;', title: '还车申请', path: '/return' },
         { icon: '&#xe62e;', title: '充电订单管理', path: '/order' }
       ]"
     ></Links>
@@ -85,10 +85,9 @@
 </template>
 
 <script>
-import UserInfo from "@@/components/userInfo";
 import Links from "./components/links";
 export default {
-  components: { UserInfo, Links },
+  components: { Links },
   methods: {
     routeTo(path) {
       this.$router.push({ path });
