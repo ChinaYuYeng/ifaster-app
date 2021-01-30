@@ -4,7 +4,7 @@ import { registerModule, getStore } from "@/store";
 import request from "@/api/request";
 import { registerApi } from "@/api";
 import { createNamespacedHelpers } from "vuex";
-import { parseFilePath } from "@/assets/util/tool";
+import { parseFilePath } from "./tool";
 
 function traverse(route, cb, path = []) {
   if (route) {
