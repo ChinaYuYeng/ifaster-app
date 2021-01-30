@@ -1,12 +1,16 @@
 <template>
-  <AppLayout ref="report__wrap">
-    <!-- {{ this.$route.query.data }} -->
+  <AppLayout>
     <PileList :columns="columns" :result="dataForm" :hasArrow="false" :useRoute="false" :imgProp="msg"></PileList>
     <Panel>
       <tmap></tmap>
       <statusList></statusList>
     </Panel>
-    <listItem :listColumns="listColumns" :listData="listData" :routePath="routePath"></listItem>
+    <Panel>
+      <listItem :listColumns="listColumns1" :listData="listData1" :routePath="routePath1"></listItem>
+    </Panel>
+    <Panel>
+      <listItem :listColumns="listColumns2" :listData="listData2" :routePath="routePath2"></listItem>
+    </Panel>
   </AppLayout>
 </template>
 
@@ -18,7 +22,8 @@ export default {
   data() {
     return {
       msg: "img",
-      routePath: "/pile/edit",
+      routePath1: "/battery/edit",
+      routePath2: "/battery/log",
       columns: [
         { label: "编号1", prop: "a" },
         { label: "编号2", prop: "b" },
@@ -34,8 +39,7 @@ export default {
           img: require("../testImg/index-bac.png")
         }
       ],
-
-      listColumns: [
+      listColumns1: [
         {
           label: "名称1",
           prop: "a1",
@@ -59,24 +63,29 @@ export default {
           prop: "a5"
         }
       ],
-      listData: {
+      listData1: {
         a1: "111",
         a2: "222",
         a3: "333",
         a4: "444",
-        a5: "555",
-        imei: "12312312312"
+        a5: "555"
+      },
+      listColumns2: [
+        {
+          label: "操作日志",
+          prop: "a1",
+          islink: true
+        },
+        {
+          label: "名称2",
+          prop: "a2"
+        }
+      ],
+      listData2: {
+        a1: "111",
+        a2: "222"
       }
     };
-  },
-  created() {
-    // this.msg = this.$route.query.data
-  },
-  methods: {
-    getDataForm(data) {
-      this.listData = data;
-      console.log(data);
-    }
   },
   components: {
     tmap,
@@ -85,5 +94,4 @@ export default {
   }
 };
 </script>
-
 <style></style>
