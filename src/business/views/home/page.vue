@@ -66,19 +66,8 @@
     <Links
       :links="[
         { icon: '&#xe62e;', title: '还车申请', path: '/return' },
-        { icon: '&#xe62e;', title: '充电订单管理', path: '/order' }
-      ]"
-    ></Links>
-    <Links
-      :links="[
-        { icon: '&#xe62e;', title: '还车申请' },
-        { icon: '&#xe62e;', title: '充电订单管理' }
-      ]"
-    ></Links>
-    <Links
-      :links="[
-        { icon: '&#xe62e;', title: '还车申请' },
-        { icon: '&#xe62e;', title: '充电订单管理' }
+        { icon: '&#xe62e;', title: '充电订单管理', path: '/order' },
+        { icon: '&#xe62e;', title: '租还点管理', path: '/rentMar' }
       ]"
     ></Links>
   </AppLayout>
