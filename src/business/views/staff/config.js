@@ -32,6 +32,13 @@ export default function() {
         meta: {
           title: "权限模板"
         }
+      },
+      {
+        path: "addtemp",
+        component: "./addTemp/page.vue",
+        meta: {
+          title: "新增模板"
+        }
       }
     ]
   };
