@@ -1,53 +1,36 @@
 <template>
-  <div class="pilelist">
-    <van-cell v-for="(item, index) in templatename" :key="index" @click="goDetail(item1)">
-      <img class="list-img" :src="item[imgProp]" alt="" />
+  <div>
+    <van-cell class="list" v-for="item in dataList" :key="item.id" @click="goEdit()">
+      <img class="list-img" :src="item.img" alt="" />
       <div class="templatename">
         <h3>{{ item.name }}</h3>
-        <span class="tips">{{ item.tips }}</span>
+        <span class="tips">{{ item.rentModel }}</span>
       </div>
-      <van-icon v-if="hasArrow" class="arrow-icon" name="arrow" size="20" color="#B2B2B2" />
+      <van-icon class="arrow-icon" name="arrow" size="20" color="#B2B2B2" />
     </van-cell>
   </div>
 </template>
 
 <script>
 export default {
-  name: "chargeList",
   data() {
-    return {
-      // imgList:[]
-    };
+    return {};
   },
   props: {
     useRoute: {
       type: Boolean,
       default: true
     },
-    hasArrow: {
-      type: Boolean,
-      default: true
-    },
     imgProp: String,
-    templatename: {
-      type: Array
-    }
+    dataList: Array
     // otherDatas:Array
   },
   methods: {
-    goDetail(item) {
-      if (this.useRoute) {
-        this.$router.push({
-          path: "/pile/detail",
-          query: { id: item.id }
-        });
-      }
+    goEdit() {
+      this.$router.push({
+        path: "/charge/edit"
+      });
     }
-    // getImgUrl(){
-    //     for(let i=0;i<this.result.length;i++){
-    //         this.imgList.push(result[i].imgProp)
-    //     }
-    // }
   }
 };
 </script>
@@ -57,24 +40,24 @@ export default {
   margin: 0;
   padding: 0;
 }
+
 .list-img {
-  width: 23%;
+  width: 20%;
   border: 1px solid #dddddd;
   float: left;
-  margin-top: 20px;
-  margin-left: 25px;
-  margin-bottom: 20px;
+  margin: 10px 5px;
 }
 .arrow-icon {
   position: absolute;
-  top: 55px;
+  top: 35%;
   left: 90%;
 }
 .templatename {
-  margin-left: 1rem;
   color: #f90;
+  margin-top: 10px;
 }
 .templatename > span {
   color: #ccc;
+  font-weight: 700;
 }
 </style>

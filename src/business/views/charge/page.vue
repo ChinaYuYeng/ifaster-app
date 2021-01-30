@@ -1,13 +1,14 @@
 <template>
   <AppLayout ref="report__wrap">
-    <van-tabs>
+    <van-tabs :before-change="beforeChange" v-model:active="active">
       <van-tab v-for="(t, index) in title" :key="index" :value="index">
         <template #title>
           <span class="iconfont" v-html="t.icon"></span>
           <span>{{ t.name }}</span>
         </template>
         <LoadList :loadData="onLoad" class="mtop10">
-          <ChargeList :templatename="dataform"></ChargeList>
+          <ChargeList :dataList="dataList"></ChargeList>
+          <van-button type="primary" size="large">新增模板</van-button>
         </LoadList>
       </van-tab>
     </van-tabs>
@@ -15,11 +16,15 @@
 </template>
 
 <script>
-import bac from "./testImg/index-bac.png";
+import batteryImg from "../../../assets/images/battery.png";
+import chargingImg from "../../../assets/images/charging.png";
 import ChargeList from "./components/chargeList";
 export default {
   data() {
     return {
+      imgSrc: "",
+      batteryImg: batteryImg,
+      chargingImg: chargingImg,
       active: 0,
       title: [
         {
@@ -31,31 +36,37 @@ export default {
           name: " 电桩收费模板"
         }
       ],
-      bac,
-      msg: "img",
-      dataform: [
-        { name: "电池收费模板-01", tips: "(保证金模式)", imgProp: require("./testImg/index-bac.png") },
-        { name: "电池收费模板-02", tips: "(预付款模式)", imgProp: require("./testImg/index-bac.png") }
+      dataList: [
+        { id: 0, name: "收费模板名称-001", rentModel: "保证金模式", img: batteryImg },
+        { id: 1, name: "收费模板名称-002", rentModel: "预付费模式", img: batteryImg },
+        { id: 2, name: "收费模板名称-003", rentModel: "预付费模式", img: chargingImg }
       ]
-      // dataform: [
-      //   { axc: "1", sss: "2", abc: "123", aaa: "ee", img: require("./testImg/index-bac.png"), id: "1" },
-      //   { axc: "33333", sss: "4", abc: "444", aaa: "wfw", img: require("./testImg/index-bac.png"), id: "2" }
-      // ]
     };
   },
   methods: {
     onLoad() {
       return new Promise(resolve => {
         setTimeout(() => {
-          this.datalist.push({
-            date: new Date().toDateString(),
-            income: "123",
-            pay: "123",
-            assignment: "1212"
-          });
+          this.dataList.push({ name: "4", rentModel: "444", img: require("./testImg/index-bac.png"), id: 3 });
           resolve();
         }, 1000);
       });
+    },
+    beforeChange(index) {
+      if (index == 1) {
+        this.dataList = [
+          { id: 0, name: "AAA收费模板名称-001", rentModel: "保证金模式", img: batteryImg },
+          { id: 1, name: "BBB收费模板名称-002", rentModel: "预付费模式", img: batteryImg },
+          { id: 2, name: "CCC收费模板名称-003", rentModel: "预付费模式", img: chargingImg }
+        ];
+      } else {
+        this.dataList = [
+          { id: 0, name: "111收费模板名称-001", rentModel: "保证金模式", img: batteryImg },
+          { id: 1, name: "BBB收费模板名称-002", rentModel: "预付费模式", img: batteryImg },
+          { id: 2, name: "CCC收费模板名称-003", rentModel: "预付费模式", img: chargingImg }
+        ];
+      }
+      this.active = index;
     }
   },
   components: {

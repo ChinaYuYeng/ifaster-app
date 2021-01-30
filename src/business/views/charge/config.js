@@ -6,10 +6,10 @@ export default function() {
     },
     children: [
       {
-        path: "set",
+        path: "edit",
         component: "./edit/page.vue",
         meta: {
-          title: "收费模板设置"
+          title: "编辑/新增收费模板"
         }
       }
     ]
