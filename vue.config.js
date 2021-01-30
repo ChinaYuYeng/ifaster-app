@@ -4,9 +4,14 @@ function resolve(dir) {
 }
 module.exports = {
   configureWebpack: {
-    // module: {
-    //   unknownContextCritical: false
-    // }
+    devServer: {
+      proxy: {
+        "/ifaster-v2-wechat": {
+          target: "http://192.168.1.16:8899",
+          autoRewrite: true
+        }
+      }
+    }
   },
   chainWebpack: config => {
     config.externals = {

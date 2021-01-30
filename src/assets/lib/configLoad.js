@@ -46,7 +46,7 @@ contexts.keys().map(item => {
 
   const apis = {
     root: config?.apis?.root,
-    scope: config?.apis?.scope || config?.apis?.root ? {} : config?.apis || {}
+    scope: config?.apis?.scope || (config?.apis?.root ? {} : config?.apis || {})
   };
   registerApi(apis.root);
 
@@ -79,7 +79,7 @@ contexts.keys().map(item => {
                 .filter(v => v)
                 .join("-") || "root",
             beforeCreate() {
-              Object.defineProperty(this, "$api", {
+              Object.defineProperty(this, "$apis", {
                 value: Object.assign(Object.create(this.$api), apis.scope)
               });
               // 当前页面的默认路径，用来判断当前路由是否在这个页面上
