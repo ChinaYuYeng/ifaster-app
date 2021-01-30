@@ -14,6 +14,15 @@ function setRem() {
   document.querySelector("html").setAttribute("style", "font-size:calc(100vw / 750 * 100);");
 }
 
+// 加载高德地图
+function loadMap() {
+  const script = document.createElement("script");
+  script.src = "https://webapi.amap.com/loader.js";
+  // script.src = "https://webapi.amap.com/maps?v=2.0&key=21a1ca7e415887a172fe8399bd114b28";
+  script.type = "text/javascript";
+  document.querySelector("head").appendChild(script);
+}
+
 /* 开启路由 */
 function setLoginRouter() {
   loadRouters();
@@ -67,6 +76,7 @@ function requestInterceptor(request) {
 }
 
 export default function(request, router, store) {
+  loadMap();
   setRem();
   setLoginRouter();
   routerControll(router, store);

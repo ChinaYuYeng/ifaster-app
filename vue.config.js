@@ -9,6 +9,9 @@ module.exports = {
     // }
   },
   chainWebpack: config => {
+    config.externals = {
+      amap: "amap"
+    };
     config.resolve.alias.set("@@", resolve("src/business"));
     config.module
       .rule("vue")
