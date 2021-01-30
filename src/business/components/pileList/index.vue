@@ -1,7 +1,7 @@
 <template>
   <div class="pilelist">
     <van-cell v-for="(item1, index) in result" :key="index" @click="goDetail(item1)">
-      <img class="list-img" :src="item1[imgProp]" alt="" />
+      <img class="list-img" :src="item1[imgProp]" />
       <div v-for="(item, index) in columns" :key="index" class="text-bar">
         <div class="label-bar">
           <span class="label">{{ item.label }} :</span>
@@ -12,7 +12,6 @@
     </van-cell>
   </div>
 </template>
-
 <script>
 export default {
   name: "PileList",
@@ -36,23 +35,20 @@ export default {
     },
     result: {
       type: Array
-    }
+    },
+    routePath: String,
+    routeData: String
     // otherDatas:Array
   },
   methods: {
     goDetail(item) {
       if (this.useRoute) {
         this.$router.push({
-          path: "/pile/detail",
-          query: { id: item.id }
+          path: this.routePath,
+          query: { data: item[this.routeData] }
         });
       }
     }
-    // getImgUrl(){
-    //     for(let i=0;i<this.result.length;i++){
-    //         this.imgList.push(result[i].imgProp)
-    //     }
-    // }
   }
 };
 </script>
@@ -63,7 +59,7 @@ export default {
   padding: 0;
 }
 .list-img {
-  width: 23%;
+  width: 25%;
   border: 1px solid #dddddd;
   float: left;
   margin-top: 20px;
@@ -82,7 +78,7 @@ export default {
 }
 .label-bar {
   float: left;
-  width: 20%;
+  width: 25%;
 }
 p {
   position: relative;

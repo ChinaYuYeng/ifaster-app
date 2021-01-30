@@ -46,7 +46,7 @@
         </Panel>
       </van-col>
       <van-col span="12">
-        <Panel>
+        <Panel @click.native="routeTo('/battery')">
           <div slot="header">
             电池管理
           </div>
@@ -68,6 +68,12 @@
         { icon: '&#xe62e;', title: '还车申请', path: '/return' },
         { icon: '&#xe62e;', title: '充电订单管理', path: '/order' },
         { icon: '&#xe62e;', title: '租还点管理', path: '/rentMar' }
+      ]"
+    ></Links>
+    <Links
+      :links="[
+        { icon: '&#xe62e;', title: '店员管理', path: '/staff' },
+        { icon: '&#xe62e;', title: '下级管理', path: '/junior' }
       ]"
     ></Links>
   </AppLayout>

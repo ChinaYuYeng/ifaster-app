@@ -1,11 +1,9 @@
 <template>
-  <div>
-    {{ dataForm }}
+  <AppLayout>
     <tmap></tmap>
     <inputList :columns="columns" :data="dataForm"></inputList>
-
-    <button @click="submit()" class="submit">保 存</button>
-  </div>
+    <SubmitBtn :onSubmit="submit" class="submit" text="保 存"></SubmitBtn>
+  </AppLayout>
 </template>
 
 <script>
@@ -24,7 +22,7 @@ export default {
   },
   methods: {
     submit() {
-      this.$emit("sub", this.dataForm);
+      // this.$emit("sub", this.dataForm);
       // console.log(this.dataForm)
       this.$router.go(-1);
     }
