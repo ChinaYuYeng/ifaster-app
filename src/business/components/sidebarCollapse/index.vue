@@ -1,10 +1,25 @@
 <template>
   <div class="wrap">
-    <van-row>
+    <van-row class="row">
       <van-col span="6"><Sidebar :bars="bars"></Sidebar></van-col>
-      <van-col span="18"><Collapse :collapses="children"></Collapse></van-col>
+      <van-col span="18">
+        <van-row>
+          <van-col class="row">
+            <van-cell-group>
+              <van-cell :value="collapseHeader" value-class="header-cell" />
+            </van-cell-group>
+          </van-col>
+        </van-row>
+        <van-row>
+          <van-col class="row"><Collapse :collapses="children" :errIcon="errIcon"></Collapse></van-col>
+        </van-row>
+      </van-col>
     </van-row>
-    <ActionBar :btns="btns" :summary="summary"></ActionBar>
+    <van-row class="row action-bar">
+      <van-col span="24">
+        <ActionBar :btns="btns" :summary="summary"></ActionBar>
+      </van-col>
+    </van-row>
   </div>
 </template>
 <script>
@@ -15,8 +30,8 @@ export default {
   name: "sidebarCollapse",
   props: {
     bars: {
-      type: Boolean,
-      default: true
+      type: Array,
+      required: true
     },
     children: {
       type: Array,
@@ -28,10 +43,21 @@ export default {
     },
     summary: {
       type: String
+    },
+    errIcon: {
+      type: String
+    },
+    collapseHeader: {
+      type: String
     }
   },
-  data: function() {
-    return {};
+  data() {
+    return {
+      actives: []
+    };
+  },
+  created() {
+    this.summary = "比例：20% 数量：99;比例：20% 数量：99;比例：20% 数量：99;";
   },
   computed: {
     /* 是否显示当前页面，或者提供router-view */
@@ -45,6 +71,13 @@ export default {
       return !!this.$slots.search;
     }
   },
+  watch: {
+    "this.actives": function(val) {
+      if (val && val.length > 0) {
+        this.summary = val.map(v => v.name + v.cnt + ",").join();
+      }
+    }
+  },
   components: {
     Collapse,
     Sidebar,
@@ -55,5 +88,16 @@ export default {
 <style lang="less" scoped>
 .wrap {
   display: flex;
+  .row {
+    width: 100%;
+  }
+  .action-bar {
+    position: fixed;
+    bottom: 50px;
+    text-align: center;
+  }
+}
+.header-cell {
+  color: @theme-color;
 }
 </style>
