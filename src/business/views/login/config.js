@@ -5,11 +5,17 @@ export default function({ post }) {
       loginout() {
         console.log("out");
       },
-      loadMenu() {}
+      loadMenu() {},
+      sms(params) {
+        return post("/account/sms", params);
+      }
     },
     scope: {
       login(params) {
         return post("/account/login", params);
+      },
+      register(params) {
+        return post("/account/agent/register", params);
       }
     }
   };

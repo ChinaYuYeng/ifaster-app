@@ -9,7 +9,7 @@
         <van-field class="input" v-model="dataForm.mobile" placeholder="请输入手机号码" />
         <span class="label">验证码</span>
         <van-field class="input" v-model="dataForm.verifyCode" placeholder="请输入验证码" />
-        <button class="get-code">获取验证码</button>
+        <button class="get-code" @click="getSms">获取验证码</button>
       </div>
       <div class="proto-bar">
         <van-checkbox class="check" icon-size="15px" v-model="checked" shape="square" checked-color="#55BABB"></van-checkbox>
@@ -57,6 +57,9 @@ export default {
         .catch(err => {
           this.$notify(err.msg);
         });
+    },
+    getSms() {
+      this.$apis.sms({ mobile: this.dataForm.mobile, type: 1 });
     },
     gotoRegister() {
       this.$router.push("/login/register");

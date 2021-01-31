@@ -7,6 +7,7 @@ import "vant/lib/index.less";
 import "@@/style/main.less";
 import "@@/components";
 import "@@/mixins";
+import "@/assets/directive";
 Vue.use(Vant);
 
 /* 设置rem */
@@ -48,7 +49,7 @@ function routerControll(router) {
 }
 
 /*  接口拦截 */
-function requestInterceptor(request, Vue) {
+function requestInterceptor(request) {
   request.defaults.timeout = 2 * 60 * 1000;
   request.defaults.baseURL = "/ifaster-v2-wechat";
   request.interceptors.request.use(
