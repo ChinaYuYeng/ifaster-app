@@ -9,7 +9,7 @@ export default function() {
         path: "edit",
         component: "./edit/page.vue",
         meta: {
-          title: "编辑/新增收费模板"
+          title: "新增/编辑-收费模板"
         }
       }
     ]

@@ -1,15 +1,17 @@
 <template>
   <AppLayout ref="report__wrap">
-    <van-tabs :before-change="beforeChange" v-model:active="active">
+    <van-tabs :before-change="beforeChange" :active="active">
       <van-tab v-for="(t, index) in title" :key="index" :value="index">
         <template #title>
           <span class="iconfont" v-html="t.icon"></span>
           <span>{{ t.name }}</span>
         </template>
-        <LoadList :loadData="onLoad" class="mtop10">
+        <!-- <LoadList :loadData="onLoad" class="mtop10">
           <ChargeList :dataList="dataList"></ChargeList>
           <van-button type="primary" size="large">新增模板</van-button>
-        </LoadList>
+        </LoadList> -->
+        <ChargeList :dataList="dataList"></ChargeList>
+        <van-button type="primary" size="large">新增模板</van-button>
       </van-tab>
     </van-tabs>
   </AppLayout>
@@ -37,9 +39,9 @@ export default {
         }
       ],
       dataList: [
-        { id: 0, name: "收费模板名称-001", rentModel: "保证金模式", img: batteryImg },
-        { id: 1, name: "收费模板名称-002", rentModel: "预付费模式", img: batteryImg },
-        { id: 2, name: "收费模板名称-003", rentModel: "预付费模式", img: chargingImg }
+        { id: 0, name: "收费模板名称-001", rentModel: 1, img: batteryImg },
+        { id: 1, name: "收费模板名称-002", rentModel: 2, img: batteryImg },
+        { id: 2, name: "收费模板名称-003", rentModel: 0, img: chargingImg }
       ]
     };
   },
@@ -53,17 +55,17 @@ export default {
       });
     },
     beforeChange(index) {
-      if (index == 1) {
+      if (index == 0) {
         this.dataList = [
-          { id: 0, name: "AAA收费模板名称-001", rentModel: "保证金模式", img: batteryImg },
-          { id: 1, name: "BBB收费模板名称-002", rentModel: "预付费模式", img: batteryImg },
-          { id: 2, name: "CCC收费模板名称-003", rentModel: "预付费模式", img: chargingImg }
+          { id: 0, name: "AAA收费模板名称-001", rentModel: 1, img: batteryImg },
+          { id: 1, name: "BBB收费模板名称-002", rentModel: 2, img: batteryImg },
+          { id: 2, name: "CCC收费模板名称-003", rentModel: 0, img: batteryImg }
         ];
       } else {
         this.dataList = [
-          { id: 0, name: "111收费模板名称-001", rentModel: "保证金模式", img: batteryImg },
-          { id: 1, name: "BBB收费模板名称-002", rentModel: "预付费模式", img: batteryImg },
-          { id: 2, name: "CCC收费模板名称-003", rentModel: "预付费模式", img: chargingImg }
+          { id: 0, name: "111收费模板名称-001", rentModel: 0, img: chargingImg },
+          { id: 1, name: "BBB收费模板名称-002", rentModel: 2, img: chargingImg },
+          { id: 2, name: "CCC收费模板名称-003", rentModel: 1, img: chargingImg }
         ];
       }
       this.active = index;

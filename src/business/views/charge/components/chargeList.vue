@@ -4,7 +4,8 @@
       <img class="list-img" :src="item.img" alt="" />
       <div class="templatename">
         <h3>{{ item.name }}</h3>
-        <span class="tips">{{ item.rentModel }}</span>
+        <!-- <span class="tips">{{ item.rentModel }}</span> -->
+        <span class="tips">{{ result }}</span>
       </div>
       <van-icon class="arrow-icon" name="arrow" size="20" color="#B2B2B2" />
     </van-cell>
@@ -30,6 +31,19 @@ export default {
       this.$router.push({
         path: "/charge/edit"
       });
+    }
+  },
+  computed: {
+    result() {
+      let showTips = "";
+      if (this.dataList.rentModel == 1) {
+        showTips = "保证金模式";
+      } else if (this.dataList.rentModel == 2) {
+        showTips = "2222222222";
+      } else {
+        showTips = "没有参数";
+      }
+      return showTips;
     }
   }
 };
