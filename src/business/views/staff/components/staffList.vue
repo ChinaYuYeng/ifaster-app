@@ -1,7 +1,12 @@
 <template>
   <div>
     <div v-for="(item, index) in dataList" :key="index">
-      <van-cell :icon="item.img" :title="item.name" :label="item.status" is-link @click="routeTo(item)"></van-cell>
+      <van-cell is-link @click="routeTo(item)">
+        <UserInfo :avatar="item.img">
+          <span>{{ item.name }}</span>
+          <span>{{ item.status }}</span>
+        </UserInfo>
+      </van-cell>
     </div>
   </div>
 </template>
