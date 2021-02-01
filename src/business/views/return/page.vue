@@ -1,28 +1,5 @@
 <template>
   <AppLayout ref="report__wrap">
-    <template slot="body-top">
-      <Panel>
-        <van-cell center>
-          <van-grid>
-            <van-grid-item>
-              <span>{{ item.date }}</span>
-            </van-grid-item>
-            <van-grid-item>
-              <span>营收</span>
-              <span>{{ item.income }}</span>
-            </van-grid-item>
-            <van-grid-item>
-              <span>分账</span>
-              <span>{{ item.assignment }}</span>
-            </van-grid-item>
-            <van-grid-item>
-              <span>支出</span>
-              <span>{{ item.pay }}</span>
-            </van-grid-item>
-          </van-grid>
-        </van-cell>
-      </Panel>
-    </template>
     <LoadList :loadData="onLoad" class="mtop10">
       <Panel v-for="item in datalist" :key="item.date" class="mtop10">
         <div class="content__item order__header" slot="header">
@@ -49,24 +26,27 @@
           <span>2013-1-1 10:1:1</span>
           <span>营收：12元</span>
           <span>营收：12元</span>
-          <van-button plain type="info" size="mini" @click="$router.push({ name: '/report/statement/detail' })">查看详情</van-button>
+          <van-button plain type="info" size="mini" @click="$router.push({ name: '/return/detail' })">查看详情</van-button>
         </div>
       </Panel>
     </LoadList>
+    <template #search>
+      <Search :formData="searchForm"></Search>
+    </template>
   </AppLayout>
 </template>
 
 <script>
+import Search from "./components/search";
 export default {
-  inject: ["parent"],
-  created() {
-    console.log(this.$route);
-  },
+  components: { Search },
   data() {
     return {
-      finished: false,
-      loading: false,
       item: this.$route.params,
+      searchForm: {
+        type: 1,
+        date: new Date().toUTCString()
+      },
       datalist: [
         {
           date: "2021-01-16",
@@ -95,7 +75,13 @@ export default {
       ]
     };
   },
+  provide() {
+    return {
+      parent: this
+    };
+  },
   methods: {
+    onSearch() {},
     onLoad() {
       return new Promise(resolve => {
         setTimeout(() => {

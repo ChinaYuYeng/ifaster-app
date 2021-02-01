@@ -9,6 +9,9 @@ module.exports = {
     // }
   },
   chainWebpack: config => {
+    config.externals = {
+      amap: "amap"
+    };
     config.resolve.alias.set("@@", resolve("src/business"));
     config.module
       .rule("vue")
@@ -25,7 +28,7 @@ module.exports = {
       less: {
         modifyVars: {
           // 或者可以通过 less 文件覆盖（文件路径为绝对路径）
-          hack: `true; @import "${resolve("./src/assets/theme/vant-theme.less")}"`
+          hack: `true; @import "${resolve("./src/business/style/vant-theme.less")}"`
         }
       }
     }

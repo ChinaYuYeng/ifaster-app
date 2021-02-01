@@ -4,7 +4,7 @@ import { registerModule, getStore } from "@/store";
 import request from "@/api/request";
 import { registerApi } from "@/api";
 import { createNamespacedHelpers } from "vuex";
-import { parseFilePath } from "@/assets/util/tool";
+import { parseFilePath } from "./tool";
 
 function traverse(route, cb, path = []) {
   if (route) {
@@ -36,15 +36,13 @@ contexts.keys().map(item => {
    * }
    */
   const config =
-    contexts(item).default &&
-    contexts(item).default(request, {
-      mapGetters,
-      mapActions,
-      mapMutations
-    });
-
-  // 判空，避免未 export default 方法 或者 方法未返回对象
-  if (!config) return;
+    (contexts(item).default &&
+      contexts(item).default(request, {
+        mapGetters,
+        mapActions,
+        mapMutations
+      })) ||
+    {};
 
   const apis = {
     root: config?.apis?.root,
