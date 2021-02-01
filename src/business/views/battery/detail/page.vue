@@ -1,15 +1,15 @@
 <template>
   <AppLayout>
-    <PileList :columns="columns" :result="dataForm" :hasArrow="false" :useRoute="false" :imgProp="msg"></PileList>
+    <PileList :columns="columns" :result="dataForm" :hasArrow="false" :useRoute="false" imgProp="img"></PileList>
     <Panel>
       <tmap></tmap>
       <statusList></statusList>
     </Panel>
     <Panel>
-      <listItem :listColumns="listColumns1" :listData="listData1" :routePath="routePath1"></listItem>
+      <listItem :listColumns="listColumns1" :listData="listData1" routePath="/battery/edit"></listItem>
     </Panel>
     <Panel>
-      <listItem :listColumns="listColumns2" :listData="listData2" :routePath="routePath2"></listItem>
+      <listItem :listColumns="listColumns2" :listData="listData2" routePath="/battery/log"></listItem>
     </Panel>
   </AppLayout>
 </template>
@@ -21,9 +21,6 @@ import listItem from "../components/list-item";
 export default {
   data() {
     return {
-      msg: "img",
-      routePath1: "/battery/edit",
-      routePath2: "/battery/log",
       columns: [
         { label: "编号1", prop: "a" },
         { label: "编号2", prop: "b" },

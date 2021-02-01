@@ -4,16 +4,24 @@
     <template #body-bottom>
       <van-button text="新增店员" @click="gotoAdd"></van-button>
     </template>
+    <template #search>
+      <Search :formData="searchForm"></Search>
+    </template>
   </AppLayout>
 </template>
 
 <script>
 import staffList from "./components/staffList";
 import test from "./testImg/index-bac.png";
+import Search from "./components/search";
 export default {
   data() {
     return {
       test,
+      searchForm: {
+        type: 1,
+        date: new Date().toUTCString()
+      },
       datalist: [
         { name: "店员1", status: "待审核", phone: "123456", img: test },
         { name: "店员2", status: "待审核", phone: "2222222", img: test },
@@ -22,9 +30,18 @@ export default {
     };
   },
   components: {
-    staffList
+    staffList,
+    Search
+  },
+  provide() {
+    return {
+      parent: this
+    };
   },
   methods: {
+    onSearch() {
+      //写入后台交互
+    },
     gotoAdd() {
       this.$router.push("/staff/qrcode");
     }

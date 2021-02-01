@@ -1,4 +1,20 @@
-export default function() {
+export default function({ post }) {
+  const apis = {
+    scope: {
+      // login(params) {
+      //   return post("/account/login", params);
+      // },
+      // register(params) {
+      //   return post("/account/agent/register", params);
+      // }
+      list(params) {
+        return post("/charge/device/list", params);
+      },
+      detail(params) {
+        return post("/charge/device/detail", params);
+      }
+    }
+  };
   const routes = {
     path: "/pile",
     meta: {
@@ -34,7 +50,12 @@ export default function() {
       setPileInfo(state, data) {
         state.pileInfo = data;
       }
+    },
+    actions: {
+      saveMessage({ commit }, data) {
+        commit("setPileInfo", data);
+      }
     }
   };
-  return { routes, store };
+  return { apis, routes, store };
 }

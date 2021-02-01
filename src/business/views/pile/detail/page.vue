@@ -1,12 +1,17 @@
 <template>
   <AppLayout ref="report__wrap">
     <!-- {{ this.$route.query.data }} -->
-    <PileList :columns="columns" :result="dataForm" :hasArrow="false" :useRoute="false" :imgProp="msg"></PileList>
+    <pileList :columns="columns" :result="dataForm" :hasArrow="false" :useRoute="false" imgProp="chargeFeeTemplateImg"></pileList>
     <Panel>
       <tmap></tmap>
       <statusList></statusList>
     </Panel>
-    <listItem :listColumns="listColumns" :listData="listData" :routePath="routePath"></listItem>
+    <Panel style="margin-top:10px">
+      <listItem :listColumns="listColumns1" :listData="listData" routePath="/pile/edit"></listItem>
+    </Panel>
+    <Panel style="margin-top:10px">
+      <listItem :listColumns="listColumns2" :listData="listData" routePath=""></listItem>
+    </Panel>
   </AppLayout>
 </template>
 
@@ -14,65 +19,70 @@
 import tmap from "../components/map";
 import statusList from "../components/status_list";
 import listItem from "../components/list-item";
+import pileList from "../components/pileList";
 export default {
   data() {
     return {
       msg: "img",
-      routePath: "/pile/edit",
       columns: [
-        { label: "编号1", prop: "a" },
-        { label: "编号2", prop: "b" },
-        { label: "编号3", prop: "c" },
-        { label: "编号4", prop: "d" }
+        { label: "电桩编号", prop: "number" },
+        { label: "所在地点", prop: "address" },
+        { label: "收费模板", prop: "chargeFeeTemplateName" },
+        { label: "状态", prop: "chargeStatus" }
       ],
-      dataForm: [
+      dataForm: [],
+      listColumns1: [
         {
-          a: "123",
-          b: "222",
-          c: "331",
-          d: "3123",
-          img: require("../testImg/index-bac.png")
+          label: "电桩名称",
+          prop: "name",
+          islink: true
+        },
+        {
+          label: "电桩编号",
+          prop: "number"
+        },
+        {
+          label: "详细地址",
+          prop: "address",
+          islink: true
+        },
+        {
+          label: "充电次数",
+          prop: "chargeTimes"
+        },
+        {
+          label: "租赁充电",
+          prop: "rentChargeTimes"
         }
       ],
-
-      listColumns: [
+      listColumns2: [
         {
-          label: "名称1",
-          prop: "a1",
-          islink: true
+          label: "收费模板",
+          prop: "chargeFeeTemplateName"
         },
         {
-          label: "名称2",
-          prop: "a2"
+          label: "分账",
+          prop: "a5"
         },
         {
-          label: "名称3",
-          prop: "a3",
-          islink: true
-        },
-        {
-          label: "名称4",
-          prop: "a4"
-        },
-        {
-          label: "名称5",
+          label: "运营",
           prop: "a5"
         }
       ],
-      listData: {
-        a1: "111",
-        a2: "222",
-        a3: "333",
-        a4: "444",
-        a5: "555",
-        imei: "12312312312"
-      }
+      listData: {}
     };
   },
   created() {
-    // this.msg = this.$route.query.data
+    this.getDetail();
   },
   methods: {
+    getDetail() {
+      let id = this.$route.query.data.id;
+      this.$apis.detail({ id: id }).then(res => {
+        this.dataForm.push(res.data);
+        this.listData = res.data;
+      });
+    },
     getDataForm(data) {
       this.listData = data;
       console.log(data);
@@ -81,7 +91,8 @@ export default {
   components: {
     tmap,
     statusList,
-    listItem
+    listItem,
+    pileList
   }
 };
 </script>

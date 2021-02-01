@@ -1,5 +1,6 @@
 <template>
   <AppLayout>
+    <!-- {{ this.$route.query.column }} -->
     <tmap></tmap>
     <inputList :columns="columns" :data="dataForm"></inputList>
     <SubmitBtn :onSubmit="submit" class="submit" text="保 存"></SubmitBtn>

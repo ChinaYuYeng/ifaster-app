@@ -1,7 +1,7 @@
 <template>
   <AppLayout>
     <tmap></tmap>
-    <inputList :columns="columns" :data="dataForm"></inputList>
+    <inputList :columns="columns" :data="itemList"></inputList>
     <SubmitBtn :onSubmit="submit" class="submit" text="保 存"></SubmitBtn>
   </AppLayout>
 </template>
@@ -12,8 +12,15 @@ import inputList from "../components/input-list";
 export default {
   data() {
     return {
-      dataForm: {},
-      columns: []
+      itemList: {},
+      columns: [],
+      dataForm: {
+        address: "",
+        id: "",
+        lat: "",
+        lng: "",
+        name: ""
+      }
     };
   },
   created() {
