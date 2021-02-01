@@ -57,7 +57,7 @@ export default {
     };
   },
   created() {
-    this.summary = "比例：20% 数量：99;比例：20% 数量：99;比例：20% 数量：99;";
+    // this.summary = "比例：20% 数量：99;比例：20% 数量：99;比例：20% 数量：99;";
   },
   computed: {
     /* 是否显示当前页面，或者提供router-view */

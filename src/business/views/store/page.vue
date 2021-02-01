@@ -100,12 +100,14 @@ export default {
     let btnChangeB = {
       id: 1,
       name: "批量调拨",
-      click: "changeBattery"
+      click: "changeBattery",
+      route: "/store/transfer"
     };
     let btnClaimB = {
       id: 2,
       name: "批量认领",
-      click: "claimBattery"
+      click: "claimBattery",
+      route: "/store/claim"
     };
     this.btns.push(btnChangeB);
     this.btns.push(btnClaimB);
