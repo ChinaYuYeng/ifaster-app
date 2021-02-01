@@ -1,12 +1,13 @@
 <template>
-  <AppLayout ref="report__wrap">
+  <AppLayout ref="report__wrap" :onRefresh="onRefresh">
     <LoadList :loadData="onLoad">
       <van-cell
         is-link
-        style="padding:6px 0;align-items: center;"
-        v-for="item in datalist"
-        :key="item.date"
-        @click="$router.push({ name: '/report/statement', params: item })"
+        center
+        style="padding:6px 0;"
+        v-for="item in dataList"
+        :key="item.id"
+        @click="routerTo({ name: '/report/statement', params: item })"
       >
         <van-grid>
           <van-grid-item>
@@ -34,49 +35,28 @@
 export default {
   data() {
     return {
-      datalist: [
-        {
-          date: "2021-01-16",
-          income: "123",
-          pay: "123",
-          assignment: "1212"
-        },
-        {
-          date: "2021-01-17",
-          income: "123",
-          pay: "123",
-          assignment: "1212"
-        },
-        {
-          date: "2021-01-18",
-          income: "123",
-          pay: "123",
-          assignment: "1212"
-        },
-        {
-          date: "2021-01-19",
-          income: "123",
-          pay: "123",
-          assignment: "1212"
-        }
-      ]
+      dataList: []
     };
   },
   methods: {
     onLoad() {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          this.datalist.push({
-            date: new Date().toDateString(),
-            income: "123",
-            pay: "123",
-            assignment: "1212"
-          });
-          resolve();
-        }, 1000);
+      return this.$apis.getList(Object.assign.apply(null, Array.from(arguments))).then(res => {
+        this.dataList = this.dataList.concat(res.data.rows);
+        return res;
       });
     },
-    onRefresh() {}
+    onRefresh() {
+      return new Promise(resolve => {
+        this.onLoad = this.onLoad.bind(this, {});
+        this.dataList = [];
+        resolve();
+      });
+    },
+    onSearch({ close }, search) {
+      this.onLoad = this.onLoad.bind(this, search);
+      this.dataList = [];
+      close();
+    }
   }
 };
 </script>
