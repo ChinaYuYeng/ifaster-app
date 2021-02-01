@@ -77,4 +77,10 @@ export default {
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.van-button--large {
+  position: fixed;
+  width: 95%;
+  bottom: 1.2rem;
+}
+</style>
