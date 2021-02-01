@@ -22,6 +22,12 @@ export default {
     tempList: Array
   },
   methods: {
+    gotoEdit(item) {
+      this.$router.push({
+        path: "/staff/addtemp",
+        query: { data: item }
+      });
+    },
     useTemp() {
       this.$router.go(-1);
     }

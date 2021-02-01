@@ -7,6 +7,7 @@ import SubmitBtn from "./submitBtn";
 import LoadList from "./loadList";
 import PileList from "./pileList";
 import UserInfo from "./userInfo";
+import SidebarCollapse from "./sidebarCollapse";
 
 Vue.component("Panel", Panel);
 Vue.component("UserInfo", UserInfo);
@@ -16,3 +17,4 @@ Vue.component("BtnGroup", BtnGroup);
 Vue.component("SubmitBtn", SubmitBtn);
 Vue.component("LoadList", LoadList);
 Vue.component("PileList", PileList);
+Vue.component("SidebarCollapse", SidebarCollapse);
