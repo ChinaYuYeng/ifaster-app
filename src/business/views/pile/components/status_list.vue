@@ -6,21 +6,21 @@
           在线状态
         </p>
         <p class="value">当前状态：{{ status1 }}</p>
-        <button class="btn">检测</button>
+        <button class="btn" @click="getOnlineStatus()">检测</button>
       </van-col>
       <van-col :span="8">
         <p class="title">
           运营状态
         </p>
         <p class="value">当前状态：{{ status2 }}</p>
-        <button class="btn">设置</button>
+        <button class="btn" @click="setOperateStatus()">设置</button>
       </van-col>
       <van-col :span="8">
         <p class="title">
           使用状态
         </p>
         <p class="value">当前状态：{{ status3 }}</p>
-        <button class="btn">刷新</button>
+        <button class="btn" @click="getUseStatus()">刷新</button>
       </van-col>
     </van-row>
   </div>
@@ -30,17 +30,26 @@
 export default {
   data() {
     return {
-      status1: "在线",
-      status2: "运营中",
-      status3: "充电中"
+      status1: "",
+      status2: "",
+      status3: ""
     };
   },
+  created() {
+    this.setStatusData();
+  },
+  methods: {
+    setStatusData() {
+      this.status1 = this.statusData.isOnlineDesc;
+      this.status2 = this.statusData.statusDesc;
+      this.status3 = this.statusData.chargeStatusDesc;
+    }
+  },
   props: {
-    // titles:{
-    //     type:Array,
-    //     default:[
-    //     ]
-    // }
+    getOnlineStatus: Function,
+    getUseStatus: Function,
+    setOperateStatus: Function,
+    statusData: Object
   }
 };
 </script>

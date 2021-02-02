@@ -5,22 +5,22 @@
         <p class="title">
           在线状态
         </p>
-        <p class="value">{{ status1 }}</p>
-        <button class="btn">检测</button>
+        <p class="value">当前状态：{{ status1 }}</p>
+        <button class="btn" @click="getOnline">检测</button>
       </van-col>
       <van-col :span="8">
         <p class="title">
           强锁电池
         </p>
         <p class="value">当前状态：{{ status2 }}</p>
-        <button class="btn">锁定</button>
+        <button class="btn" @click="forceUnlock">锁定</button>
       </van-col>
       <van-col :span="8">
         <p class="title">
           临时解锁
         </p>
         <p class="value">当前状态：{{ status3 }}</p>
-        <button class="btn" @click="unlock">解锁</button>
+        <button class="btn" @click="temporaryUnlock">解锁</button>
       </van-col>
     </van-row>
     <TimeSelect ref="timeselect" :title="selectTitle" :valuesList1="valuesList1" :valuesList2="valuesList2"></TimeSelect>
@@ -37,41 +37,29 @@ export default {
       selectTitle: "选择临时解锁时长",
       valuesList1: [],
       valuesList2: [],
-      status1: "2020-12-20 2:20:00",
-      status2: "锁定",
-      status3: "解锁"
+      status1: "",
+      status2: "",
+      status3: ""
     };
   },
   components: {
     TimeSelect
   },
   created() {
-    this.setSelectList();
-    // this.selectData = this.$refs.timeselect.value;
-    // alert(this.selectData);
+    this.setStatusData();
   },
   methods: {
-    unlock() {
-      this.$refs.timeselect.isShowPicker = true;
-    },
-    // showData(){
-
-    // }
-    setSelectList() {
-      for (let i = 0; i < 24; i++) {
-        this.valuesList1.push(i + 1 + "小时");
-      }
-      for (let i = 0; i < 59; i++) {
-        this.valuesList2.push(i + 1 + "分钟");
-      }
+    setStatusData() {
+      this.status1 = this.statusData.isOnlineDesc;
+      this.status2 = this.statusData.lockStatusDesc;
+      this.status3 = this.statusData.lockStatusDesc;
     }
   },
   props: {
-    // titles:{
-    //     type:Array,
-    //     default:[
-    //     ]
-    // }
+    getOnline: Function,
+    forceUnlock: Function,
+    temporaryUnlock: Function,
+    statusData: Object
   }
 };
 </script>

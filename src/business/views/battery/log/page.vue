@@ -4,7 +4,7 @@
       <Panel v-for="item in datalist" :key="item.date" class="mtop10">
         <div class="content__item order__header" slot="header">
           <span class="item__title">操作类型</span>
-          <span>强锁/解锁</span>
+          <span>{{ item.type }}</span>
         </div>
         <div class="content__item">
           <span class="item__label">操作人员:</span>
@@ -24,15 +24,13 @@
 
 <script>
 export default {
-  created() {
-    console.log(this.$route);
-  },
   data() {
     return {
       finished: false,
       loading: false,
       datalist: [
         {
+          type: "强锁",
           date: "2021-01-16",
           time: "3小时2分钟",
           name: "店员1"
@@ -55,7 +53,16 @@ export default {
       ]
     };
   },
+  created() {
+    this.getLogs();
+  },
   methods: {
+    getLogs() {
+      let id = this.getbatteryInfo.id;
+      this.$apis.log({ id: id }).then(res => {
+        console.log(res.data);
+      });
+    },
     onLoad() {
       return new Promise(resolve => {
         setTimeout(() => {

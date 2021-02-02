@@ -1,7 +1,9 @@
 <template>
   <AppLayout ref="report__wrap" :showHeader="true">
     <LoadList :loadData="onLoad" class="pile">
-      <PileList routePath="/battery/detail" :columns="list" :result="dataform" imgProp="img" class="pile"></PileList>
+      <van-cell v-for="(item, index) in dataform" :key="index" @click="goDetail(item)">
+        <pileList :columns="list" :item1="item"></pileList>
+      </van-cell>
     </LoadList>
     <template #search>
       <Search :formData="searchForm"></Search>
@@ -10,36 +12,38 @@
 </template>
 
 <script>
-import bac from "./testImg/index-bac.png";
 import Search from "./components/search";
+import pileList from "./components/pileList";
 export default {
   data() {
     return {
-      bac,
       searchForm: {
-        type: 1,
-        date: new Date().toUTCString()
+        imei: "",
+        isOnline: "",
+        model: "",
+        number: "",
+        onRentPointId: "",
+        rentFeeTemplateId: "",
+        rentStatus: "",
+        type: [],
+        pageIndex: 1,
+        pageSize: 10
       },
       list: [
-        { label: "电池编号1", prop: "axc" },
-        { label: "电池编号2", prop: "sss" },
-        { label: "电池编号3", prop: "abc" },
-        { label: "电池编号4", prop: "id" }
+        { label: "电池imei", prop: "imei" },
+        { label: "所属门店", prop: "onRentPointName" },
+        { label: "收费模板", prop: "rentFeeTemplateName" },
+        { label: "租赁状态", prop: "rentStatusDesc" }
       ],
-      dataform: [
-        { axc: "1", sss: "2", abc: "123", aaa: "ee", img: bac, id: "1" },
-        { axc: "33333", sss: "4", abc: "444", aaa: "wfw", img: bac, id: "2" },
-        { axc: "33333", sss: "4", abc: "444", aaa: "wfw", img: bac, id: "2" },
-        { axc: "33333", sss: "4", abc: "444", aaa: "wfw", img: bac, id: "2" },
-        { axc: "33333", sss: "4", abc: "444", aaa: "wfw", img: bac, id: "2" },
-        { axc: "33333", sss: "4", abc: "444", aaa: "wfw", img: bac, id: "2" },
-        { axc: "33333", sss: "4", abc: "444", aaa: "wfw", img: bac, id: "2" },
-        { axc: "33333", sss: "4", abc: "444", aaa: "wfw", img: bac, id: "2" }
-      ]
+      dataform: []
     };
   },
   components: {
-    Search
+    Search,
+    pileList
+  },
+  created() {
+    this.getBatteryList();
   },
   provide() {
     return {
@@ -50,10 +54,18 @@ export default {
     onSearch() {
       //写入后台交互
     },
+    goDetail(item) {
+      this.saveMessage(item);
+      this.$router.push("/battery/detail");
+    },
+    getBatteryList() {
+      this.$apis.list(this.searchForm).then(res => {
+        this.dataform = res.data.rows;
+      });
+    },
     onLoad() {
       return new Promise(resolve => {
         setTimeout(() => {
-          this.dataform.push({ axc: "33333", sss: "4", abc: "444", aaa: "wfw", img: bac, id: "2" });
           resolve();
         }, 1000);
       });

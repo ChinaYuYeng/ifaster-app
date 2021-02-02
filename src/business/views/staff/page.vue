@@ -19,8 +19,13 @@ export default {
     return {
       test,
       searchForm: {
-        type: 1,
-        date: new Date().toUTCString()
+        id: 0,
+        mobile: "",
+        pageIndex: 1,
+        pageSize: 10,
+        parentId: 0,
+        status: 0,
+        template: 0
       },
       datalist: [
         { name: "店员1", status: "待审核", phone: "123456", img: test },
@@ -28,6 +33,9 @@ export default {
         { name: "店员3", status: "权限名称", phone: "465465465", img: test }
       ]
     };
+  },
+  created() {
+    this.getStaffList();
   },
   components: {
     staffList,
@@ -41,6 +49,11 @@ export default {
   methods: {
     onSearch() {
       //写入后台交互
+    },
+    getStaffList() {
+      this.$apis.audit(this.searchForm).then(res => {
+        console.log(res.data);
+      });
     },
     gotoAdd() {
       this.$router.push("/staff/qrcode");

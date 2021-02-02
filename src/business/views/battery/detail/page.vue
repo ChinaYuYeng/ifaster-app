@@ -1,93 +1,132 @@
 <template>
   <AppLayout>
-    <PileList :columns="columns" :result="dataForm" :hasArrow="false" :useRoute="false" imgProp="img"></PileList>
-    <Panel>
-      <tmap></tmap>
-      <statusList></statusList>
+    <van-cell>
+      <pileList :columns="columns" :item1="dataForm" :hasArrow="false" :useRoute="false"></pileList>
+    </van-cell>
+
+    <Panel @touchmove.native.stop.prevent>
+      <div id="rentMar__map" style="width:100%; height:100px;"></div>
     </Panel>
     <Panel>
-      <listItem :listColumns="listColumns1" :listData="listData1" routePath="/battery/edit"></listItem>
+      <statusList
+        :getOnline="getOnlineStatus"
+        :temporaryUnlock="temporaryUnlock"
+        :forceUnlock="forceUnlock"
+        :statusData="this.getbatteryDetail"
+      ></statusList>
+    </Panel>
+    <Panel style="margin-top:10px">
+      <listItem :listColumns="listColumns1" :listData="dataForm" routePath="/battery/edit"></listItem>
     </Panel>
     <Panel>
-      <listItem :listColumns="listColumns2" :listData="listData2" routePath="/battery/log"></listItem>
+      <listItem :listColumns="listColumns2" :listData="dataForm" routePath="/battery/log"></listItem>
+    </Panel>
+    <Panel style="margin-top:10px">
+      <listItem :listColumns="listColumns3" :listData="dataForm"></listItem>
     </Panel>
   </AppLayout>
 </template>
 
 <script>
-import tmap from "../components/map";
 import statusList from "../components/status_list";
 import listItem from "../components/list-item";
+import pileList from "../components/pileList";
 export default {
   data() {
     return {
       columns: [
-        { label: "编号1", prop: "a" },
-        { label: "编号2", prop: "b" },
-        { label: "编号3", prop: "c" },
-        { label: "编号4", prop: "d" }
+        { label: "电池编号", prop: "id" },
+        { label: "电池imei", prop: "imei" },
+        { label: "电池类型", prop: "model" }
       ],
-      dataForm: [
-        {
-          a: "123",
-          b: "222",
-          c: "331",
-          d: "3123",
-          img: require("../testImg/index-bac.png")
-        }
-      ],
+      dataForm: {},
       listColumns1: [
         {
-          label: "名称1",
-          prop: "a1",
+          label: "所属门店",
+          prop: "onRentPointName",
           islink: true
         },
         {
-          label: "名称2",
-          prop: "a2"
+          label: "设备名称",
+          prop: "remark"
         },
         {
-          label: "名称3",
-          prop: "a3",
-          islink: true
+          label: "当前温度",
+          prop: "temperature"
         },
         {
-          label: "名称4",
-          prop: "a4"
+          label: "充电次数",
+          prop: "chargeTimes"
         },
         {
-          label: "名称5",
-          prop: "a5"
+          label: "当前电压",
+          prop: "acurrentVoltage5"
+        },
+        {
+          label: "当前容量",
+          prop: "currentCapacity"
         }
       ],
-      listData1: {
-        a1: "111",
-        a2: "222",
-        a3: "333",
-        a4: "444",
-        a5: "555"
-      },
       listColumns2: [
         {
           label: "操作日志",
-          prop: "a1",
+          prop: "unlock_time",
+          islink: true
+        }
+      ],
+      listColumns3: [
+        {
+          label: "租赁状态",
+          prop: "rentStatusDesc",
           islink: true
         },
         {
-          label: "名称2",
-          prop: "a2"
+          label: "用户姓名",
+          prop: "rentUserName"
+        },
+        {
+          label: "联系电话",
+          prop: "rentUserMobile"
         }
-      ],
-      listData2: {
-        a1: "111",
-        a2: "222"
-      }
+      ]
     };
   },
+  created() {
+    this.getBatteryDetail();
+  },
+  mounted() {
+    AMapLoader.load({
+      key: "21a1ca7e415887a172fe8399bd114b28",
+      version: "2.0"
+    }).then(AMap => {
+      new AMap.Map("rentMar__map", {
+        zoom: 11,
+        center: [107.4976, 32.1697]
+      });
+    });
+  },
+  methods: {
+    getOnlineStatus() {
+      let id = this.getbatteryDetail.id;
+      this.$apis.online({ id: id }).then(res => {
+        console.log(res.msg);
+      });
+    },
+    forceUnlock() {},
+    temporaryUnlock() {},
+    getBatteryDetail() {
+      let id = this.getbatteryInfo.id;
+      this.$apis.detail({ id: id }).then(res => {
+        console.log(res.data);
+        this.dataForm = res.data;
+        this.saveDetail(res.data);
+      });
+    }
+  },
   components: {
-    tmap,
     statusList,
-    listItem
+    listItem,
+    pileList
   }
 };
 </script>

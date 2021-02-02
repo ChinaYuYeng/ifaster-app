@@ -1,10 +1,19 @@
 <template>
   <AppLayout ref="report__wrap">
     <!-- {{ this.$route.query.data }} -->
-    <pileList :columns="columns" :result="dataForm" :hasArrow="false" :useRoute="false" imgProp="chargeFeeTemplateImg"></pileList>
+    <van-cell>
+      <pileList :columns="columns" :item1="dataForm" :hasArrow="false" :useRoute="false" imgProp="chargeFeeTemplateImg"></pileList>
+    </van-cell>
+    <Panel @touchmove.native.stop.prevent>
+      <div id="rentMar__map" style="width:100%; height:100px;"></div>
+    </Panel>
     <Panel>
-      <tmap></tmap>
-      <statusList></statusList>
+      <statusList
+        :statusData="this.getPileDetail"
+        :getOnlineStatus="getOnlineStatus"
+        :setOperateStatus="setOperateStatus"
+        :getUseStatus="getUseStatus"
+      ></statusList>
     </Panel>
     <Panel style="margin-top:10px">
       <listItem :listColumns="listColumns1" :listData="listData" routePath="/pile/edit"></listItem>
@@ -12,25 +21,29 @@
     <Panel style="margin-top:10px">
       <listItem :listColumns="listColumns2" :listData="listData" routePath=""></listItem>
     </Panel>
+    <van-popup v-model="isShowPicker" position="bottom" :style="{ height: '50%', width: '100%' }">
+      <van-picker show-toolbar title="选择运营状态" :columns="selectList" @cancel="onCancel" @confirm="onConfirm" />
+    </van-popup>
   </AppLayout>
 </template>
 
 <script>
-import tmap from "../components/map";
 import statusList from "../components/status_list";
 import listItem from "../components/list-item";
 import pileList from "../components/pileList";
 export default {
   data() {
     return {
-      msg: "img",
+      isShowPicker: false,
+      selectList: ["停运", "暂时关闭", "正常"],
+      status: "",
       columns: [
         { label: "电桩编号", prop: "number" },
         { label: "所在地点", prop: "address" },
         { label: "收费模板", prop: "chargeFeeTemplateName" },
-        { label: "状态", prop: "chargeStatus" }
+        { label: "状态", prop: "chargeStatusDesc" }
       ],
-      dataForm: [],
+      dataForm: {},
       listColumns1: [
         {
           label: "电桩名称",
@@ -58,29 +71,74 @@ export default {
       listColumns2: [
         {
           label: "收费模板",
-          prop: "chargeFeeTemplateName"
+          prop: "chargeFeeTemplateName",
+          islink: true
         },
         {
           label: "分账",
-          prop: "a5"
+          prop: "",
+          islink: true
         },
         {
           label: "运营",
-          prop: "a5"
+          prop: "",
+          islink: true
         }
       ],
       listData: {}
     };
   },
   created() {
+    console.log(this.getPileInfo);
     this.getDetail();
   },
+  mounted() {
+    AMapLoader.load({
+      key: "21a1ca7e415887a172fe8399bd114b28",
+      version: "2.0"
+    }).then(AMap => {
+      new AMap.Map("rentMar__map", {
+        zoom: 11,
+        center: [107.4976, 32.1697]
+      });
+    });
+  },
   methods: {
+    getOnlineStatus() {
+      this.$apis.online({ id: this.getPileInfo.id }).then(res => {
+        console.log(res.msg);
+        this.getDetail();
+      });
+    },
+    getUseStatus() {
+      this.$apis.use({ id: this.getPileInfo.id }).then(res => {
+        console.log(res.msg);
+        this.getDetail();
+      });
+    },
+    setOperateStatus() {
+      this.isShowPicker = true;
+    },
+    onConfirm(value, index) {
+      this.status = index - 1;
+      console.log(this.status);
+      this.$apis.operate({ id: this.getPileDetail.id, status: this.status }).then(res => {
+        console.log(res.msg);
+        this.getDetail();
+      });
+
+      this.status = "";
+      this.isShowPicker = false;
+    },
+    onCancel() {
+      this.isShowPicker = false;
+    },
     getDetail() {
-      let id = this.$route.query.data.id;
+      let id = this.getPileInfo.id;
       this.$apis.detail({ id: id }).then(res => {
-        this.dataForm.push(res.data);
+        this.dataForm = res.data;
         this.listData = res.data;
+        this.saveDetail(res.data);
       });
     },
     getDataForm(data) {
@@ -89,7 +147,6 @@ export default {
     }
   },
   components: {
-    tmap,
     statusList,
     listItem,
     pileList

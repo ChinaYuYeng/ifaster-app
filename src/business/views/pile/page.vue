@@ -1,7 +1,9 @@
 <template>
   <AppLayout ref="report__wrap" :showHeader="true">
     <LoadList :loadData="onLoad" class="pile">
-      <pileList routePath="/pile/detail" :columns="list" :result="dataList" imgProp="chargeFeeTemplateImg" class="pile"></pileList>
+      <van-cell v-for="(item, index) in dataList" :key="index" @click="goDetail(item)">
+        <pileList routePath="/pile/detail" :columns="list" :item1="item" :result="dataList" imgProp="chargeFeeTemplateImg" class="pile"></pileList>
+      </van-cell>
     </LoadList>
     <template #search>
       <Search :formData="searchForm"></Search>
@@ -19,11 +21,11 @@ export default {
         { label: "电桩编号", prop: "number" },
         { label: "所在地点", prop: "address" },
         { label: "收费模板", prop: "chargeFeeTemplateName" },
-        { label: "状态", prop: "chargeStatus" }
+        { label: "状态", prop: "chargeStatusDesc" }
       ],
       searchForm: {
         address: "",
-        chargeFeeTemplateId: 0,
+        chargeFeeTemplateId: "",
         chargeStatus: [],
         isOnline: [],
         model: "",
@@ -39,8 +41,6 @@ export default {
   },
   created() {
     this.getPileList();
-    this.saveMessage({ name: 2 });
-    console.log(this.getPileInfo);
   },
   components: {
     Search,
@@ -52,6 +52,10 @@ export default {
     };
   },
   methods: {
+    goDetail(item) {
+      this.saveMessage(item);
+      this.$router.push("/pile/detail");
+    },
     getPileList() {
       this.$apis.list(this.searchForm).then(res => {
         this.dataList = res.data.rows;
@@ -59,6 +63,7 @@ export default {
     },
     onSearch() {
       //写入后台交互
+      this.getPileList();
     },
     onLoad() {
       return new Promise(resolve => {

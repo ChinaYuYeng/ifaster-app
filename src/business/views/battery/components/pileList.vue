@@ -11,7 +11,7 @@
   </div>
 </template>
 <script>
-import defaultImg from "../testImg/charging.png";
+import defaultImg from "../testImg/battery.png";
 export default {
   name: "PileList",
   data() {

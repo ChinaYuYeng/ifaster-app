@@ -1,4 +1,11 @@
-export default function() {
+export default function({ post }) {
+  const apis = {
+    scope: {
+      audit(params) {
+        return post("/pers/staff/audit", params);
+      }
+    }
+  };
   const routes = {
     path: "/staff",
     meta: {
@@ -42,5 +49,5 @@ export default function() {
       }
     ]
   };
-  return { routes };
+  return { apis, routes };
 }

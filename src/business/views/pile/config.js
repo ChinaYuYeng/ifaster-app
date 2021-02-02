@@ -1,17 +1,23 @@
 export default function({ post }) {
   const apis = {
     scope: {
-      // login(params) {
-      //   return post("/account/login", params);
-      // },
-      // register(params) {
-      //   return post("/account/agent/register", params);
-      // }
       list(params) {
         return post("/charge/device/list", params);
       },
       detail(params) {
         return post("/charge/device/detail", params);
+      },
+      edit(params) {
+        return post("/charge/device/update/info", params);
+      },
+      online(params) {
+        return post("/charge/device/refresh/online", params);
+      },
+      use(params) {
+        return post("/charge/device/refresh/use", params);
+      },
+      operate(params) {
+        return post("/charge/device/update/status", params);
       }
     }
   };
@@ -32,28 +38,39 @@ export default function({ post }) {
         path: "edit",
         component: "./edit/page.vue",
         meta: {
-          title: "电桩imei：1111"
+          title: "电桩imei"
         }
       }
     ]
   };
+  // const imei = store.state.pileDetail;
   const store = {
     state: {
-      pileInfo: {}
+      pileInfo: {},
+      pileDetail: {}
     },
     getters: {
       getPileInfo(state) {
         return state.pileInfo;
+      },
+      getPileDetail(state) {
+        return state.pileDetail;
       }
     },
     mutations: {
       setPileInfo(state, data) {
         state.pileInfo = data;
+      },
+      setPileDetail(state, data) {
+        state.pileDetail = data;
       }
     },
     actions: {
       saveMessage({ commit }, data) {
         commit("setPileInfo", data);
+      },
+      saveDetail({ commit }, data) {
+        commit("setPileDetail", data);
       }
     }
   };
