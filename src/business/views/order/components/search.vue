@@ -17,15 +17,10 @@ export default {
     onSearch: {
       type: Function,
       default: () => Promise.resolve()
+    },
+    searchForm: {
+      type: Object
     }
-  },
-  data() {
-    return {
-      searchForm: {
-        type: 1,
-        date: new Date().toUTCString()
-      }
-    };
   },
   methods: {
     submit() {

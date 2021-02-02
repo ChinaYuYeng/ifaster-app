@@ -17,16 +17,12 @@ export default {
     onSearch: {
       type: Function,
       default: () => Promise.resolve()
+    },
+    searchForm: {
+      type: Object
     }
   },
-  data() {
-    return {
-      searchForm: {
-        status1: 1,
-        date: new Date().toUTCString()
-      }
-    };
-  },
+
   methods: {
     submit() {
       return this.$refs.form.validate().then(() => {

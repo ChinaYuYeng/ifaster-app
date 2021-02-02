@@ -1,6 +1,6 @@
 <template>
   <AppLayout ref="report__wrap" :onRefresh="onRefresh">
-    <LoadList :loadData="onLoad" class="mtop10">
+    <LoadList :loadStatus="loadStatus">
       <Panel v-for="item in dataList" :key="item.date" class="mtop10">
         <div class="content__item order__header" slot="header">
           <span>订单编号：{{ item.number }}</span>
@@ -35,39 +35,36 @@
       </Panel>
     </LoadList>
     <template #search="scope">
-      <Search :onSearch="onSearch.bind(this, scope)"></Search>
+      <Search :onSearch="onSearch.bind(this, scope)" :searchForm="searchForm"></Search>
     </template>
   </AppLayout>
 </template>
 
 <script>
 import Search from "./components/search";
+import loadList from "@@/mixins/loadList";
 export default {
   components: { Search },
+  mixins: [loadList],
   data() {
     return {
-      item: this.$route.params,
-      dataList: []
+      searchForm: {
+        status1: 1,
+        date: new Date().toUTCString()
+      }
     };
   },
+  created() {
+    this.setListLoader(paging => {
+      return this.$apis.getList({ ...this.searchForm, ...paging });
+    });
+  },
   methods: {
-    onLoad() {
-      return this.$apis.getList(Object.assign.apply(null, Array.from(arguments))).then(res => {
-        this.dataList = this.dataList.concat(res.data.rows);
-        return res;
-      });
-    },
     onRefresh() {
-      return new Promise(resolve => {
-        this.onLoad = this.onLoad.bind(this, {});
-        this.dataList = [];
-        resolve();
-      });
+      return this.setListLoader();
     },
-    onSearch({ close }, search) {
-      this.onLoad = this.onLoad.bind(this, search);
-      this.dataList = [];
-      close();
+    onSearch({ close }) {
+      return this.setListLoader().then(close);
     }
   }
 };

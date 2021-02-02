@@ -1,5 +1,5 @@
 import "./style.less";
-export default function() {
+export default function({ post }) {
   return {
     routes: {
       meta: {
@@ -42,6 +42,13 @@ export default function() {
                   }
                 }
               ]
+            },
+            {
+              path: "edit",
+              component: "./rent/add.vue",
+              meta: {
+                title: "租还点修改"
+              }
             }
           ]
         },
@@ -49,10 +56,39 @@ export default function() {
           path: "add",
           component: "./rent/add.vue",
           meta: {
-            title: "租还点修改"
+            title: "租还点新增"
           }
         }
       ]
+    },
+    apis: {
+      getPointList(params) {
+        return post("/rent/point/list", params);
+      },
+      getPointDetail(params) {
+        return post("/rent/point/detail", params);
+      },
+      deletePoint(params) {
+        return post("/rent/point/delete", params);
+      },
+      addPoint(params) {
+        return post("/rent/point/add", params);
+      },
+      editPoint(params) {
+        return post("/rent/point/edit", params);
+      },
+      getAssignList(params) {
+        return post("/rent/point/commission/list", params);
+      },
+      delAssign(params) {
+        return post("/rent/point/commission/list", params);
+      },
+      saveAssign(params) {
+        return post("/rent/point/commission/list", params);
+      },
+      getAssignDetail(params) {
+        return post("/rent/point/commission/list", params);
+      }
     }
   };
 }
