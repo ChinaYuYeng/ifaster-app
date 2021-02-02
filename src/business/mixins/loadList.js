@@ -10,7 +10,7 @@ export default {
     _loadList(loader) {
       return loader(this.paging)
         .then(res => {
-          this.dataList = this.dataList.concat(res.data.rows);
+          this.dataList = this.dataList.concat(res.data.rows || []);
           return res;
         })
         .then(res => {
