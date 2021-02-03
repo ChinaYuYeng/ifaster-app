@@ -8,7 +8,14 @@
     </BodyContent>
     <FooterMenu v-if="showFooter"></FooterMenu>
     <Search :show.sync="showSearch">
-      <slot name="search"></slot>
+      <slot
+        name="search"
+        :close="
+          () => {
+            this.showSearch = false;
+          }
+        "
+      ></slot>
     </Search>
   </div>
   <router-view v-else></router-view>
@@ -32,7 +39,7 @@ export default {
       default: true
     }
   },
-  data: function() {
+  data() {
     return {
       showSearch: false
     };
@@ -47,7 +54,7 @@ export default {
       return path === this.$pagePath;
     },
     showSearchIcon() {
-      return !!this.$slots.search;
+      return !!this.$slots.search || !!this.$scopedSlots.search;
     }
   },
   components: {
