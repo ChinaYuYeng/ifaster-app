@@ -2,7 +2,7 @@
   <div class="userInfo">
     <div class="userInfo__left">
       <img :src="avatar" class="userInfo__avatar" :style="{ weight: height, height: height }" />
-      <div class="userInfo__list" ref="userInfo__list">
+      <div class="userInfo__list" v-onResize="resizeImg">
         <slot>
           <span class="userInfo__list-item">下线</span>
           <span class="userInfo__list-item">12345677889</span>
@@ -30,8 +30,12 @@ export default {
       height: "0px"
     };
   },
-  mounted() {
-    this.height = this.$refs.userInfo__list.getBoundingClientRect().height + "px";
+  methods: {
+    resizeImg(el) {
+      this.$nextTick(() => {
+        this.height = el.getBoundingClientRect().height + "px";
+      });
+    }
   }
 };
 </script>

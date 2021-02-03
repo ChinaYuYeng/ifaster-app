@@ -2,7 +2,13 @@
   <div class="layout__body">
     <slot name="top"></slot>
     <div class="layout__body-content" :class="{ 'layout__main-content--scroll': isScroll }">
-      <van-pull-refresh v-model="isLoading" success-text="刷新成功" @refresh="_onRefresh" style="overflow-y:scroll;min-height:100%;">
+      <van-pull-refresh
+        v-model="isLoading"
+        success-text="刷新成功"
+        @refresh="_onRefresh"
+        :disabled="disRefresh"
+        style="overflow-y:scroll;min-height:100%;"
+      >
         <slot><van-empty description="暂无内容" /></slot>
       </van-pull-refresh>
     </div>
@@ -18,8 +24,7 @@ export default {
       default: false
     },
     onRefresh: {
-      type: Function,
-      default: () => Promise.resolve()
+      type: Function
     }
   },
   data() {
@@ -27,9 +32,14 @@ export default {
       isLoading: false
     };
   },
+  computed: {
+    disRefresh() {
+      return !this.onRefresh;
+    }
+  },
   methods: {
     _onRefresh() {
-      this.onRefresh().then(() => {
+      this.onRefresh().finally(() => {
         this.isLoading = false;
       });
     }

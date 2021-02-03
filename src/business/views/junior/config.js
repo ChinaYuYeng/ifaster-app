@@ -3,16 +3,23 @@ export default function() {
     path: "/junior",
     meta: {
       title: "下级管理"
-    }
-    // children: [
-    //   {
-    //     path: "detail",
-    //     component: "./detail/page.vue",
-    //     meta: {
-    //       title: "电池详情"
-    //     }
-    //   }
-    // ]
+    },
+    children: [
+      {
+        path: "invite",
+        component: "./invite/page.vue",
+        meta: {
+          title: "邀请注册"
+        }
+      },
+      {
+        path: "detail",
+        component: "./detail/page.vue",
+        meta: {
+          title: "详情"
+        }
+      }
+    ]
   };
   return { routes };
 }
