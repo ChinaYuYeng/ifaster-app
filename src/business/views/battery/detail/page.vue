@@ -1,7 +1,7 @@
 <template>
   <AppLayout>
     <van-cell>
-      <pileList :columns="columns" :item1="dataForm" :hasArrow="false" :useRoute="false"></pileList>
+      <pileList :columns="columns" :item1="dataForm" :hasArrow="false" imgProp="rentFeeTemplateImg"></pileList>
     </van-cell>
 
     <Panel @touchmove.native.stop.prevent>
@@ -24,6 +24,18 @@
     <Panel style="margin-top:10px">
       <listItem :listColumns="listColumns3" :listData="dataForm"></listItem>
     </Panel>
+    <Panel style="margin-top:10px">
+      <listItem :listColumns="listColumns4" :listData="dataForm"></listItem>
+    </Panel>
+    <van-popup v-model="isShowPicker1" position="bottom" :style="{ height: '50%', width: '100%' }">
+      <van-picker show-toolbar title="设置解锁/锁定" :columns="selectColumn1" @confirm="onConfirm1" @cancel="onCancel1" />
+    </van-popup>
+    <van-popup v-model="isShowPicker" position="bottom" :style="{ height: '50%', width: '100%' }">
+      <van-picker show-toolbar title="设置解锁/锁定" :columns="selectColumn1" @confirm="onConfirm" @cancel="onCancel" />
+    </van-popup>
+    <van-popup v-model="isShowPicker2" position="bottom" :style="{ height: '50%', width: '100%' }">
+      <van-picker show-toolbar title="请选择临时解锁/锁定时间" :columns="selectColumn2" @confirm="onConfirm2" @cancel="onCancel2" />
+    </van-popup>
   </AppLayout>
 </template>
 
@@ -34,6 +46,27 @@ import pileList from "../components/pileList";
 export default {
   data() {
     return {
+      isShowPicker: false,
+      isShowPicker1: false,
+      isShowPicker2: false,
+      forceLockStatus: "",
+      temporaryLockStatus: "",
+      selectColumn1: [
+        {
+          values: ["解锁", "锁定"],
+          defaultIndex: 2
+        }
+      ],
+      selectColumn2: [
+        {
+          values: [],
+          defaultIndex: 1
+        },
+        {
+          values: [],
+          defaultIndex: 2
+        }
+      ],
       columns: [
         { label: "电池编号", prop: "id" },
         { label: "电池imei", prop: "imei" },
@@ -77,8 +110,7 @@ export default {
       listColumns3: [
         {
           label: "租赁状态",
-          prop: "rentStatusDesc",
-          islink: true
+          prop: "rentStatusDesc"
         },
         {
           label: "用户姓名",
@@ -88,11 +120,27 @@ export default {
           label: "联系电话",
           prop: "rentUserMobile"
         }
+      ],
+      listColumns4: [
+        {
+          label: "收费模板",
+          prop: "rentFeeTemplateName",
+          islink: true
+        },
+        {
+          label: "分账",
+          prop: ""
+        },
+        {
+          label: "运营",
+          prop: ""
+        }
       ]
     };
   },
   created() {
     this.getBatteryDetail();
+    this.setSelectColumn2();
   },
   mounted() {
     AMapLoader.load({
@@ -112,8 +160,54 @@ export default {
         console.log(res.msg);
       });
     },
-    forceUnlock() {},
-    temporaryUnlock() {},
+    forceUnlock() {
+      this.isShowPicker1 = true;
+    },
+    temporaryUnlock() {
+      this.isShowPicker = true;
+    },
+    setSelectColumn2() {
+      for (let i = 0; i < 25; i++) {
+        this.selectColumn2[0].values.push(i + "小时");
+      }
+      for (let i = 0; i < 59; i++) {
+        this.selectColumn2[1].values.push(i + 1 + "分钟");
+      }
+    },
+    onConfirm1(index, value) {
+      this.$apis.force({ batteryId: this.getbatteryInfo.id, forceLockStatus: value[0] }).then(res => {
+        console.log(res.msg);
+        this.getBatteryDetail();
+        this.isShowPicker1 = false;
+      });
+    },
+    onCancel() {
+      this.isShowPicker = false;
+    },
+    onConfirm(index, value) {
+      this.temporaryLockStatus = value[0];
+      this.isShowPicker = false;
+      this.isShowPicker2 = true;
+    },
+    onCancel1() {
+      this.isShowPicker1 = false;
+    },
+    onConfirm2(index, value) {
+      let min = value[0] * 60 + value[1] + 1;
+      this.$apis
+        .temporary({
+          batteryId: this.getbatteryInfo.id,
+          temporaryLockStatus: this.temporaryLockStatus,
+          temporaryLockTime: min
+        })
+        .then(res => {
+          console.log(res.msg);
+        });
+      this.isShowPicker2 = false;
+    },
+    onCancel2() {
+      this.isShowPicker2 = false;
+    },
     getBatteryDetail() {
       let id = this.getbatteryInfo.id;
       this.$apis.detail({ id: id }).then(res => {

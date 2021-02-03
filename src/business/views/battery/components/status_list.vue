@@ -5,56 +5,29 @@
         <p class="title">
           在线状态
         </p>
-        <p class="value">当前状态：{{ status1 }}</p>
+        <p class="value">当前状态：{{ this.statusData.isOnlineDesc }}</p>
         <button class="btn" @click="getOnline">检测</button>
       </van-col>
       <van-col :span="8">
         <p class="title">
           强锁电池
         </p>
-        <p class="value">当前状态：{{ status2 }}</p>
+        <p class="value">当前状态：{{ this.statusData.lockStatusDesc }}</p>
         <button class="btn" @click="forceUnlock">锁定</button>
       </van-col>
       <van-col :span="8">
         <p class="title">
           临时解锁
         </p>
-        <p class="value">当前状态：{{ status3 }}</p>
+        <p class="value">当前状态：{{ this.statusData.lockStatusDesc }}</p>
         <button class="btn" @click="temporaryUnlock">解锁</button>
       </van-col>
     </van-row>
-    <TimeSelect ref="timeselect" :title="selectTitle" :valuesList1="valuesList1" :valuesList2="valuesList2"></TimeSelect>
   </div>
 </template>
 
 <script>
-import TimeSelect from "./timeSelect";
 export default {
-  data() {
-    return {
-      selectData: "",
-      isShow: false,
-      selectTitle: "选择临时解锁时长",
-      valuesList1: [],
-      valuesList2: [],
-      status1: "",
-      status2: "",
-      status3: ""
-    };
-  },
-  components: {
-    TimeSelect
-  },
-  created() {
-    this.setStatusData();
-  },
-  methods: {
-    setStatusData() {
-      this.status1 = this.statusData.isOnlineDesc;
-      this.status2 = this.statusData.lockStatusDesc;
-      this.status3 = this.statusData.lockStatusDesc;
-    }
-  },
   props: {
     getOnline: Function,
     forceUnlock: Function,

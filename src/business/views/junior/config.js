@@ -1,4 +1,11 @@
-export default function() {
+export default function({ post }) {
+  const apis = {
+    scope: {
+      info(params) {
+        return post("/partner/info", params);
+      }
+    }
+  };
   const routes = {
     path: "/junior",
     meta: {
@@ -21,5 +28,25 @@ export default function() {
       }
     ]
   };
-  return { routes };
+  const store = {
+    state: {
+      topInfo: {}
+    },
+    getters: {
+      getTopInfo(state) {
+        return state.topInfo;
+      }
+    },
+    mutations: {
+      setTopInfo(state, data) {
+        state.topInfo = data;
+      }
+    },
+    actions: {
+      saveMessage({ commit }, data) {
+        commit("setTopInfo", data);
+      }
+    }
+  };
+  return { apis, routes, store };
 }

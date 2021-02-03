@@ -1,20 +1,26 @@
 <template>
-  <AppLayout ref="report__wrap" :showHeader="true">
-    <LoadList :loadData="onLoad" class="pile">
-      <van-cell v-for="(item, index) in dataform" :key="index" @click="goDetail(item)">
-        <pileList :columns="list" :item1="item"></pileList>
+  <AppLayout ref="report__wrap" :showHeader="true" :onRefresh="onRefresh">
+    <LoadList :loadStatus="loadStatus">
+      <van-cell v-for="(item, index) in dataList" :key="index" @click="goDetail(item)">
+        <pileList :columns="list" :item1="item" imgProp="rentFeeTemplateImg"></pileList>
       </van-cell>
     </LoadList>
-    <template #search>
-      <Search :formData="searchForm"></Search>
+    <template #search="scope">
+      <Search :onSearch="onSearch.bind(this, scope)" :searchForm="searchForm"></Search>
     </template>
   </AppLayout>
 </template>
 
 <script>
 import Search from "./components/search";
+import loadList from "@@/mixins/loadList";
 import pileList from "./components/pileList";
 export default {
+  mixins: [loadList],
+  components: {
+    Search,
+    pileList
+  },
   data() {
     return {
       searchForm: {
@@ -25,9 +31,7 @@ export default {
         onRentPointId: "",
         rentFeeTemplateId: "",
         rentStatus: "",
-        type: [],
-        pageIndex: 1,
-        pageSize: 10
+        type: []
       },
       list: [
         { label: "电池imei", prop: "imei" },
@@ -38,37 +42,21 @@ export default {
       dataform: []
     };
   },
-  components: {
-    Search,
-    pileList
-  },
   created() {
-    this.getBatteryList();
-  },
-  provide() {
-    return {
-      parent: this
-    };
+    this.setListLoader(paging => {
+      return this.$apis.list({ ...this.searchForm, ...paging });
+    });
   },
   methods: {
-    onSearch() {
-      //写入后台交互
+    onRefresh() {
+      return this.setListLoader();
+    },
+    onSearch({ close }) {
+      return this.setListLoader().then(close);
     },
     goDetail(item) {
       this.saveMessage(item);
       this.$router.push("/battery/detail");
-    },
-    getBatteryList() {
-      this.$apis.list(this.searchForm).then(res => {
-        this.dataform = res.data.rows;
-      });
-    },
-    onLoad() {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve();
-        }, 1000);
-      });
     }
   }
 };

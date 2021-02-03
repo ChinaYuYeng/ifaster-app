@@ -1,20 +1,26 @@
 <template>
-  <AppLayout ref="report__wrap" :showHeader="true">
-    <LoadList :loadData="onLoad" class="pile">
+  <AppLayout ref="report__wrap" :showHeader="true" :onRefresh="onRefresh">
+    <LoadList :loadStatus="loadStatus">
       <van-cell v-for="(item, index) in dataList" :key="index" @click="goDetail(item)">
-        <pileList routePath="/pile/detail" :columns="list" :item1="item" :result="dataList" imgProp="chargeFeeTemplateImg" class="pile"></pileList>
+        <pileList :columns="list" :item1="item" imgProp="chargeFeeTemplateImg" class="pile"></pileList>
       </van-cell>
     </LoadList>
-    <template #search>
-      <Search :formData="searchForm"></Search>
+    <template #search="scope">
+      <Search :onSearch="onSearch.bind(this, scope)" :searchForm="searchForm"></Search>
     </template>
   </AppLayout>
 </template>
 
 <script>
 import Search from "./components/search";
+import loadList from "@@/mixins/loadList";
 import pileList from "./components/pileList";
 export default {
+  mixins: [loadList],
+  components: {
+    Search,
+    pileList
+  },
   data() {
     return {
       list: [
@@ -32,45 +38,26 @@ export default {
         name: "",
         number: "",
         status: [],
-        type: [],
-        pageIndex: 1,
-        pageSize: 10
+        type: []
       },
       dataList: []
     };
   },
   created() {
-    this.getPileList();
-  },
-  components: {
-    Search,
-    pileList
-  },
-  provide() {
-    return {
-      parent: this
-    };
+    this.setListLoader(paging => {
+      return this.$apis.list({ ...this.searchForm, ...paging });
+    });
   },
   methods: {
+    onRefresh() {
+      return this.setListLoader();
+    },
+    onSearch({ close }) {
+      return this.setListLoader().then(close);
+    },
     goDetail(item) {
       this.saveMessage(item);
       this.$router.push("/pile/detail");
-    },
-    getPileList() {
-      this.$apis.list(this.searchForm).then(res => {
-        this.dataList = res.data.rows;
-      });
-    },
-    onSearch() {
-      //写入后台交互
-      this.getPileList();
-    },
-    onLoad() {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve();
-        }, 1000);
-      });
     }
   }
 };

@@ -19,13 +19,13 @@ export default {
     return {
       test,
       searchForm: {
-        id: 0,
-        mobile: "",
+        // id: "",
+        // mobile: "",
+        // parentId: 0,
+        // status: 0,
+        // template: 0,
         pageIndex: 1,
-        pageSize: 10,
-        parentId: 0,
-        status: 0,
-        template: 0
+        pageSize: 10
       },
       datalist: [
         { name: "店员1", status: "待审核", phone: "123456", img: test },

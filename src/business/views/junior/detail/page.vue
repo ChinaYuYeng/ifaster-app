@@ -1,16 +1,16 @@
 <template>
   <AppLayout>
     <Panel>
-      <UserInfo :avatar="data.imgurl">
+      <UserInfo>
         <span class="title__name">{{ data.name }}</span>
-        <span>{{ data.phone }}</span>
+        <span>{{ data.mobile }}</span>
       </UserInfo>
     </Panel>
     <Panel>
-      <van-cell title="订单数量" :value="data.order" is-link></van-cell>
-      <van-cell title="电桩数量" :value="data.pile" is-link></van-cell>
-      <van-cell title="租还点数量" :value="data.point" is-link></van-cell>
-      <van-cell title="电池数量" :value="data.battery" is-link></van-cell>
+      <van-cell title="订单数量" :value="data.rentOrderCount" is-link></van-cell>
+      <van-cell title="电桩数量" :value="data.pileCount" is-link></van-cell>
+      <van-cell title="租还点数量" :value="data.rentPointCount" is-link></van-cell>
+      <van-cell title="电池数量" :value="data.batteryCount" is-link></van-cell>
     </Panel>
   </AppLayout>
 </template>
@@ -23,7 +23,8 @@ export default {
     };
   },
   created() {
-    this.data = this.$route.query.data;
+    this.data = this.getTopInfo;
+    console.log(this.data);
   }
 };
 </script>
