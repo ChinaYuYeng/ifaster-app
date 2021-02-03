@@ -3,8 +3,8 @@
     <van-field :value="timeValue" :readonly="true" @click="showPopup" is-link arrow-direction="down" v-bind="$attrs" />
     <van-popup v-model="show" position="bottom">
       <van-datetime-picker
-        v-model="currentDate"
-        type="datetime"
+        :value="currentDate"
+        :type="dateType"
         title="选择时间"
         :loading="isLoadingShow"
         @cancel="show = false"
@@ -18,14 +18,27 @@
 export default {
   name: "datePick",
   props: {
-    value: String
+    value: String,
+    dateType: {
+      type: String,
+      default: "datetime"
+    }
   },
   data() {
+    let currentDate = this.value;
+    switch (this.dateType) {
+      case "datetime":
+        currentDate = (this.value && new Date(this.value)) || new Date();
+        break;
+      case "time":
+        currentDate = currentDate || "08:00";
+        break;
+    }
     return {
       timeValue: this.value || "",
       show: false,
       isLoadingShow: true,
-      currentDate: new Date()
+      currentDate: currentDate
     };
   },
   methods: {
@@ -39,24 +52,28 @@ export default {
     },
     // 确认选择的时间
     confirmPicker(val) {
-      let year = val.getFullYear();
-      let month = val.getMonth() + 1;
-      let day = val.getDate();
-      let hour = val.getHours();
-      let minute = val.getMinutes();
-      if (month >= 1 && month <= 9) {
-        month = `0${month}`;
+      try {
+        let year = val.getFullYear();
+        let month = val.getMonth() + 1;
+        let day = val.getDate();
+        let hour = val.getHours();
+        let minute = val.getMinutes();
+        if (month >= 1 && month <= 9) {
+          month = `0${month}`;
+        }
+        if (day >= 1 && day <= 9) {
+          day = `0${day}`;
+        }
+        if (hour >= 0 && hour <= 9) {
+          hour = `0${hour}`;
+        }
+        if (minute >= 0 && minute <= 9) {
+          minute = `0${minute}`;
+        }
+        this.timeValue = `${year}-${month}-${day} ${hour}:${minute}`;
+      } catch (error) {
+        this.timeValue = val;
       }
-      if (day >= 1 && day <= 9) {
-        day = `0${day}`;
-      }
-      if (hour >= 0 && hour <= 9) {
-        hour = `0${hour}`;
-      }
-      if (minute >= 0 && minute <= 9) {
-        minute = `0${minute}`;
-      }
-      this.timeValue = `${year}-${month}-${day} ${hour}:${minute}`;
       this.$emit("input", this.timeValue);
       this.show = false;
     }

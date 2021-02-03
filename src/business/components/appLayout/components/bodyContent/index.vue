@@ -7,7 +7,7 @@
         success-text="刷新成功"
         @refresh="_onRefresh"
         :disabled="disRefresh"
-        style="overflow-y:scroll;min-height:100%;"
+        style="overflow-y:scroll;height:100%;"
       >
         <slot><van-empty description="暂无内容" /></slot>
       </van-pull-refresh>
