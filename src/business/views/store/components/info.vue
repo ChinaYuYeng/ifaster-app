@@ -1,10 +1,14 @@
 <template>
   <van-row>
-    <van-col span="8">
-      <van-image :src="headImg" width="150" height="150"></van-image>
+    <van-col span="6">
+      <van-image :src="headImg"></van-image>
     </van-col>
-    <van-col span="8" v-for="(l, index) in label" :key="index" class="text-black">{{ l }}</van-col>
-    <van-col span="8" v-for="(v, index) in value" :key="index">{{ v }}</van-col>
+    <van-col span="16" offset="2">
+      <van-row v-for="(t, index) in obj" :key="index" class="col-left">
+        <van-col span="12" class="text-black">{{ t.label }}</van-col>
+        <van-col span="12">{{ t.value }}</van-col>
+      </van-row>
+    </van-col>
   </van-row>
 </template>
 
@@ -15,10 +19,7 @@ export default {
     headImg: {
       type: String
     },
-    label: {
-      type: Array
-    },
-    value: {
+    obj: {
       type: Array
     }
   },
@@ -32,5 +33,13 @@ export default {
 <style lang="less" scoped>
 .text-black {
   color: #000;
+}
+.col-left {
+  height: 100%;
+
+  .van-col {
+    height: 20%;
+    margin-top: 3%;
+  }
 }
 </style>

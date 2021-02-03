@@ -58,7 +58,15 @@ export default {
   },
   created() {
     // this.summary = "比例：20% 数量：99;比例：20% 数量：99;比例：20% 数量：99;";
+    // debugger;
+    this.bars.map(b => {
+      if (b.name.length > 4) {
+        b.name = b.name.substring(0, 4);
+      }
+      return b;
+    });
   },
+  mounted() {},
   computed: {
     /* 是否显示当前页面，或者提供router-view */
     showContent() {
