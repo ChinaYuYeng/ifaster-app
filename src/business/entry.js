@@ -6,11 +6,22 @@ import Vant from "vant";
 import "vant/lib/index.less";
 import "@@/style/main.less";
 import "@@/components";
+import "@@/mixins";
+import "@/assets/directive";
 Vue.use(Vant);
 
 /* 设置rem */
 function setRem() {
   document.querySelector("html").setAttribute("style", "font-size:calc(100vw / 750 * 100);");
+}
+
+// 加载高德地图
+function loadMap() {
+  const script = document.createElement("script");
+  script.src = "https://webapi.amap.com/loader.js";
+  // script.src = "https://webapi.amap.com/maps?v=2.0&key=21a1ca7e415887a172fe8399bd114b28";
+  script.type = "text/javascript";
+  document.querySelector("head").appendChild(script);
 }
 
 /* 开启路由 */
@@ -40,9 +51,10 @@ function routerControll(router) {
 /*  接口拦截 */
 function requestInterceptor(request) {
   request.defaults.timeout = 2 * 60 * 1000;
-  request.defaults.baseURL = "";
+  request.defaults.baseURL = "/ifaster-v2-wechat";
   request.interceptors.request.use(
     config => {
+      config.headers = { token: "fe0e38e0-e4ac-4388-8266-5c93890adbe0" };
       return config;
     },
     error => {
@@ -53,11 +65,17 @@ function requestInterceptor(request) {
   request.interceptors.response.use(
     response => {
       let res = response.data;
-      if (res.login === 0) {
-        //   exitLogin();
-        // store.dispatch("d2admin/account/logout", {});
+      switch (res.code) {
+        case "A0500":
+        case "A0300":
+          Vue.prototype.$notify({ type: "warning", message: res.msg });
+          return Promise.reject(res);
+        case "A0400":
+        case "B0001":
+          return Promise.reject(res);
+        default:
+          return Promise.resolve(res);
       }
-      return res;
     },
     error => {
       return Promise.reject(error);
@@ -66,6 +84,7 @@ function requestInterceptor(request) {
 }
 
 export default function(request, router, store) {
+  loadMap();
   setRem();
   setLoginRouter();
   routerControll(router, store);

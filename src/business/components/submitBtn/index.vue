@@ -33,7 +33,7 @@ export default {
   methods: {
     submit() {
       this.loading = true;
-      this.onSubmit().then(() => {
+      this.onSubmit().finally(() => {
         this.loading = false;
       });
     }

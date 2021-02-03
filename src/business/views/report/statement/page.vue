@@ -2,7 +2,7 @@
   <AppLayout ref="report__wrap">
     <template slot="body-top">
       <Panel>
-        <van-cell is-link style="padding:6px 0;align-items: center;">
+        <van-cell center>
           <van-grid>
             <van-grid-item>
               <span>{{ item.date }}</span>

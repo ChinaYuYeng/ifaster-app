@@ -28,5 +28,8 @@ module.exports = {
         mocha: true
       }
     }
-  ]
+  ],
+  globals: {
+    AMapLoader: true
+  }
 };

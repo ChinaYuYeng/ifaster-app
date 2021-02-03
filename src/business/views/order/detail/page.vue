@@ -3,61 +3,139 @@
     <template slot="body-top">
       <Panel>
         <div class="content__item order__header" slot="header">
-          <span>订单编号：1234</span>
-          <span>已完成</span>
+          <span>订单编号：{{ routeData.number }}</span>
+          <span>{{ routeData.statusName }}</span>
+        </div>
+        <div class="content__item">
+          <span>电桩imei:</span>
+          <span>{{ routeData.pileImei }}</span>
         </div>
         <div class="content__item">
           <span>电池imei:</span>
-          <span>2</span>
+          <span>{{ routeData.batteryImei }}</span>
         </div>
         <div class="content__item">
-          <span>电池imei:</span>
-          <span>2</span>
+          <span>租点:</span>
+          <span>{{ routeData.rentPointName }}</span>
         </div>
         <div class="content__item">
-          <span>电池imei:</span>
-          <span>2</span>
+          <span>还点:</span>
+          <span>{{ routeData.returnPointName }}</span>
         </div>
         <div class="content__item">
-          <span>电池imei:</span>
-          <span>2</span>
+          <span>用户姓名:</span>
+          <span>{{ routeData.customerName }}</span>
+        </div>
+        <div class="content__item">
+          <span>用户手机:</span>
+          <span>{{ routeData.customerMobile }}</span>
+        </div>
+        <div class="content__item">
+          <span>起租时间:</span>
+          <span>{{ routeData.startTime }}</span>
+        </div>
+        <div class="content__item">
+          <span>归还时间:</span>
+          <span>{{ routeData.realEndTime }}</span>
+        </div>
+        <div class="content__item">
+          <span>租赁类型:</span>
+          <span>{{ routeData.typeName }}</span>
+        </div>
+        <div class="content__item">
+          <span>收费模板:</span>
+          <span>{{ routeData.typeName }}</span>
+        </div>
+        <div class="content__item">
+          <span>公司赠送积分:</span>
+          <span>{{ routeData.typeName }}</span>
         </div>
         <div class="content__item order__footer" slot="footer">
-          <span>2013-1-1 10:1:1</span>
-          <span>营收：12元</span>
-          <span>营收：12元</span>
+          <span>{{ routeData.returnTime }}</span>
+          <span>营收：{{ routeData.payFee }}元</span>
+          <span>实收：{{ routeData.realIncome }}元</span>
         </div>
       </Panel>
     </template>
     <van-collapse accordion v-model="activeName" class="mtop10">
       <van-collapse-item title="收支详情" name="1">
         <div class="content__item">
-          <span>电池imei:</span>
-          <span>2</span>
+          <span>营收:</span>
+          <span>{{ routeData.payFee }}元</span>
         </div>
         <div class="content__item">
-          <span>电池imei:</span>
-          <span>2</span>
+          <span>支出:</span>
+          <span>{{ routeData.income.expend }}元</span>
+        </div>
+        <div class="content__item">
+          <span>分账:</span>
+          <span>{{ routeData.income.settle }}元</span>
+        </div>
+        <div class="content__item">
+          <span>分账人员:</span>
+          <span>{{ routeData.income.settles.map(v => v.name).join(",") }}</span>
+        </div>
+        <div class="content__item">
+          <span>实收:</span>
+          <span>{{ routeData.realIncome }}元</span>
         </div>
       </van-collapse-item>
       <van-collapse-item title="收费模板详情" name="2">
         <div class="content__item">
-          <span>电池imei:</span>
+          <span>押金:</span>
           <span>2</span>
         </div>
         <div class="content__item">
-          <span>电池imei:</span>
+          <span>短租:</span>
+          <span>2</span>
+        </div>
+        <div class="content__item">
+          <span>短租上限:</span>
+          <span>2</span>
+        </div>
+        <div class="content__item">
+          <span>周租:</span>
+          <span>2</span>
+        </div>
+        <div class="content__item">
+          <span>月租:</span>
+          <span>2</span>
+        </div>
+        <div class="content__item">
+          <span>年租:</span>
+          <span>2</span>
+        </div>
+        <div class="content__item">
+          <span>yo车:</span>
+          <span>2</span>
+        </div>
+        <div class="content__item">
+          <span>积分:</span>
           <span>2</span>
         </div>
       </van-collapse-item>
       <van-collapse-item title="用户信息" name="3">
         <div class="content__item">
-          <span>电池imei:</span>
-          <span>2</span>
+          <span>用户姓名:</span>
+          <span>{{ routeData.customerName }}</span>
+        </div>
+        <div class="content__item">
+          <span>用户手机:</span>
+          <span>{{ routeData.customerMobile }}</span>
+        </div>
+      </van-collapse-item>
+      <van-collapse-item title="设备信息" name="4">
+        <div class="content__item">
+          <span>设备关系:</span>
+          <span>{{ routeData.batteryModel }}</span>
         </div>
         <div class="content__item">
           <span>电池imei:</span>
-          <span>2</span>
+          <span>{{ routeData.batteryImei }}</span>
+        </div>
+        <div class="content__item">
+          <span>电池编号:</span>
+          <span>{{ routeData.batteryModel }}</span>
         </div>
       </van-collapse-item>
     </van-collapse>
@@ -66,12 +144,10 @@
 
 <script>
 export default {
-  created() {
-    console.log(this.$route);
-  },
   data() {
     return {
-      activeName: "1"
+      activeName: "1",
+      routeData: this.$route.params
     };
   },
   methods: {}

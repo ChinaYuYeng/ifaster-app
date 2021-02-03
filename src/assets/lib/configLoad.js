@@ -4,10 +4,11 @@ import { registerModule, getStore } from "@/store";
 import request from "@/api/request";
 import { registerApi } from "@/api";
 import { createNamespacedHelpers } from "vuex";
-import { parseFilePath } from "@/assets/util/tool";
+import { parseFilePath } from "./tool";
 
 function traverse(route, cb, path = []) {
   if (route) {
+    if (!route.path) throw new Error("children route need path,please set something");
     path.push(route.path);
     cb(route, path.join("/"));
     if (route.children) {
@@ -35,19 +36,17 @@ contexts.keys().map(item => {
    * }
    */
   const config =
-    contexts(item).default &&
-    contexts(item).default(request, {
-      mapGetters,
-      mapActions,
-      mapMutations
-    });
-
-  // 判空，避免未 export default 方法 或者 方法未返回对象
-  if (!config) return;
+    (contexts(item).default &&
+      contexts(item).default(request, {
+        mapGetters,
+        mapActions,
+        mapMutations
+      })) ||
+    {};
 
   const apis = {
     root: config?.apis?.root,
-    scope: config?.apis?.scope || config?.apis?.root ? {} : config?.apis || {}
+    scope: config?.apis?.scope || (config?.apis?.root ? {} : config?.apis || {})
   };
   registerApi(apis.root);
 
@@ -67,9 +66,8 @@ contexts.keys().map(item => {
   }));
 
   currentPath = "/" + currentPath;
-  traverse(config.routes || {}, (route, fullPath) => {
-    route.path = route.path || currentPath;
-    fullPath = fullPath || currentPath;
+  // 设置默认path
+  traverse({ path: currentPath, ...(config.routes || {}) }, (route, fullPath) => {
     route.name = fullPath;
     route.component =
       Object.prototype.toString.call(route.component) === "[object Function]"
@@ -81,7 +79,7 @@ contexts.keys().map(item => {
                 .filter(v => v)
                 .join("-") || "root",
             beforeCreate() {
-              Object.defineProperty(this, "$api", {
+              Object.defineProperty(this, "$apis", {
                 value: Object.assign(Object.create(this.$api), apis.scope)
               });
               // 当前页面的默认路径，用来判断当前路由是否在这个页面上
