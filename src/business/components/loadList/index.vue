@@ -1,5 +1,5 @@
 <template>
-  <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+  <van-list v-model="loadStatus.loading" :finished="loadStatus.finished" :finished-text="loadStatus.finishedText" @load="loadStatus.loadList">
     <slot></slot>
   </van-list>
 </template>
@@ -10,21 +10,8 @@ export default {
     loadData: {
       type: Function,
       default: () => Promise.resolve()
-    }
-  },
-  data() {
-    return {
-      finished: false,
-      loading: false
-    };
-  },
-  methods: {
-    onLoad() {
-      this.loadData().then(res => {
-        this.loading = false;
-        if (!res || !res.length) this.finished = true;
-      });
-    }
+    },
+    loadStatus: Object
   }
 };
 </script>

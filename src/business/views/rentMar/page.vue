@@ -1,15 +1,15 @@
 <template>
-  <AppLayout>
-    <LoadList :loadData="loadData">
-      <van-cell center v-for="(item, index) in rentList" :key="index" is-link @click="routerTo({ name: '/rentMar/detail' })">
+  <AppLayout :onRefresh="onRefresh">
+    <LoadList :loadStatus="loadStatus">
+      <van-cell center v-for="(item, index) in dataList" :key="index" is-link @click="routerTo({ name: '/rentMar/detail', params: item })">
         <template #title>
           <span class="iconfont theme-font">&#xe635;</span>
           <span style="padding-left:5px;">{{ item.name }}</span>
         </template>
         <template #label>
           <div class="tag__group">
-            <van-tag type="primary">异地收</van-tag>
-            <van-tag type="success">异点收</van-tag>
+            <van-tag type="success" v-if="item.otherPlaceReturn">异地收</van-tag>
+            <van-tag type="success" v-if="item.otherPointReturn">异点收</van-tag>
           </div>
         </template>
       </van-cell>
@@ -21,20 +21,20 @@
 </template>
 
 <script>
+import loadList from "@@/mixins/loadList";
 export default {
+  mixins: [loadList],
   data() {
     return {
-      rentList: []
+      dataList: []
     };
   },
+  created() {
+    this.setListLoader(this.$apis.getPointList);
+  },
   methods: {
-    loadData() {
-      return new Promise(resolve => {
-        this.rentList.push({
-          name: "长寿路"
-        });
-        resolve(this.rentList);
-      });
+    onRefresh() {
+      return this.setListLoader();
     }
   }
 };

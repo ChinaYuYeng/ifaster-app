@@ -1,78 +1,59 @@
 <template>
-  <AppLayout ref="report__wrap">
-    <LoadList :loadData="onLoad" class="mtop10">
-      <Panel v-for="item in datalist" :key="item.date" class="mtop10">
+  <AppLayout ref="report__wrap" :onRefresh="onRefresh">
+    <LoadList :loadStatus="loadStatus">
+      <Panel v-for="item in dataList" :key="item.id" class="mtop10">
         <div class="content__item order__header" slot="header">
-          <span>订单编号：1234</span>
-          <span>已完成</span>
+          <span>订单编号：{{ item.number }}</span>
+          <span>{{ item.statusName }}</span>
         </div>
         <div class="content__item">
-          <span>电池imei:</span>
-          <span>2</span>
+          <span>电桩名称:</span>
+          <span>{{ item.pileNo }}</span>
         </div>
         <div class="content__item">
-          <span>电池imei:</span>
-          <span>2</span>
+          <span>用户姓名:</span>
+          <span>{{ item.customerName }}</span>
         </div>
         <div class="content__item">
-          <span>电池imei:</span>
-          <span>2</span>
-        </div>
-        <div class="content__item">
-          <span>电池imei:</span>
-          <span>2</span>
+          <span>用户手机:</span>
+          <span>{{ item.customerMobile }}</span>
         </div>
         <div class="content__item order__footer" slot="footer">
-          <span>2013-1-1 10:1:1</span>
-          <span>营收：12元</span>
-          <span>营收：12元</span>
-          <van-button plain type="info" size="mini" @click="$router.push({ name: '/order/detail' })">查看详情</van-button>
+          <span>{{ item.returnTime }}</span>
+          <span>营收：{{ item.payFee }}元</span>
+          <span>实收：{{ item.realIncome }}元</span>
+          <van-button plain type="info" size="mini" @click="routerTo({ name: '/order/detail', params: item })">查看详情</van-button>
         </div>
       </Panel>
     </LoadList>
-    <template #search>
-      <Search :formData="searchForm"></Search>
+    <template #search="scope">
+      <Search :onSearch="onSearch.bind(this, scope)" :searchForm="searchForm"></Search>
     </template>
   </AppLayout>
 </template>
 
 <script>
 import Search from "./components/search";
+import loadList from "@@/mixins/loadList";
 export default {
   components: { Search },
+  mixins: [loadList],
   data() {
     return {
-      item: this.$route.params,
-      searchForm: {
-        type: 1,
-        date: new Date().toUTCString()
-      },
-      datalist: [
-        {
-          date: "2021-01-16",
-          income: "123",
-          pay: "123",
-          assignment: "1212"
-        },
-        {
-          date: "2021-01-17",
-          income: "123",
-          pay: "123",
-          assignment: "1212"
-        },
-        {
-          date: "2021-01-18",
-          income: "123",
-          pay: "123",
-          assignment: "1212"
-        },
-        {
-          date: "2021-01-19",
-          income: "123",
-          pay: "123",
-          assignment: "1212"
+      dataList: [],
+      loadStatus: {
+        finished: false,
+        loading: false,
+        finishedText: "",
+        paging: {
+          pageIndex: 1,
+          pageSize: 10
         }
-      ]
+      },
+      searchForm: {
+        status1: 1,
+        date: new Date().toUTCString()
+      }
     };
   },
   provide() {
@@ -80,20 +61,17 @@ export default {
       parent: this
     };
   },
+  created() {
+    this.setListLoader(paging => {
+      return this.$apis.getList({ ...this.searchForm, ...paging });
+    });
+  },
   methods: {
-    onSearch() {},
-    onLoad() {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          this.datalist.push({
-            date: new Date().toDateString(),
-            income: "123",
-            pay: "123",
-            assignment: "1212"
-          });
-          resolve();
-        }, 1000);
-      });
+    onRefresh() {
+      return this.setListLoader();
+    },
+    onSearch({ close }) {
+      return this.setListLoader().then(close);
     }
   }
 };
