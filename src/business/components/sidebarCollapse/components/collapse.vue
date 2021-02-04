@@ -1,32 +1,30 @@
 <template>
-  <van-collapse v-model="active">
+  <van-collapse v-model="active" class="right">
     <van-collapse-item v-for="(collapse, index) in collapses" :key="collapse.imei" :title="collapse.title" @click.stop>
       <template #title>
         <div>
-          <van-checkbox shape="square" v-model="collapse.checked" icon-size="16" :label-disabled="true" @click="headClick(index)">
+          <van-checkbox shape="square" v-model="collapse.checked" icon-size="14" :label-disabled="true" @click="headClick(index)">
             {{ collapse.title }}
           </van-checkbox>
         </div>
       </template>
 
       <!-- 内容 -->
-      <van-checkbox-group :v-model="box.id + '.checked'" :ref="'checkboxGroup_' + index" v-for="box in collapse.list" :key="box.id">
-        <van-row>
-          <van-col span="6" class="left-col">
-            <van-checkbox name="a" shape="square" icon-size="16">
-              <van-image :src="box.img" width="100" height="100">
-                <template v-slot:error><van-image :src="errIcon" /></template>
-              </van-image>
-            </van-checkbox>
-          </van-col>
-          <van-col span="16" offset="2">
-            <van-row v-for="(rw, index1) in box.rows" :key="index1">
-              <van-col span="12" class="text-black">{{ rw.name }}</van-col>
-              <van-col span="12">{{ rw.value }}</van-col>
-            </van-row>
-          </van-col>
-        </van-row>
-      </van-checkbox-group>
+      <van-row v-for="box in collapse.list" :key="box.id">
+        <van-col span="10" class="left-col">
+          <van-checkbox name="a" shape="square" icon-size="14" v-model="box.checked">
+            <van-image :src="errIcon" width="80" height="60" fit="contain">
+              <template v-slot:error><van-image :src="errIcon" /></template>
+            </van-image>
+          </van-checkbox>
+        </van-col>
+        <van-col span="14" offset="0" class="right-col">
+          <van-row v-for="(rw, index1) in box.rows" :key="index1">
+            <van-col span="12" class="text-black">{{ rw.name }}</van-col>
+            <van-col span="12">{{ rw.value }}</van-col>
+          </van-row>
+        </van-col>
+      </van-row>
     </van-collapse-item>
   </van-collapse>
 </template>
@@ -47,20 +45,33 @@ export default {
   data() {
     return {
       loading: false,
-      active: []
+      active: [],
+      rrr: false
     };
   },
+  created() {
+    console.log(this.errIcon);
+  },
+  mounted() {
+    console.log(this.collapses);
+  },
   methods: {
+    click(box) {
+      debugger;
+      console.log(box);
+      // this.setChecked(box.checked);
+      box.checked = true;
+    },
     headClick(index) {
       //console.log(i);
       console.log(index);
-      debugger;
-      // return false;
-      if (this.collapses[index].checked) {
-        this.$refs["checkboxGroup_" + index].checked.toggleAll(true);
-      } else {
-        this.$refs["checkboxGroup_" + index].checked.toggleAll(false);
-      }
+      // debugger;
+      // // return false;
+      // if (this.collapses[index].checked) {
+      //   this.$refs["checkboxGroup_" + index].checked.toggleAll(true);
+      // } else {
+      //   this.$refs["checkboxGroup_" + index].checked.toggleAll(false);
+      // }
 
       // this.$refs.collapse_i.toggle();
       // console.log(this.collapses);
@@ -72,10 +83,16 @@ export default {
 <style lang="less" scoped>
 .left-col {
   display: flex;
-  text-align: center;
+  text-align: left;
   height: 100%;
+  .van-image {
+    margin-left: -16px;
+  }
 }
 .text-black {
   color: #000;
+}
+.right-col {
+  margin-left: -16px;
 }
 </style>

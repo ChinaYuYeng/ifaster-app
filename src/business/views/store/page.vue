@@ -1,6 +1,6 @@
 <template>
   <AppLayout>
-    <van-tabs :active="active" :before-change="beforeChange">
+    <van-tabs :active="active" :before-change="beforeChange" sticky :offset-top="500">
       <van-tab v-for="(t, index) in tabs" :key="index" :value="index">
         <template #title>
           <span class="iconfont" v-html="t.icon"></span>
@@ -28,8 +28,8 @@ export default {
   data() {
     return {
       active: 0,
-      batteryImg: batteryImg,
-      chargingImg: chargingImg,
+      batteryImg,
+      chargingImg,
       tabs: [
         {
           icon: "&#xe609;",
@@ -139,14 +139,50 @@ export default {
             this.bars = this.getBOperators;
             this.collapseHeader = r.data[0].name;
             //
-            debugger;
+            // debugger;
             this.$apis.battery
-              .repositoryList({ id: r.data[0].id })
+              .repositoryList({ id: r.data[0].value })
               .then(res => {
                 if (res.code == "1" && res.data && res.data.length > 0) {
-                  this.setRepositories({ c: "pile", data: res.data.listItemVos });
-                  this.children = res.data.listItemVos;
-                  this.title = "比例：" + res.data.percent + "（" + res.data.model + "）";
+                  this.setRepositories({ c: "battery", data: res.data[0].listItemVos });
+                  this.children = [];
+                  for (let i = 0; i < res.data.length; i++) {
+                    let d = res.data[i];
+                    // let rows = [];
+                    let lists = [];
+                    for (let j = 0; j < d.listItemVos.length; j++) {
+                      // let item = d.listItemVos[j];
+                      let row = [];
+                      let row1 = {
+                        name: "电池IMEI:",
+                        value: d.listItemVos[j].imei
+                      };
+                      let row2 = {
+                        name: "电池型号:",
+                        value: d.listItemVos[j].model
+                      };
+
+                      row.push(row1);
+                      row.push(row2);
+                      //debugger;
+                      let item = {
+                        checked: false,
+                        id: d.listItemVos[j].id,
+                        imei: d.listItemVos[j].imei,
+                        model: d.listItemVos[j].model,
+                        rows: row
+                      };
+                      // let oneList = Object.assign(item, { rows: [rows] });
+                      lists.push(item);
+                    }
+
+                    let child = {
+                      list: lists,
+                      title: "比例：" + d.percent * 100 + "%（" + d.model + "）"
+                    };
+                    // debugger;
+                    this.children.push(child);
+                  }
                 }
               })
               .catch(e => console.log(e));
@@ -155,22 +191,32 @@ export default {
         .catch(e => console.log(e));
 
       this.defaultIcon = this.batteryImg;
+      console.log(this.defaultIcon);
     },
     getPileInfo() {
       this.$apis.pile
         .operatorList()
         .then(r => {
           if (r.code == "200") {
-            this.pile.setOperators(r.data);
+            this.setOperators({ c: "pile", data: r.data });
             this.bars = r.data;
             this.collapseHeader = r.data[0].name;
             //
             this.$apis.pile
-              .repositoryList({ id: r.data[0].id })
+              .repositoryList({ id: r.data[0].value })
               .then(res => {
-                this.pile.setRepositories(res.data.listItemVos);
-                this.children = res.data.listItemVos;
-                this.title = "比例：" + res.data.percent + "（" + res.data.model + "）";
+                if (res.code == "1" && res.data && res.data.length > 0) {
+                  this.setRepositories({ c: "pile", data: res.data.listItemVos });
+                  this.children = [];
+                  for (let i = 0; i < res.data.length; i++) {
+                    let d = res.data[i];
+                    let child = {
+                      list: d.listItemVos,
+                      title: "比例：" + d.percent * 100 + "%（" + d.model + "）"
+                    };
+                    this.children.push(child);
+                  }
+                }
               })
               .catch(e => console.log(e));
           }
@@ -191,5 +237,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.tab {
 }
 </style>
