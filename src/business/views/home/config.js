@@ -9,7 +9,7 @@ export default function({ post }) {
       state: {
         operator: {}
       },
-      getter: {
+      getters: {
         getOperator(state) {
           return state.operator;
         }
