@@ -1,5 +1,5 @@
 import "./style.less";
-export default function({ post }) {
+export default function({ post, get }) {
   return {
     routes: {
       meta: {
@@ -88,6 +88,9 @@ export default function({ post }) {
       },
       getAssignDetail(params) {
         return post("/rent/point/commission/list", params);
+      },
+      getRegisterRoleList(params) {
+        return get("/account/register/role", params);
       }
     }
   };
