@@ -1,7 +1,7 @@
 <template>
   <div>
-    <SubmitBtn :onSubmit="submit" class="reject" :text="leftbtn"></SubmitBtn>
-    <SubmitBtn :onSubmit="submit" class="submit" :text="rightbtn"></SubmitBtn>
+    <SubmitBtn :onSubmit="leftFunc" class="reject" :text="leftbtn"></SubmitBtn>
+    <SubmitBtn :onSubmit="rightFunc" class="submit" :text="rightbtn"></SubmitBtn>
   </div>
 </template>
 
@@ -14,7 +14,15 @@ export default {
   },
   props: {
     leftbtn: String,
-    rightbtn: String
+    rightbtn: String,
+    leftFunc: {
+      type: Function,
+      default: function() {}
+    },
+    rightFunc: {
+      type: Function,
+      default: function() {}
+    }
   }
 };
 </script>

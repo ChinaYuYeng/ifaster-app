@@ -6,7 +6,7 @@
     <Panel>
       <van-cell title="下级情况"></van-cell>
       <div v-for="(item, index) in listData" :key="index" @click="checkJunior(item)">
-        <item :dataItem="item" :hasDetail="false"></item>
+        <item :dataItem="item" :hasDetail="false" style="margin-bottom:20px"></item>
       </div>
     </Panel>
     <template #body-bottom>
@@ -43,6 +43,13 @@ export default {
     checkJunior(item) {
       this.operate = item.id;
       // this.getInfo();
+      this.listData = [];
+      this.$apis.info({ operate: this.operate }).then(res => {
+        this.listTop = res.data[0];
+        for (let i = 1; i < res.data.length; i++) {
+          this.listData.push(res.data[i]);
+        }
+      });
     },
     getInfo() {
       this.$apis.info({ operate: this.operate }).then(res => {
@@ -50,7 +57,6 @@ export default {
         for (let i = 1; i < res.data.length; i++) {
           this.listData.push(res.data[i]);
         }
-        console.log(this.listData);
       });
     }
   }

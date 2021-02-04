@@ -26,7 +26,7 @@
       <div class="btn-bar">
         <!-- <button class="btn login">登 录</button> -->
         <SubmitBtn text="登录" width="100%" :onSubmit="submit" class="btn login"></SubmitBtn>
-        <button class="btn register" @click="gotoRegister()">新用户注册</button>
+        <!-- <button class="btn register" @click="gotoRegister()">新用户注册</button> -->
       </div>
       <van-popup v-model="show">
         协议内容

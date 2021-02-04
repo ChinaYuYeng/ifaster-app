@@ -25,7 +25,8 @@ export default {
   created() {
     this.data = this.getTopInfo;
     console.log(this.data);
-  }
+  },
+  methods: {}
 };
 </script>
 

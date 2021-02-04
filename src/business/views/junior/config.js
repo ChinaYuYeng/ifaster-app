@@ -30,16 +30,29 @@ export default function({ post }) {
   };
   const store = {
     state: {
-      topInfo: {}
+      topInfo: {},
+      userList: []
     },
     getters: {
       getTopInfo(state) {
         return state.topInfo;
+      },
+      getList(state) {
+        return state.userList;
+      },
+      getListTop(state) {
+        return state.userList[state.userList.length - 1];
       }
     },
     mutations: {
       setTopInfo(state, data) {
         state.topInfo = data;
+      },
+      pop(state) {
+        state.userList.pop();
+      },
+      push(state, data) {
+        state.userList.push(data);
       }
     },
     actions: {
