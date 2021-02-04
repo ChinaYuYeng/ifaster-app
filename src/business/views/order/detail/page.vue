@@ -81,37 +81,13 @@
         </div>
       </van-collapse-item>
       <van-collapse-item title="收费模板详情" name="2">
-        <div class="content__item">
-          <span>押金:</span>
-          <span>2</span>
+        <div class="content__item" v-for="item in routeData.chargeFeeTemplate.once" :key="item.type">
+          <span>型号{{ item.type }}:</span>
+          <span>{{ item.price }}</span>
         </div>
-        <div class="content__item">
-          <span>短租:</span>
-          <span>2</span>
-        </div>
-        <div class="content__item">
-          <span>短租上限:</span>
-          <span>2</span>
-        </div>
-        <div class="content__item">
-          <span>周租:</span>
-          <span>2</span>
-        </div>
-        <div class="content__item">
-          <span>月租:</span>
-          <span>2</span>
-        </div>
-        <div class="content__item">
-          <span>年租:</span>
-          <span>2</span>
-        </div>
-        <div class="content__item">
-          <span>yo车:</span>
-          <span>2</span>
-        </div>
-        <div class="content__item">
-          <span>积分:</span>
-          <span>2</span>
+        <div class="content__item" v-for="item in routeData.chargeFeeTemplate.time" :key="item.type">
+          <span>时长{{ item.type }}:</span>
+          <span>{{ item.price }}</span>
         </div>
       </van-collapse-item>
       <van-collapse-item title="用户信息" name="3">
@@ -149,6 +125,11 @@ export default {
       activeName: "1",
       routeData: this.$route.params
     };
+  },
+  created() {
+    this.$apis.getOrderDetail({ id: this.routeData.id }).then(res => {
+      this.routeData = res.data;
+    });
   },
   methods: {}
 };

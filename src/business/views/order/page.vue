@@ -40,16 +40,6 @@ export default {
   mixins: [loadList],
   data() {
     return {
-      dataList: [],
-      loadStatus: {
-        finished: false,
-        loading: false,
-        finishedText: "",
-        paging: {
-          pageIndex: 1,
-          pageSize: 10
-        }
-      },
       searchForm: {
         status1: 1,
         date: new Date().toUTCString()
