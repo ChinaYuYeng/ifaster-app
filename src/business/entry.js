@@ -54,7 +54,7 @@ function requestInterceptor(request) {
   request.defaults.baseURL = "/ifaster-v2-wechat";
   request.interceptors.request.use(
     config => {
-      config.headers = { token: "fe0e38e0-e4ac-4388-8266-5c93890adbe0" };
+      config.headers = { token: "d77ba467-3d71-4379-ad3c-860a5c7494ea" };
       return config;
     },
     error => {

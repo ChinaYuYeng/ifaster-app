@@ -77,14 +77,14 @@
     <Links
       :links="[
         { icon: '&#xe62e;', title: '充电订单管理' },
- 		{ icon: '&#xe62e;', title: '收费设置', path: '/staff' },
+        { icon: '&#xe62e;', title: '收费设置', path: '/staff' },
         { icon: '&#xe62e;', title: '结算记录', path: '/settle' }
-
-	 ]"
+      ]"
     ></Links>
     <Links
       :links="[
         { icon: '&#xe62e;', title: '我的租还点', path: '/rentMar' },
+        { icon: '&#xe611;', title: '收费设置', path: '/charge' },
         { icon: '&#xe62e;', title: '仓库管理', path: '/store' },
         { icon: '&#xe62e;', title: '店员管理', path: '/staff' },
         { icon: '&#xe62e;', title: '下级管理', path: '/junior' }

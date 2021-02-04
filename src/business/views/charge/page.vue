@@ -1,32 +1,31 @@
 <template>
-  <AppLayout ref="report__wrap">
+  <AppLayout ref="report__wrap" :onRefresh="onRefresh">
     <van-tabs :before-change="beforeChange" :active="active">
       <van-tab v-for="(t, index) in title" :key="index" :value="index">
         <template #title>
           <span class="iconfont" v-html="t.icon"></span>
           <span>{{ t.name }}</span>
         </template>
-        <!-- <LoadList :loadData="onLoad" class="mtop10">
-          <ChargeList :dataList="dataList"></ChargeList>
-          <van-button type="primary" size="large">新增模板</van-button>
-        </LoadList> -->
-        <ChargeList :dataList="dataList"></ChargeList>
-        <van-button type="primary" size="large">新增模板</van-button>
       </van-tab>
+      <LoadList :loadStatus="loadStatus">
+        <van-cell v-for="(item, index) in dataList" :key="index">
+          <CList :item="item"></CList>
+        </van-cell>
+      </LoadList>
+      <van-button type="primary" size="large" @click="addM == true ? addBatteryM() : addPilM()">{{ btnMessage }}</van-button>
     </van-tabs>
   </AppLayout>
 </template>
 
 <script>
-import batteryImg from "../../../assets/images/battery.png";
-import chargingImg from "../../../assets/images/charging.png";
-import ChargeList from "./components/chargeList";
+import CList from "./components/CList";
+import loadList from "@@/mixins/loadList";
 export default {
+  mixins: [loadList],
   data() {
     return {
-      imgSrc: "",
-      batteryImg: batteryImg,
-      chargingImg: chargingImg,
+      addM: true,
+      btnMessage: "新建电池收费模板",
       active: 0,
       title: [
         {
@@ -38,41 +37,65 @@ export default {
           name: " 电桩收费模板"
         }
       ],
-      dataList: [
-        { id: 0, name: "收费模板名称-001", rentModel: 1, img: batteryImg },
-        { id: 1, name: "收费模板名称-002", rentModel: 2, img: batteryImg },
-        { id: 2, name: "收费模板名称-003", rentModel: 0, img: chargingImg }
-      ]
+      batteryInfo: {}
     };
   },
+  created() {
+    // this.getBatterylist();
+
+    this.setListLoader(paging => {
+      return this.$apis.getBatterylist({ ...paging });
+    });
+  },
   methods: {
-    onLoad() {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          this.dataList.push({ name: "4", rentModel: "444", img: require("./testImg/index-bac.png"), id: 3 });
-          resolve();
-        }, 1000);
-      });
+    onRefresh() {
+      return this.setListLoader();
+    },
+    addBatteryM() {
+      console.log("11");
+      this.$router.push({ path: "/charge/editbattery" });
+    },
+    addPilM() {
+      console.log("22");
+      this.$router.push({ path: "/charge/editpile" });
     },
     beforeChange(index) {
       if (index == 0) {
-        this.dataList = [
-          { id: 0, name: "AAA收费模板名称-001", rentModel: 1, img: batteryImg },
-          { id: 1, name: "BBB收费模板名称-002", rentModel: 2, img: batteryImg },
-          { id: 2, name: "CCC收费模板名称-003", rentModel: 0, img: batteryImg }
-        ];
+        this.getBatterylist();
+        this.btnMessage = "新建电池收费模板";
+        console.log("当前处于电池收费模板");
+        this.addM = true;
       } else {
-        this.dataList = [
-          { id: 0, name: "111收费模板名称-001", rentModel: 0, img: chargingImg },
-          { id: 1, name: "BBB收费模板名称-002", rentModel: 2, img: chargingImg },
-          { id: 2, name: "CCC收费模板名称-003", rentModel: 1, img: chargingImg }
-        ];
+        this.btnMessage = "新建电桩收费模板";
+        console.log("当前处于电桩收费模板");
+        this.addM = false;
       }
       this.active = index;
+    },
+    getBatterylist() {
+      this.$apis
+        .getBatterylist({
+          pageIndex: 1,
+          pageSize: 10
+        })
+        .then(res => {
+          console.log(res.data);
+          // this.batteryInfo = res.data;
+          if (res && res.code === "1") {
+            console.log("请求成功！");
+            this.batteryInfo = res.data; // 把传回来数据赋给batteryInfo（列表中的数据）
+          } else {
+            console.log("请求失败！");
+            this.batteryInfo = [];
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   },
   components: {
-    ChargeList
+    CList
   }
 };
 </script>
