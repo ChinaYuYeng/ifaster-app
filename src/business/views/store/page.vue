@@ -166,7 +166,6 @@ export default {
                       row.push(row2);
                       //debugger;
                       let item = {
-                        checked: false,
                         id: d.listItemVos[j].id,
                         imei: d.listItemVos[j].imei,
                         model: d.listItemVos[j].model,
@@ -177,8 +176,10 @@ export default {
                     }
 
                     let child = {
+                      checked: false,
                       list: lists,
-                      title: "比例：" + d.percent * 100 + "%（" + d.model + "）"
+                      name: "比例：" + d.percent * 100 + "%",
+                      title: "比例：" + d.percent * 100 + "%" + "（" + d.model + "）"
                     };
                     // debugger;
                     this.children.push(child);
@@ -211,8 +212,10 @@ export default {
                   for (let i = 0; i < res.data.length; i++) {
                     let d = res.data[i];
                     let child = {
+                      checked: false,
                       list: d.listItemVos,
-                      title: "比例：" + d.percent * 100 + "%（" + d.model + "）"
+                      name: "比例：" + d.percent * 100 + d.percent + "%",
+                      title: child.name + "（" + d.model + "）"
                     };
                     this.children.push(child);
                   }
@@ -228,7 +231,8 @@ export default {
     routeTo(path) {
       this.$router.push({ path });
     }
-  }
+  },
+  watch: {}
 };
 </script>
 

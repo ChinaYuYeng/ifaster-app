@@ -1,11 +1,12 @@
 <template>
   <van-collapse v-model="active" class="right">
-    <van-collapse-item v-for="(collapse, index) in collapses" :key="collapse.imei" :title="collapse.title" @click.stop>
+    <van-collapse-item v-for="collapse in collapses" :key="collapse.imei" :title="collapse.title">
       <template #title>
         <div>
-          <van-checkbox shape="square" v-model="collapse.checked" icon-size="14" :label-disabled="true" @click="headClick(index)">
-            {{ collapse.title }}
-          </van-checkbox>
+          <input type="checkbox" v-model="collapse.checked" @click.stop />
+          <!-- <van-checkbox shape="square"  icon-size="14" :label-disabled="true"> -->
+          {{ collapse.title }}
+          <!-- </van-checkbox> -->
         </div>
       </template>
 
@@ -56,15 +57,23 @@ export default {
     console.log(this.collapses);
   },
   methods: {
+    onclick(val) {
+      debugger;
+      val.checked = !val.checked;
+      console.log(this.collapses);
+    },
     click(box) {
       debugger;
       console.log(box);
       // this.setChecked(box.checked);
       box.checked = true;
     },
-    headClick(index) {
+    headClick(e) {
+      e.stopPropagation();
+      // e.preventDefault();
       //console.log(i);
-      console.log(index);
+      console.log(e);
+      //return false;
       // debugger;
       // // return false;
       // if (this.collapses[index].checked) {

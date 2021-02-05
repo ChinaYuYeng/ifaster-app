@@ -41,9 +41,9 @@ export default {
       type: Array,
       required: true
     },
-    summary: {
-      type: String
-    },
+    // summary: {
+    //   type: String
+    // },
     errIcon: {
       type: String
     },
@@ -53,6 +53,7 @@ export default {
   },
   data() {
     return {
+      summary: "",
       actives: []
     };
   },
@@ -80,10 +81,52 @@ export default {
     }
   },
   watch: {
-    "this.actives": function(val) {
-      if (val && val.length > 0) {
-        this.summary = val.map(v => v.name + v.cnt + ",").join();
-      }
+    // "this.actives": function(val) {
+    //   if (val && val.length > 0) {
+    //     this.summary = val.map(v => v.name + v.cnt + ",").join();
+    //   }
+    // },
+    children: {
+      handler: function(v) {
+        debugger;
+        console.log(v);
+        // 是否选择了 比例型号
+        // let hasSelectedPercent = 0;
+        let selectedPercent = v.filter(p => p.checked)[0];
+        let selectedCopy;
+        if (selectedPercent) {
+          selectedCopy = JSON.parse(JSON.stringify(selectedPercent));
+        }
+
+        v = v.map(c => {
+          debugger;
+          if (c.checked) {
+            if (c == selectedPercent) {
+              c.list = c.list.map(t => {
+                t.checked = true;
+              });
+            } else {
+              c.checked = false;
+              c.list = c.list.map(t => {
+                t.checked = false;
+              });
+            }
+          }
+        });
+        // debugger;
+        // let sel = v.find(c => c.checked);
+        if (selectedCopy) {
+          let name = selectedCopy.name;
+          let cnt = selectedCopy.list.reduce((accumulator, currentValue) => {
+            if (currentValue.checked) {
+              accumulator++;
+            }
+            // return accumulator;
+          });
+          this.summary = name + " 数量：" + cnt;
+        }
+      },
+      deep: true
     }
   },
   components: {
