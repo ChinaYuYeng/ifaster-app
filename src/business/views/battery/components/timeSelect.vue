@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-popup v-model="isShowPicker" position="bottom" :style="{ height: '50%', width: '100%' }">
-      <van-picker show-toolbar :title="title" :columns="columns" @confirm="onConfirm" @cancel="onCancel" @change="onChange" />
+      <van-picker show-toolbar :title="title" :columns="columns" @confirm="onConfirm" @cancel="onCancel" />
     </van-popup>
   </div>
 </template>

@@ -1,87 +1,155 @@
 <template>
   <AppLayout ref="report__wrap">
     <!-- {{ this.$route.query.data }} -->
-    <PileList :columns="columns" :result="dataForm" :hasArrow="false" :useRoute="false" :imgProp="msg"></PileList>
-    <Panel>
-      <tmap></tmap>
-      <statusList></statusList>
+    <van-cell>
+      <pileList :columns="columns" :item1="dataForm" :hasArrow="false" :useRoute="false" imgProp="chargeFeeTemplateImg"></pileList>
+    </van-cell>
+    <Panel @touchmove.native.stop.prevent>
+      <div id="rentMar__map" style="width:100%; height:100px;"></div>
     </Panel>
-    <listItem :listColumns="listColumns" :listData="listData" :routePath="routePath"></listItem>
+    <Panel>
+      <statusList
+        :statusData="this.getPileDetail"
+        :getOnlineStatus="getOnlineStatus"
+        :setOperateStatus="setOperateStatus"
+        :getUseStatus="getUseStatus"
+      ></statusList>
+    </Panel>
+    <Panel style="margin-top:10px">
+      <listItem :listColumns="listColumns1" :listData="listData" routePath="/pile/edit"></listItem>
+    </Panel>
+    <Panel style="margin-top:10px">
+      <listItem :listColumns="listColumns2" :listData="listData" routePath=""></listItem>
+    </Panel>
+    <van-popup v-model="isShowPicker" position="bottom" :style="{ height: '50%', width: '100%' }">
+      <van-picker show-toolbar title="选择运营状态" :columns="selectList" @cancel="onCancel" @confirm="onConfirm" />
+    </van-popup>
   </AppLayout>
 </template>
 
 <script>
-import tmap from "../components/map";
 import statusList from "../components/status_list";
 import listItem from "../components/list-item";
+import pileList from "../components/pileList";
 export default {
   data() {
     return {
-      msg: "img",
-      routePath: "/pile/edit",
+      isShowPicker: false,
+      selectList: ["停运", "暂时关闭", "正常"],
+      status: "",
       columns: [
-        { label: "编号1", prop: "a" },
-        { label: "编号2", prop: "b" },
-        { label: "编号3", prop: "c" },
-        { label: "编号4", prop: "d" }
+        { label: "电桩编号", prop: "number" },
+        { label: "所在地点", prop: "address" },
+        { label: "收费模板", prop: "chargeFeeTemplateName" },
+        { label: "状态", prop: "chargeStatusDesc" }
       ],
-      dataForm: [
+      dataForm: {},
+      listColumns1: [
         {
-          a: "123",
-          b: "222",
-          c: "331",
-          d: "3123",
-          img: require("../testImg/index-bac.png")
-        }
-      ],
-
-      listColumns: [
-        {
-          label: "名称1",
-          prop: "a1",
+          label: "电桩名称",
+          prop: "name",
           islink: true
         },
         {
-          label: "名称2",
-          prop: "a2"
+          label: "电桩编号",
+          prop: "number"
         },
         {
-          label: "名称3",
-          prop: "a3",
+          label: "详细地址",
+          prop: "address",
           islink: true
         },
         {
-          label: "名称4",
-          prop: "a4"
+          label: "充电次数(次)",
+          prop: "chargeTimes"
         },
         {
-          label: "名称5",
-          prop: "a5"
+          label: "租赁充电(次)",
+          prop: "rentChargeTimes"
         }
       ],
-      listData: {
-        a1: "111",
-        a2: "222",
-        a3: "333",
-        a4: "444",
-        a5: "555",
-        imei: "12312312312"
-      }
+      listColumns2: [
+        {
+          label: "收费模板",
+          prop: "chargeFeeTemplateName",
+          islink: true
+        },
+        {
+          label: "分账",
+          prop: "",
+          islink: true
+        },
+        {
+          label: "运营",
+          prop: "",
+          islink: true
+        }
+      ],
+      listData: {}
     };
   },
   created() {
-    // this.msg = this.$route.query.data
+    console.log(this.getPileInfo);
+    this.getDetail();
+  },
+  mounted() {
+    AMapLoader.load({
+      key: "21a1ca7e415887a172fe8399bd114b28",
+      version: "2.0"
+    }).then(AMap => {
+      new AMap.Map("rentMar__map", {
+        zoom: 11,
+        center: [107.4976, 32.1697]
+      });
+    });
   },
   methods: {
+    getOnlineStatus() {
+      this.$apis.online({ id: this.getPileInfo.id }).then(res => {
+        console.log(res.msg);
+        this.getDetail();
+      });
+    },
+    getUseStatus() {
+      this.$apis.use({ id: this.getPileInfo.id }).then(res => {
+        console.log(res.msg);
+        this.getDetail();
+      });
+    },
+    setOperateStatus() {
+      this.isShowPicker = true;
+    },
+    onConfirm(value, index) {
+      this.status = index - 1;
+      console.log(this.status);
+      this.$apis.operate({ id: this.getPileDetail.id, status: this.status }).then(res => {
+        console.log(res.msg);
+        this.getDetail();
+      });
+
+      this.status = "";
+      this.isShowPicker = false;
+    },
+    onCancel() {
+      this.isShowPicker = false;
+    },
+    getDetail() {
+      let id = this.getPileInfo.id;
+      this.$apis.detail({ id: id }).then(res => {
+        this.dataForm = res.data;
+        this.listData = res.data;
+        this.saveDetail(res.data);
+      });
+    },
     getDataForm(data) {
       this.listData = data;
       console.log(data);
     }
   },
   components: {
-    tmap,
     statusList,
-    listItem
+    listItem,
+    pileList
   }
 };
 </script>

@@ -1,13 +1,14 @@
 <template>
   <AppLayout>
-    <tmap></tmap>
+    <Panel @touchmove.native.stop.prevent>
+      <div id="rentMar__map" style="width:100%; height:100px;"></div>
+    </Panel>
     <inputList :columns="columns" :data="dataForm"></inputList>
     <SubmitBtn :onSubmit="submit" class="submit" text="保 存"></SubmitBtn>
   </AppLayout>
 </template>
 
 <script>
-import tmap from "../components/map";
 import inputList from "../components/input-list";
 export default {
   data() {
@@ -20,6 +21,17 @@ export default {
     this.columns = this.$route.query.column;
     this.dataForm = this.$route.query.data;
   },
+  mounted() {
+    AMapLoader.load({
+      key: "21a1ca7e415887a172fe8399bd114b28",
+      version: "2.0"
+    }).then(AMap => {
+      new AMap.Map("rentMar__map", {
+        zoom: 11,
+        center: [107.4976, 32.1697]
+      });
+    });
+  },
   methods: {
     submit() {
       // this.$emit("sub", this.dataForm);
@@ -27,7 +39,6 @@ export default {
     }
   },
   components: {
-    tmap,
     inputList
   }
 };

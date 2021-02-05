@@ -2,12 +2,15 @@
   <AppLayout>
     <!-- {{ staffData }} -->
     <Panel>
-      <van-cell :icon="staffData.img" :title="staffData.name" :label="staffData.phone"></van-cell>
+      <UserInfo class="user__info">
+        <span>{{ staffData.cnName }}</span>
+        <span>{{ staffData.mobile }}</span>
+      </UserInfo>
     </Panel>
     <Panel>
-      <van-cell title="姓名：" :value="staffData.name"></van-cell>
-      <van-cell title="电话：" :value="staffData.phone"></van-cell>
-      <van-cell title="权限：" :value="staffData.status" is-link @click="gotoTemp"></van-cell>
+      <van-cell title="姓名：" :value="staffData.cnName"></van-cell>
+      <van-cell title="电话：" :value="staffData.mobile"></van-cell>
+      <van-cell title="权限：" :value="staffData.statusName" is-link @click="gotoTemp"></van-cell>
       <btnGroup :leftbtn="'删除店员'" :rightbtn="'保 存'"></btnGroup>
     </Panel>
   </AppLayout>
@@ -22,7 +25,7 @@ export default {
     };
   },
   created() {
-    this.staffData = this.$route.query.data;
+    this.staffData = this.getStaffInfo;
   },
   methods: {
     gotoTemp() {

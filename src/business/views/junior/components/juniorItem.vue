@@ -1,7 +1,7 @@
 <template>
   <div>
     <Panel>
-      <UserInfo :avatar="JuniorList.imgurl">
+      <UserInfo>
         <span class="title__name">{{ JuniorList.name }}</span>
         <span>{{ JuniorList.phone }}</span>
       </UserInfo>
