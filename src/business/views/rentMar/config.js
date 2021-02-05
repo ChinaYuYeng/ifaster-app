@@ -45,7 +45,7 @@ export default function({ post, get }) {
             },
             {
               path: "edit",
-              component: "./rent/add.vue",
+              component: "./rent/edit.vue",
               meta: {
                 title: "租还点修改"
               }
@@ -71,11 +71,8 @@ export default function({ post, get }) {
       deletePoint(params) {
         return post("/rent/point/delete", params);
       },
-      addPoint(params) {
-        return post("/rent/point/add", params);
-      },
-      editPoint(params) {
-        return post("/rent/point/edit", params);
+      savePoint(params) {
+        return post("/rent/point/save", params);
       },
       getAssignList(params) {
         return post("/rent/point/commission/list", params);
