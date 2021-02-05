@@ -1,7 +1,7 @@
 <template>
   <div class="layout__main" v-if="showContent">
     <HeaderNav v-if="showHeader" @click="showSearch = true" :showIcon="showSearchIcon"></HeaderNav>
-    <BodyContent :onRefresh="onRefresh" :isScroll="isScroll">
+    <BodyContent :onRefresh="onRefresh" :isScroll="isScroll" :padding="padding">
       <slot name="body-top" slot="top"></slot>
       <slot></slot>
       <slot name="body-bottom" slot="bottom"></slot>
@@ -37,7 +37,8 @@ export default {
     showFooter: {
       type: Boolean,
       default: true
-    }
+    },
+    padding: String
   },
   data() {
     return {
@@ -62,6 +63,15 @@ export default {
     BodyContent,
     FooterMenu,
     Search
+  },
+  watch: {
+    showContent(val) {
+      if (val) {
+        this.$emit("onshow");
+      } else {
+        this.$emit("onhide");
+      }
+    }
   }
 };
 </script>
@@ -71,7 +81,8 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  overflow: hidden;
+  overflow-y: hidden;
   position: relative;
+  background-color: #fafafa;
 }
 </style>
