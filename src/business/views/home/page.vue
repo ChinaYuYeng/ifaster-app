@@ -70,8 +70,8 @@
       <Links
         :links="[
           { icon: '&#xe62e;', title: `还车申请(${operator.pendingRentOrderCount || 0})`, path: '/return' },
-          { icon: '&#xe634;', title: '充电订单管理', path: '/order' },
-          { icon: '&#xe69a;', title: '租赁订单管理', path: '/order' }
+          { icon: '&#xe634;', title: '充电订单管理', path: '/chargeOrder' },
+          { icon: '&#xe69a;', title: '租赁订单管理', path: '/rentOrder' }
         ]"
       ></Links>
       <Links

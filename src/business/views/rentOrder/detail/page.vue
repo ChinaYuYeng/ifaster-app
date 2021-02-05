@@ -58,6 +58,26 @@
       </Panel>
     </template>
     <van-collapse accordion v-model="activeName" class="mtop10">
+      <van-collapse-item name="0" v-if="routeData.isTimeout">
+        <template #title>
+          <span style="color:red;">订单异常</span>
+        </template>
+        <div class="content__item">
+          <span>异常原因:</span>
+          <span>逾期未还</span>
+        </div>
+        <div class="content__item">
+          <span>操作:</span>
+          <span>
+            <van-button
+              text="结束订单"
+              size="mini"
+              type="primary"
+              @click="routerTo({ name: '/rentOrder/detail/settle', params: routeData })"
+            ></van-button>
+          </span>
+        </div>
+      </van-collapse-item>
       <van-collapse-item title="收支详情" name="1">
         <div class="content__item">
           <span>营收:</span>
@@ -65,15 +85,15 @@
         </div>
         <div class="content__item">
           <span>支出:</span>
-          <span>{{ routeData.income.expend }}元</span>
+          <span>{{ routeData.income && routeData.income.expend }}元</span>
         </div>
         <div class="content__item">
           <span>分账:</span>
-          <span>{{ routeData.income.settle }}元</span>
+          <span>{{ routeData.income && routeData.income.settle }}元</span>
         </div>
         <div class="content__item">
           <span>分账人员:</span>
-          <span>{{ routeData.income.settles.map(v => v.name).join(",") }}</span>
+          <span>{{ routeData.income && routeData.income.settles.map(v => v.name).join(",") }}</span>
         </div>
         <div class="content__item">
           <span>实收:</span>
@@ -81,13 +101,39 @@
         </div>
       </van-collapse-item>
       <van-collapse-item title="收费模板详情" name="2">
-        <div class="content__item" v-for="item in routeData.chargeFeeTemplate.once" :key="item.type">
-          <span>型号{{ item.type }}:</span>
-          <span>{{ item.price }}</span>
+        <div class="content__item">
+          <span>押金:</span>
+          <span>{{ rentFeeTemplate.deposit }}元</span>
         </div>
-        <div class="content__item" v-for="item in routeData.chargeFeeTemplate.time" :key="item.type">
-          <span>时长{{ item.type }}:</span>
-          <span>{{ item.price }}</span>
+        <div class="content__item">
+          <span>短租:</span>
+          <span>{{ rentFeeTemplate.shortRent && rentFeeTemplate.shortRent.hour }}元/小时</span>
+        </div>
+        <div class="content__item">
+          <span>短租上限:</span>
+          <span>{{ rentFeeTemplate.shortRent && rentFeeTemplate.shortRent.max }}元/天</span>
+        </div>
+        <div class="content__item">
+          <span>周租:</span>
+          <span>{{ rentFeeTemplate.longRent && rentFeeTemplate.longRent.week }}元/周</span>
+        </div>
+        <div class="content__item">
+          <span>月租:</span>
+          <span>{{ rentFeeTemplate.longRent && rentFeeTemplate.longRent.month }}元/月</span>
+        </div>
+        <div class="content__item">
+          <span>年租:</span>
+          <span>{{ rentFeeTemplate.longRent && rentFeeTemplate.longRent.year }}元/年</span>
+        </div>
+        <div class="content__item">
+          <span>YO车:</span>
+          <span>
+            {{ rentFeeTemplate.yoRent && rentFeeTemplate.yoRent.price }}/期（共{{ rentFeeTemplate.yoRent && rentFeeTemplate.yoRent.price }}期）
+          </span>
+        </div>
+        <div class="content__item">
+          <span>YO车积分:</span>
+          <span>{{ rentFeeTemplate.yoRent && rentFeeTemplate.yoRent.points }}</span>
         </div>
       </van-collapse-item>
       <van-collapse-item title="用户信息" name="3">
@@ -122,7 +168,7 @@
 export default {
   data() {
     return {
-      activeName: "1",
+      activeName: "",
       routeData: this.$route.params
     };
   },
@@ -130,6 +176,14 @@ export default {
     this.$apis.getOrderDetail({ id: this.routeData.id }).then(res => {
       this.routeData = res.data;
     });
+  },
+  computed: {
+    rentFeeTemplate() {
+      return this.routeData.rentFeeTemplate || {};
+    },
+    income() {
+      return this.routeData.income || {};
+    }
   },
   methods: {}
 };
