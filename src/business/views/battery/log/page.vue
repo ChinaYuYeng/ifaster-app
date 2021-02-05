@@ -11,7 +11,7 @@
           <span>{{ item.operatorName }}</span>
         </div>
         <div class="content__item">
-          <span class="item__label">操作时长:</span>
+          <span class="item__label">操作时长(分钟):</span>
           <span>{{ item.duration }}</span>
         </div>
         <div class="content__item order__footer" slot="footer">
@@ -30,29 +30,6 @@ export default {
     return {
       finished: false,
       loading: false
-      // datalist: [
-      //   {
-      //     type: "强锁",
-      //     date: "2021-01-16",
-      //     time: "3小时2分钟",
-      //     name: "店员1"
-      //   },
-      //   {
-      //     date: "2021-01-17",
-      //     time: "3小时2分钟",
-      //     name: "店员2"
-      //   },
-      //   {
-      //     date: "2021-01-18",
-      //     time: "3小时2分钟",
-      //     name: "店员3"
-      //   },
-      //   {
-      //     date: "2021-01-19",
-      //     time: "3小时2分钟",
-      //     name: "店员4"
-      //   }
-      // ]
     };
   },
   created() {

@@ -84,19 +84,19 @@ export default {
           prop: "remark"
         },
         {
-          label: "当前温度",
+          label: "当前温度(°C)",
           prop: "temperature"
         },
         {
-          label: "充电次数",
+          label: "充电次数(次)",
           prop: "chargeTimes"
         },
         {
-          label: "当前电压",
+          label: "当前电压(V)",
           prop: "acurrentVoltage5"
         },
         {
-          label: "当前容量",
+          label: "当前容量(Ah)",
           prop: "currentCapacity"
         }
       ],

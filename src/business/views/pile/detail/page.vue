@@ -60,11 +60,11 @@ export default {
           islink: true
         },
         {
-          label: "充电次数",
+          label: "充电次数(次)",
           prop: "chargeTimes"
         },
         {
-          label: "租赁充电",
+          label: "租赁充电(次)",
           prop: "rentChargeTimes"
         }
       ],

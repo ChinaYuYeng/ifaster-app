@@ -10,6 +10,15 @@ export default {
     _loadList(loader) {
       return loader(this.paging)
         .then(res => {
+          for (let i = 0; i < res.data.length; i++) {
+            if (res.data[i].type == 0) {
+              res.data[i].type = "解锁";
+            } else if (res.data[i].type == 1) {
+              res.data[i].type = "临时解锁";
+            } else {
+              res.data[i].type = "强制锁定";
+            }
+          }
           this.dataList = this.dataList.concat(res.data || []);
           return res;
         })
