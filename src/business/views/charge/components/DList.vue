@@ -4,8 +4,6 @@
     <img class="list-img" :src="imgnResult" alt="" />
     <div class="templatename">
       <h3>{{ item.name }}</h3>
-      <span class="tips">{{ item.rowsrentModel }}</span>
-      <span class="tips">{{ result }}</span>
     </div>
     <van-icon class="arrow-icon" name="arrow" size="20" color="#B2B2B2" />
     <!-- </van-cell> -->
@@ -13,12 +11,12 @@
 </template>
 
 <script>
-import batteryImg from "../../../../assets/images/battery.png";
+import chargingImg from "../../../../assets/images/charging.png";
 
 export default {
   data() {
     return {
-      batteryImg: batteryImg
+      chargingImg: chargingImg
     };
   },
   props: {
@@ -27,34 +25,23 @@ export default {
       default: true
     },
     imgProp: String,
-    rentInfo: Array,
+    pileInfo: Array,
     item: Object
   },
   methods: {
     goEdit() {
       this.$router.push({
-        path: "/charge/editrent"
+        path: "/charge/editpile"
       });
     }
   },
   computed: {
-    result() {
-      let showTips = "";
-      if (this.item.price.rentModel == 1) {
-        showTips = "保证金模式";
-      } else if (this.dataList.rows.price.rentModel == 2) {
-        showTips = "预付费模式";
-      } else {
-        showTips = "";
-      }
-      return showTips;
-    },
     imgnResult() {
       let showImg = "";
       if (this.item.img) {
         showImg = this.item.img;
       } else {
-        showImg = this.batteryImg;
+        showImg = this.chargingImg;
       }
       return showImg;
     }

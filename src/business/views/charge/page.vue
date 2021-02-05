@@ -9,16 +9,18 @@
       </van-tab>
       <LoadList :loadStatus="loadStatus">
         <van-cell v-for="(item, index) in dataList" :key="index">
-          <CList :item="item"></CList>
+          <CList :item="item" v-if="clist"></CList>
+          <DList :item="item" v-else></DList>
         </van-cell>
       </LoadList>
-      <van-button type="primary" size="large" @click="addM == true ? addBatteryM() : addPilM()">{{ btnMessage }}</van-button>
+      <van-button type="primary" size="large" @click="addM == true ? addRentM() : addPileM()">{{ btnMessage }}</van-button>
     </van-tabs>
   </AppLayout>
 </template>
 
 <script>
 import CList from "./components/CList";
+import DList from "./components/DList";
 import loadList from "@@/mixins/loadList";
 export default {
   mixins: [loadList],
@@ -37,65 +39,97 @@ export default {
           name: " 电桩收费模板"
         }
       ],
-      batteryInfo: {}
+      rentInfo: {},
+      pileInfo: {},
+      clist: true
     };
   },
   created() {
-    // this.getBatterylist();
-
     this.setListLoader(paging => {
-      return this.$apis.getBatterylist({ ...paging });
+      if (this.active === 0) {
+        this.clist = true;
+        return this.$apis.rent.getRentInfo({ ...paging });
+      } else {
+        this.clist = false;
+        return this.$apis.pile.getPileInfo({ ...paging });
+      }
     });
   },
   methods: {
     onRefresh() {
       return this.setListLoader();
     },
-    addBatteryM() {
+    addRentM() {
       console.log("11");
-      this.$router.push({ path: "/charge/editbattery" });
+      this.$router.push({ path: "/charge/editrent" });
     },
-    addPilM() {
+    addPileM() {
       console.log("22");
       this.$router.push({ path: "/charge/editpile" });
     },
+    // 操作Tab选项卡按钮时的方法
     beforeChange(index) {
       if (index == 0) {
-        this.getBatterylist();
+        this.clist = true;
+        this.onRefresh();
         this.btnMessage = "新建电池收费模板";
-        console.log("当前处于电池收费模板");
+        console.log("当前处于----电池,收费模板" + this.active + index);
         this.addM = true;
       } else {
+        this.onRefresh();
+        // 在点击电桩收费模板Tab时调用获取电桩收费模板列表API
+        this.clist = false;
         this.btnMessage = "新建电桩收费模板";
-        console.log("当前处于电桩收费模板");
+        console.log("当前处于----电桩,收费模板" + this.active + index);
         this.addM = false;
       }
       this.active = index;
-    },
-    getBatterylist() {
-      this.$apis
-        .getBatterylist({
-          pageIndex: 1,
-          pageSize: 10
-        })
-        .then(res => {
-          console.log(res.data);
-          // this.batteryInfo = res.data;
-          if (res && res.code === "1") {
-            console.log("请求成功！");
-            this.batteryInfo = res.data; // 把传回来数据赋给batteryInfo（列表中的数据）
-          } else {
-            console.log("请求失败！");
-            this.batteryInfo = [];
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
     }
+    // getRentInfo() {
+    //   this.$apis.rent
+    //     .getRentInfo({
+    //       pageIndex: 1,
+    //       pageSize: 10
+    //     })
+    //     .then(res => {
+    //       console.log(res.data);
+    //       // this.rentInfo = res.data;
+    //       if (res && res.code === "1") {
+    //         console.log("请求成功！");
+    //         this.rentInfo = res.data; // 把传回来数据赋给rentInfo（列表中的数据）
+    //       } else {
+    //         console.log("请求失败！");
+    //         this.rentInfo = [];
+    //       }
+    //     })
+    //     .catch(function(error) {
+    //       console.log(error);
+    //     });
+    // },
+    // getPileList() {
+    //   this.$apis.pile
+    //     .getPilelist({
+    //       pageIndex: 1,
+    //       pageSize: 10
+    //     })
+    //     .then(res => {
+    //       console.log(res.data);
+    //       if (res && res.code === "1") {
+    //         console.log("请求成功！");
+    //         this.pileInfo = res.data; // 把传回来数据赋给pileInfo（列表中的数据）
+    //       } else {
+    //         console.log("请求失败！");
+    //         this.pileInfo = [];
+    //       }
+    //     })
+    //     .catch(function(error) {
+    //       console.log(error);
+    //     });
+    // }
   },
   components: {
-    CList
+    CList,
+    DList
   }
 };
 </script>

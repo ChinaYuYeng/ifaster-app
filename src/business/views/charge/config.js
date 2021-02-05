@@ -6,8 +6,8 @@ export default function({ post }) {
     },
     children: [
       {
-        path: "editbattery",
-        component: "./editbattery/page.vue",
+        path: "editrent",
+        component: "./editrent/page.vue",
         meta: {
           title: "新增/编辑-电池收费模板"
         }
@@ -22,22 +22,44 @@ export default function({ post }) {
     ]
   };
   const apis = {
-    getBatterylist(params) {
-      return post("/rent/rate/list", params);
+    rent: {
+      getRentInfo(params) {
+        return post("/rent/rate/list", params);
+      }
+    },
+    pile: {
+      getPileInfo(params) {
+        return post("/charge/rate/list", params);
+      }
     }
   };
   const store = {
     state: {
-      batteryInfo: {}
+      rentInfo: {},
+      pileInfo: {}
     },
     getters: {
-      getBatteryInfo(state) {
-        return state.BatteryInfo;
+      getRentInfo(state) {
+        return state.rentInfo;
+      },
+      getPileInfo(state) {
+        return state.pileInfo;
       }
     },
     mutations: {
-      setBatteryInfo(state, data) {
-        state.BatteryInfo = data;
+      setRentInfo(state, data) {
+        state.rentInfo = data;
+      },
+      setPileInfo(state, data) {
+        state.pileInfo = data;
+      }
+    },
+    actions: {
+      doRentInfo({ commit }, data) {
+        commit("setRentInfo", data);
+      },
+      doPileInfo({ commit }, data) {
+        commit("setPileInfo", data);
       }
     }
   };
