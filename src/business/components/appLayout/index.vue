@@ -36,7 +36,7 @@ export default {
     isScroll: Boolean,
     showFooter: {
       type: Boolean,
-      default: true
+      default: false
     },
     padding: String
   },
