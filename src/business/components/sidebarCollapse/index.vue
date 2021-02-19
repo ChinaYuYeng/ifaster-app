@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <van-row class="row">
-      <van-col span="6"><Sidebar :bars="bars"></Sidebar></van-col>
+      <van-col span="6"><SidebarIndex :bars="bars" ref="leftSidebar"></SidebarIndex></van-col>
       <van-col span="18">
         <van-row>
           <van-col class="row">
@@ -11,11 +11,11 @@
           </van-col>
         </van-row>
         <van-row>
-          <van-col class="row"><Collapse :collapses="children" :errIcon="errIcon"></Collapse></van-col>
+          <van-col class="row"><CollapseIndex :collapses="children" :errIcon="errIcon"></CollapseIndex></van-col>
         </van-row>
       </van-col>
     </van-row>
-    <van-row class="row action-bar">
+    <van-row class="row action-bar" v-if="showAction">
       <van-col span="24">
         <ActionBar :btns="btns" :summary="summary"></ActionBar>
       </van-col>
@@ -23,8 +23,8 @@
   </div>
 </template>
 <script>
-import Collapse from "./components/collapse";
-import Sidebar from "./components/sidebar";
+import CollapseIndex from "./components/collapseIndex";
+import SidebarIndex from "./components/sidebarIndex";
 import ActionBar from "./components/actionBar";
 export default {
   name: "sidebarCollapse",
@@ -51,9 +51,12 @@ export default {
       type: String
     }
   },
+  inject: ["setSelected"],
   data() {
     return {
-      summary: "",
+      // 默认选中的哪一类
+      headChekedIndex: -1,
+      // summary: "",
       actives: []
     };
   },
@@ -68,16 +71,31 @@ export default {
     });
   },
   mounted() {},
+  methods: {},
   computed: {
-    /* 是否显示当前页面，或者提供router-view */
-    showContent() {
-      let path = this.$route.fullPath;
-      let index = path.indexOf("?");
-      path = index >= 0 ? path.slice(0, index) : path;
-      return path === this.$pagePath;
+    summary() {
+      // debugger;
+      let sum = "";
+      let seleted = this.children.find(c => c.checked == true);
+      if (seleted) {
+        let name = seleted.name;
+        let cnt = seleted.list.reduce((accumulator, currentValue) => {
+          if (currentValue.checked) {
+            accumulator++;
+          }
+          return accumulator;
+        }, 0);
+        sum = name + " 数量：" + cnt;
+        // this.showAction = true;
+      }
+      return sum;
     },
-    showSearchIcon() {
-      return !!this.$slots.search;
+    showAction() {
+      let seleted = this.children.find(c => c.checked == true);
+      if (seleted) {
+        return true;
+      }
+      return false;
     }
   },
   watch: {
@@ -87,51 +105,16 @@ export default {
     //   }
     // },
     children: {
-      handler: function(v) {
-        debugger;
-        console.log(v);
-        // 是否选择了 比例型号
-        // let hasSelectedPercent = 0;
-        let selectedPercent = v.filter(p => p.checked)[0];
-        let selectedCopy;
-        if (selectedPercent) {
-          selectedCopy = JSON.parse(JSON.stringify(selectedPercent));
-        }
-
-        v = v.map(c => {
-          debugger;
-          if (c.checked) {
-            if (c == selectedPercent) {
-              c.list = c.list.map(t => {
-                t.checked = true;
-              });
-            } else {
-              c.checked = false;
-              c.list = c.list.map(t => {
-                t.checked = false;
-              });
-            }
-          }
-        });
-        // debugger;
-        // let sel = v.find(c => c.checked);
-        if (selectedCopy) {
-          let name = selectedCopy.name;
-          let cnt = selectedCopy.list.reduce((accumulator, currentValue) => {
-            if (currentValue.checked) {
-              accumulator++;
-            }
-            // return accumulator;
-          });
-          this.summary = name + " 数量：" + cnt;
-        }
+      handler: function() {
+        this.setSelected();
+        return this.summary;
       },
       deep: true
     }
   },
   components: {
-    Collapse,
-    Sidebar,
+    CollapseIndex,
+    SidebarIndex,
     ActionBar
   }
 };

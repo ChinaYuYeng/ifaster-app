@@ -33,11 +33,7 @@ export default {
       span2: 12
     };
   },
-  methods: {
-    parentClick(name) {
-      this.$emit(name);
-    }
-  },
+  methods: {},
   watch: {
     // 计算 按钮与汇总信息 显示所占的 比例
     "this.btns": function() {

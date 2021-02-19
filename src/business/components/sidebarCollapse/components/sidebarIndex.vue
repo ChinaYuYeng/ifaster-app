@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "sidebar",
+  name: "sidebarIndex",
   props: {
     bars: {
       type: Array,

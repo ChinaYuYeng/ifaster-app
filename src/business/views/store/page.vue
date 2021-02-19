@@ -1,14 +1,17 @@
 <template>
   <AppLayout>
-    <van-tabs :active="active" :before-change="beforeChange" sticky :offset-top="500">
-      <van-tab v-for="(t, index) in tabs" :key="index" :value="index">
-        <template #title>
-          <span class="iconfont" v-html="t.icon"></span>
-          <span class="iconfont">{{ t.name }}</span>
-        </template>
-      </van-tab>
-    </van-tabs>
+    <van-sticky :offset-top="60">
+      <van-tabs :active="active" :before-change="beforeChange" ref="storeTabs">
+        <van-tab v-for="(t, index) in tabs" :key="index" :value="index">
+          <template #title>
+            <span class="iconfont" v-html="t.icon"></span>
+            <span class="iconfont">{{ t.name }}</span>
+          </template>
+        </van-tab>
+      </van-tabs>
+    </van-sticky>
     <SidebarCollapse
+      ref="mySidebarCollapse"
       :bars="bars"
       :children="children"
       :btns="btns"
@@ -50,6 +53,11 @@ export default {
       btns: [],
       summary: null,
       defaultIcon: ""
+    };
+  },
+  provide() {
+    return {
+      setSelected: this.setSelected
     };
   },
   created() {
@@ -116,7 +124,38 @@ export default {
     this.defaultIcon = this.batteryImg;
   },
   methods: {
+    // 保存选择信息
+    setSelected() {
+      // debugger;
+      let selected = this.children.find(c => c.checked == true);
+      if (selected) {
+        if (this.active == 0) {
+          // 设备来源 分成比例 设备型号 设备数量
+          let scnt = selected.list.reduce((a, i) => {
+            if (i.checked) {
+              a++;
+            }
+            return a;
+          }, 0);
+          let bInfo = {
+            operator: this.getBOperators[this.$refs.mySidebarCollapse.$refs.leftSidebar.active].name,
+            percent: selected.percent,
+            model: selected.model,
+            cnt: scnt,
+            img: this.batteryImg
+          };
+          this.setSelectedBatteryInfo(bInfo);
+        } else {
+          let pInfo = {};
+          this.setSelectedPileInfo(pInfo);
+        }
+      }
+      console.log("new111");
+      console.log(this.children);
+    },
     beforeChange(index) {
+      // 设置操作类型
+      this.setOperationType(index);
       if (index == 0) {
         // 电池
         console.log(1);
@@ -166,6 +205,7 @@ export default {
                       row.push(row2);
                       //debugger;
                       let item = {
+                        checked: false,
                         id: d.listItemVos[j].id,
                         imei: d.listItemVos[j].imei,
                         model: d.listItemVos[j].model,
@@ -178,6 +218,8 @@ export default {
                     let child = {
                       checked: false,
                       list: lists,
+                      percent: d.percent * 100 + "%",
+                      model: d.model,
                       name: "比例：" + d.percent * 100 + "%",
                       title: "比例：" + d.percent * 100 + "%" + "（" + d.model + "）"
                     };
@@ -192,13 +234,14 @@ export default {
         .catch(e => console.log(e));
 
       this.defaultIcon = this.batteryImg;
-      console.log(this.defaultIcon);
+      // console.log(this.defaultIcon);
     },
     getPileInfo() {
       this.$apis.pile
-        .operatorList()
+        .operatorList({})
         .then(r => {
-          if (r.code == "200") {
+          debugger;
+          if (r.code == "1") {
             this.setOperators({ c: "pile", data: r.data });
             this.bars = r.data;
             this.collapseHeader = r.data[0].name;
@@ -207,16 +250,47 @@ export default {
               .repositoryList({ id: r.data[0].value })
               .then(res => {
                 if (res.code == "1" && res.data && res.data.length > 0) {
-                  this.setRepositories({ c: "pile", data: res.data.listItemVos });
+                  this.setRepositories({ c: "pile", data: res.data[0].listItemVos });
                   this.children = [];
                   for (let i = 0; i < res.data.length; i++) {
                     let d = res.data[i];
+                    // let rows = [];
+                    let lists = [];
+                    for (let j = 0; j < d.listItemVos.length; j++) {
+                      // let item = d.listItemVos[j];
+                      let row = [];
+                      let row1 = {
+                        name: "电桩IMEI:",
+                        value: d.listItemVos[j].imei
+                      };
+                      let row2 = {
+                        name: "电桩型号:",
+                        value: d.listItemVos[j].model
+                      };
+
+                      row.push(row1);
+                      row.push(row2);
+                      //debugger;
+                      let item = {
+                        checked: false,
+                        id: d.listItemVos[j].id,
+                        imei: d.listItemVos[j].imei,
+                        model: d.listItemVos[j].model,
+                        rows: row
+                      };
+                      // let oneList = Object.assign(item, { rows: [rows] });
+                      lists.push(item);
+                    }
+
                     let child = {
                       checked: false,
-                      list: d.listItemVos,
-                      name: "比例：" + d.percent * 100 + d.percent + "%",
-                      title: child.name + "（" + d.model + "）"
+                      list: lists,
+                      percent: d.percent * 100 + "%",
+                      model: d.model,
+                      name: "比例：" + d.percent * 100 + "%",
+                      title: "比例：" + d.percent * 100 + "%" + "（" + d.model + "）"
                     };
+                    // debugger;
                     this.children.push(child);
                   }
                 }
@@ -241,7 +315,5 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-.tab {
 }
 </style>

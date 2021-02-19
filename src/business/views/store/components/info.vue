@@ -1,5 +1,5 @@
 <template>
-  <van-row>
+  <van-row class="bk-white">
     <van-col span="6">
       <van-image :src="headImg"></van-image>
     </van-col>
@@ -41,5 +41,8 @@ export default {
     height: 20%;
     margin-top: 3%;
   }
+}
+.bk-white {
+  background-color: #fff;
 }
 </style>
