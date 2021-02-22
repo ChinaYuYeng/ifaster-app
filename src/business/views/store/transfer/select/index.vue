@@ -85,13 +85,21 @@ export default {
         let params = {
           operateType: 1,
           amount: this.getSelectedPileInfo.limit,
-          ids: this.getSelectedBatteryInfo.ids,
+          ids: this.getSelectedPileInfo.ids,
           percent: this.getSelectedPileInfo.subPercent / 100,
           saleType: 0,
           targetOperatorId: id
         };
         debugger;
-        this.$apis.pile.operate(params);
+        this.$apis.pile.operate(params).then(res => {
+          debugger;
+          if (res.code == "1") {
+            this.$toast.success(res.msg);
+            this.$router.push({ path: "/store" });
+          } else {
+            this.$toast.fail(res.msg);
+          }
+        });
       }
     }
   }

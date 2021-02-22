@@ -14,9 +14,9 @@
     <van-row class="rw">
       <van-col span="12" offset="12">注意：一经确定，无法修改</van-col>
     </van-row>
-    <van-row v-if="dataForm.saleType == 1">
+    <!-- <van-row v-if="dataForm.saleType == 1">
       <van-col span="24"><Percent ref="percent"></Percent></van-col>
-    </van-row>
+    </van-row> -->
     <template #body-bottom class="wrap">
       <van-row>
         <van-col span="8" offset="8">
@@ -29,11 +29,10 @@
 
 <script>
 import Info from "../components/info";
-import Percent from "../components/percent";
+// import Percent from "../components/percent";
 export default {
   components: {
-    Info,
-    Percent
+    Info
   },
   data() {
     return {
@@ -58,7 +57,55 @@ export default {
     this.obj.push({ label: "设备数量：", value: this.dataForm.info.cnt });
   },
   methods: {
-    sure() {}
+    sure() {
+      //       {
+      // 	"amount": 0,
+      // 	"ids": [],
+      // 	"operateType": 0,
+      // 	"percent": 0,
+      // 	"saleType": 0,
+      // 	"targetOperatorId": 0
+      // }
+      if (this.getOperationType == 0) {
+        // 电池
+        let params = {
+          operateType: 2,
+          amount: 0,
+          ids: this.getSelectedBatteryInfo.ids,
+          percent: 0,
+          saleType: this.dataForm.saleType,
+          targetOperatorId: 0
+        };
+        debugger;
+        this.$apis.battery.operate(params).then(res => {
+          if (res.code == "1") {
+            this.$toast.success(res.msg);
+            this.$router.push({ path: "/store" });
+          } else {
+            this.$toast.fail(res.msg);
+          }
+        });
+      } else {
+        // 电桩
+        let params = {
+          operateType: 2,
+          amount: 0,
+          ids: this.getSelectedPileInfo.ids,
+          percent: 0,
+          saleType: this.dataForm.saleType,
+          targetOperatorId: 0
+        };
+        debugger;
+        this.$apis.pile.operate(params).then(res => {
+          if (res.code == "1") {
+            this.$toast.success(res.msg);
+            this.$router.push({ path: "/store" });
+          } else {
+            this.$toast.fail(res.msg);
+          }
+        });
+      }
+    }
   }
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <AppLayout>
+  <AppLayout @onshow="showStore">
     <van-sticky :offset-top="60">
       <van-tabs :active="active" :before-change="beforeChange" ref="storeTabs">
         <van-tab v-for="(t, index) in tabs" :key="index" :value="index">
@@ -124,6 +124,14 @@ export default {
     this.defaultIcon = this.batteryImg;
   },
   methods: {
+    // 默认加载数据
+    showStore() {
+      this.children = [];
+      let index = 0;
+      this.active = index;
+      this.setOperationType(index);
+      this.getBatteryInfo();
+    },
     // 保存选择信息
     setSelected() {
       // debugger;
