@@ -52,7 +52,7 @@ export default {
       let path = this.$route.fullPath;
       let index = path.indexOf("?");
       path = index >= 0 ? path.slice(0, index) : path;
-      return path === this.$pagePath;
+      return this.$pagePath.indexOf(path) > -1;
     },
     showSearchIcon() {
       return !!this.$slots.search || !!this.$scopedSlots.search;
