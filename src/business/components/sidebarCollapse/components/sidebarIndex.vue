@@ -6,6 +6,7 @@
 
 <script>
 export default {
+  inject: ["updateData"],
   name: "sidebarIndex",
   props: {
     bars: {
@@ -19,19 +20,13 @@ export default {
       active: 0
     };
   },
-  mounted() {
-    this.bars.map(b => {
-      if (b.name.length > 4) {
-        b.name = b.name.substring(0, 4);
-      }
-    });
-  },
+  mounted() {},
   created() {},
   methods: {
     onChange(index) {
       this.loading = true;
       this.active = index;
-      this.$emit("getChildren", this.bars[index]);
+      this.updateData(this.bars[index]);
     }
   },
   watch: {}
@@ -46,5 +41,8 @@ export default {
   width: 120px;
   position: fixed;
   left: 0;
+}
+.sidebar_left + .sidebar_left {
+  margin-top: 60px;
 }
 </style>
