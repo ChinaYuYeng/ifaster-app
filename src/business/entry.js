@@ -7,6 +7,7 @@ import "vant/lib/index.less";
 import "@@/style/main.less";
 import "@@/components";
 import "@@/mixins";
+import "@/assets/directive";
 Vue.use(Vant);
 
 /* 设置rem */
@@ -32,15 +33,15 @@ function setLoginRouter() {
 }
 
 /* 路由拦截 */
-function routerControll(router) {
+function routerControll(router, store) {
   router.beforeEach((to, from, next) => {
-    next();
-    // if (store.getters["login/getLogined"]) {
-    // } else if (to.path === "/login") {
-    //   next();
-    // } else {
-    //   next({ path: "/login" });
-    // }
+    if (store.getters["login/getToken"]) {
+      next();
+    } else if (to.path === "/login" || to.path === "/login/login") {
+      next();
+    } else {
+      next({ path: "/login" });
+    }
   });
   router.afterEach(() => {
     // console.log(to, store);
@@ -48,11 +49,12 @@ function routerControll(router) {
 }
 
 /*  接口拦截 */
-function requestInterceptor(request) {
+function requestInterceptor(request, store) {
   request.defaults.timeout = 2 * 60 * 1000;
-  request.defaults.baseURL = "";
+  request.defaults.baseURL = "/ifaster-v2-wechat";
   request.interceptors.request.use(
     config => {
+      config.headers = { token: store.getters["login/getToken"] };
       return config;
     },
     error => {
@@ -63,11 +65,17 @@ function requestInterceptor(request) {
   request.interceptors.response.use(
     response => {
       let res = response.data;
-      if (res.login === 0) {
-        //   exitLogin();
-        // store.dispatch("d2admin/account/logout", {});
+      switch (res.code) {
+        case "A0500":
+        case "A0300":
+          Vue.prototype.$notify({ type: "warning", message: res.msg });
+          return Promise.reject(res);
+        case "A0400":
+        case "B0001":
+          return Promise.reject(res);
+        default:
+          return Promise.resolve(res);
       }
-      return res;
     },
     error => {
       return Promise.reject(error);
@@ -80,5 +88,5 @@ export default function(request, router, store) {
   setRem();
   setLoginRouter();
   routerControll(router, store);
-  requestInterceptor(request);
+  requestInterceptor(request, store);
 }

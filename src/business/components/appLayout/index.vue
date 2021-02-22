@@ -1,14 +1,21 @@
 <template>
   <div class="layout__main" v-if="showContent">
     <HeaderNav v-if="showHeader" @click="showSearch = true" :showIcon="showSearchIcon"></HeaderNav>
-    <BodyContent :onRefresh="onRefresh" :isScroll="isScroll">
+    <BodyContent :onRefresh="onRefresh" :isScroll="isScroll" :padding="padding">
       <slot name="body-top" slot="top"></slot>
       <slot></slot>
       <slot name="body-bottom" slot="bottom"></slot>
     </BodyContent>
     <FooterMenu v-if="showFooter"></FooterMenu>
     <Search :show.sync="showSearch">
-      <slot name="search"></slot>
+      <slot
+        name="search"
+        :close="
+          () => {
+            this.showSearch = false;
+          }
+        "
+      ></slot>
     </Search>
   </div>
   <router-view v-else></router-view>
@@ -29,10 +36,11 @@ export default {
     isScroll: Boolean,
     showFooter: {
       type: Boolean,
-      default: true
-    }
+      default: false
+    },
+    padding: String
   },
-  data: function() {
+  data() {
     return {
       showSearch: false
     };
@@ -47,7 +55,7 @@ export default {
       return this.$pagePath.indexOf(path) > -1;
     },
     showSearchIcon() {
-      return !!this.$slots.search;
+      return !!this.$slots.search || !!this.$scopedSlots.search;
     }
   },
   components: {
@@ -55,6 +63,15 @@ export default {
     BodyContent,
     FooterMenu,
     Search
+  },
+  watch: {
+    showContent(val) {
+      if (val) {
+        this.$emit("onshow");
+      } else {
+        this.$emit("onhide");
+      }
+    }
   }
 };
 </script>
@@ -64,7 +81,8 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  overflow: hidden;
+  overflow-y: hidden;
   position: relative;
+  background-color: #fafafa;
 }
 </style>

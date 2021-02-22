@@ -1,28 +1,22 @@
 <template>
-  <AppLayout ref="report__wrap">
-    <LoadList :loadData="onLoad">
-      <van-cell
-        is-link
-        style="padding:6px 0;align-items: center;"
-        v-for="item in datalist"
-        :key="item.date"
-        @click="$router.push({ name: '/report/statement', params: item })"
-      >
+  <AppLayout ref="report__wrap" :onRefresh="onRefresh">
+    <LoadList :loadStatus="loadStatus">
+      <van-cell center style="padding:6px 0;" v-for="item in dataList" :key="item.id" @click="routerTo({ name: '/report/statement', params: item })">
         <van-grid>
           <van-grid-item>
-            <span>{{ item.date }}</span>
+            <span>{{ item.remitDate }}</span>
           </van-grid-item>
           <van-grid-item>
-            <span>营收</span>
-            <span>{{ item.income }}</span>
+            <span>充电</span>
+            <span>{{ item.chargeAmount }}</span>
           </van-grid-item>
           <van-grid-item>
-            <span>分账</span>
-            <span>{{ item.assignment }}</span>
+            <span>租赁</span>
+            <span>{{ item.rentAmount }}</span>
           </van-grid-item>
           <van-grid-item>
-            <span>支出</span>
-            <span>{{ item.pay }}</span>
+            <span>合计</span>
+            <span>{{ item.totalAmount }}</span>
           </van-grid-item>
         </van-grid>
       </van-cell>
@@ -31,52 +25,23 @@
 </template>
 
 <script>
+import loadList from "@@/mixins/loadList";
 export default {
+  mixins: [loadList],
   data() {
     return {
-      datalist: [
-        {
-          date: "2021-01-16",
-          income: "123",
-          pay: "123",
-          assignment: "1212"
-        },
-        {
-          date: "2021-01-17",
-          income: "123",
-          pay: "123",
-          assignment: "1212"
-        },
-        {
-          date: "2021-01-18",
-          income: "123",
-          pay: "123",
-          assignment: "1212"
-        },
-        {
-          date: "2021-01-19",
-          income: "123",
-          pay: "123",
-          assignment: "1212"
-        }
-      ]
+      dataList: []
     };
   },
+  created() {
+    this.setListLoader(paging => {
+      return this.$apis.getList({ ...this.searchForm, ...paging });
+    });
+  },
   methods: {
-    onLoad() {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          this.datalist.push({
-            date: new Date().toDateString(),
-            income: "123",
-            pay: "123",
-            assignment: "1212"
-          });
-          resolve();
-        }, 1000);
-      });
-    },
-    onRefresh() {}
+    onRefresh() {
+      return this.setListLoader();
+    }
   }
 };
 </script>

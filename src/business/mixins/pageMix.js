@@ -1,9 +1,11 @@
 export default {
   methods: {
-    fetchData() {
-      console.log("data is loading");
-    },
     routerTo(route, method = "push") {
+      if (typeof route === "string") {
+        route = {
+          path: route
+        };
+      }
       this.$router[method](route);
     }
   }

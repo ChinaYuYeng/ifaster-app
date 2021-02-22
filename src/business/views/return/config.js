@@ -1,4 +1,15 @@
-export default function() {
+export default function({ post }) {
+  const apis = {
+    getList(params) {
+      return post("/rent/return/list", params);
+    },
+    getDetail(params) {
+      return post("/rent/return/detail", params);
+    },
+    audit(params) {
+      return post("/rent/return/audit", params);
+    }
+  };
   const routes = {
     meta: {
       title: "还车申请"
@@ -23,6 +34,7 @@ export default function() {
     ]
   };
   return {
-    routes
+    routes,
+    apis
   };
 }

@@ -1,53 +1,62 @@
 <template>
-  <AppLayout ref="report__wrap" :showHeader="true">
-    <LoadList :loadData="onLoad" class="pile">
-      <PileList :routeData="data" :routePath="path" :columns="list" :result="dataform" :imgProp="msg" class="pile"></PileList>
+  <AppLayout ref="report__wrap" :showHeader="true" :onRefresh="onRefresh">
+    <LoadList :loadStatus="loadStatus">
+      <van-cell v-for="(item, index) in dataList" :key="index" @click="goDetail(item)">
+        <pileList :columns="list" :item1="item" imgProp="rentFeeTemplateImg"></pileList>
+      </van-cell>
     </LoadList>
-    <!-- <template #search>
-      <Search :formData="searchForm"></Search>
-    </template> -->
+    <template #search="scope">
+      <Search :onSearch="onSearch.bind(this, scope)" :searchForm="searchForm"></Search>
+    </template>
   </AppLayout>
 </template>
 
 <script>
-import bac from "./testImg/index-bac.png";
-// import Search from "./components/search";
+import Search from "./components/search";
+import loadList from "@@/mixins/loadList";
+import pileList from "./components/pileList";
 export default {
+  mixins: [loadList],
+  components: {
+    Search,
+    pileList
+  },
   data() {
     return {
-      bac,
-      msg: "img",
-      path: "/battery/detail",
-      data: "id",
+      searchForm: {
+        imei: "",
+        isOnline: "",
+        model: "",
+        number: "",
+        onRentPointId: "",
+        rentFeeTemplateId: "",
+        rentStatus: "",
+        type: []
+      },
       list: [
-        { label: "电池编号1", prop: "axc" },
-        { label: "电池编号2", prop: "sss" },
-        { label: "电池编号3", prop: "abc" },
-        { label: "电池编号4", prop: "id" }
+        { label: "电池imei", prop: "imei" },
+        { label: "所属门店", prop: "onRentPointName" },
+        { label: "收费模板", prop: "rentFeeTemplateName" },
+        { label: "租赁状态", prop: "rentStatusDesc" }
       ],
-      dataform: [
-        { axc: "1", sss: "2", abc: "123", aaa: "ee", img: require("./testImg/index-bac.png"), id: "1" },
-        { axc: "33333", sss: "4", abc: "444", aaa: "wfw", img: require("./testImg/index-bac.png"), id: "2" },
-        { axc: "33333", sss: "4", abc: "444", aaa: "wfw", img: require("./testImg/index-bac.png"), id: "2" },
-        { axc: "33333", sss: "4", abc: "444", aaa: "wfw", img: require("./testImg/index-bac.png"), id: "2" },
-        { axc: "33333", sss: "4", abc: "444", aaa: "wfw", img: require("./testImg/index-bac.png"), id: "2" },
-        { axc: "33333", sss: "4", abc: "444", aaa: "wfw", img: require("./testImg/index-bac.png"), id: "2" },
-        { axc: "33333", sss: "4", abc: "444", aaa: "wfw", img: require("./testImg/index-bac.png"), id: "2" },
-        { axc: "33333", sss: "4", abc: "444", aaa: "wfw", img: require("./testImg/index-bac.png"), id: "2" }
-      ]
+      dataform: []
     };
   },
-  //   components: {
-  //     Search
-  //   },
+  created() {
+    this.setListLoader(paging => {
+      return this.$apis.list({ ...this.searchForm, ...paging });
+    });
+  },
   methods: {
-    onLoad() {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          this.dataform.push({ axc: "33333", sss: "4", abc: "444", aaa: "wfw", img: require("./testImg/index-bac.png"), id: "2" });
-          resolve();
-        }, 1000);
-      });
+    onRefresh() {
+      return this.setListLoader();
+    },
+    onSearch({ close }) {
+      return this.setListLoader().then(close);
+    },
+    goDetail(item) {
+      this.saveMessage(item);
+      this.$router.push("/battery/detail");
     }
   }
 };

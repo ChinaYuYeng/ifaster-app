@@ -11,7 +11,7 @@
     </div>
     <BtnGroup direction="column" width="70%">
       <button class="btn" @click="$router.push({ path: '/login/login' })">登 录</button>
-      <button class="btn register" @click="$router.push({ path: '/login/register' })">注 册</button>
+      <!-- <button class="btn register" @click="$router.push({ path: '/login/register' })">注 册</button> -->
     </BtnGroup>
   </AppLayout>
 </template>

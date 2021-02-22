@@ -3,10 +3,16 @@ function resolve(dir) {
   return path.join(__dirname, dir);
 }
 module.exports = {
+  publicPath: process.env.NODE_ENV === "production" ? "/ifaster-v2" : "/",
   configureWebpack: {
-    // module: {
-    //   unknownContextCritical: false
-    // }
+    devServer: {
+      proxy: {
+        "/ifaster-v2-wechat": {
+          target: "http://192.168.1.16:8899",
+          autoRewrite: true
+        }
+      }
+    }
   },
   chainWebpack: config => {
     config.externals = {

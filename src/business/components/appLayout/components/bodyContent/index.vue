@@ -1,8 +1,14 @@
 <template>
-  <div class="layout__body">
+  <div class="layout__body" :style="{ padding: padding }">
     <slot name="top"></slot>
     <div class="layout__body-content" :class="{ 'layout__main-content--scroll': isScroll }">
-      <van-pull-refresh v-model="isLoading" success-text="刷新成功" @refresh="_onRefresh" style="overflow-y:scroll;min-height:100%;">
+      <van-pull-refresh
+        v-model="isLoading"
+        success-text="刷新成功"
+        @refresh="_onRefresh"
+        :disabled="disRefresh"
+        style="overflow-y:scroll;height:100%;"
+      >
         <slot><van-empty description="暂无内容" /></slot>
       </van-pull-refresh>
     </div>
@@ -18,8 +24,11 @@ export default {
       default: false
     },
     onRefresh: {
-      type: Function,
-      default: () => Promise.resolve()
+      type: Function
+    },
+    padding: {
+      type: String,
+      default: "10px"
     }
   },
   data() {
@@ -27,9 +36,14 @@ export default {
       isLoading: false
     };
   },
+  computed: {
+    disRefresh() {
+      return !this.onRefresh;
+    }
+  },
   methods: {
     _onRefresh() {
-      this.onRefresh().then(() => {
+      this.onRefresh().finally(() => {
         this.isLoading = false;
       });
     }
@@ -43,8 +57,6 @@ export default {
   display: flex;
   overflow: hidden;
   flex-direction: column;
-  padding: 10px;
-  background-color: #fafafa;
 }
 
 .layout__body-content {
