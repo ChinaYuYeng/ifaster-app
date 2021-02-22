@@ -53,6 +53,7 @@ export default {
       console.log(this.getSelectedBatteryInfo);
       if (this.getOperationType == 0) {
         let bInfo = {
+          ids: this.getSelectedBatteryInfo.ids,
           operator: this.getSelectedBatteryInfo.operator,
           percent: this.getSelectedBatteryInfo.percent,
           model: this.getSelectedBatteryInfo.model,
@@ -62,7 +63,16 @@ export default {
         };
         this.setSelectedBatteryInfo(bInfo);
       } else {
-        let pInfo = Object.assign(...this.getSelectedPileInfo, { percent: this.$refs.percent.dataForm });
+        let pInfo = {
+          ids: this.getSelectedPileInfo.ids,
+          operator: this.getSelectedPileInfo.operator,
+          percent: this.getSelectedPileInfo.percent,
+          model: this.getSelectedPileInfo.model,
+          cnt: this.getSelectedPileInfo.cnt,
+          subPercent: this.$refs.percent.dataForm.percent,
+          limit: this.$refs.percent.dataForm.limit
+        };
+        // let pInfo = Object.assign(...this.getSelectedPileInfo, { percent: this.$refs.percent.dataForm });
         this.setSelectedPileInfo(pInfo);
       }
       // 下一步

@@ -2,10 +2,12 @@
   <van-collapse v-model="active" class="right">
     <van-collapse-item v-for="(myCollapse, index) in collapses" :key="myCollapse.imei" :title="myCollapse.title">
       <template #title>
-        <div>
+        <div class="title-content">
           <input type="checkbox" v-model="myCollapse.checked" @click.stop="headClick(myCollapse.checked, index)" class="mycheck-box" />
           <!-- <label for="color-input-red"></label> -->
+
           {{ myCollapse.title }}
+
           <!-- </van-checkbox> -->
         </div>
       </template>
@@ -21,8 +23,8 @@
         </van-col>
         <van-col span="14" offset="0" class="right-col">
           <van-row v-for="(rw, index1) in box.rows" :key="index1">
-            <van-col span="12" class="text-black">{{ rw.name }}</van-col>
-            <van-col span="12">{{ rw.value }}</van-col>
+            <van-col span="10" class="text-black font-12">{{ rw.name }}</van-col>
+            <van-col span="14" class="title-content font-12">{{ rw.value }}</van-col>
           </van-row>
         </van-col>
       </van-row>
@@ -51,7 +53,7 @@ export default {
     };
   },
   created() {
-    console.log(this.errIcon);
+    // console.log(this.errIcon);
   },
   mounted() {},
   methods: {
@@ -61,7 +63,7 @@ export default {
       if (checked) {
         this.seletedHeadIndex = index;
         this.collapses.forEach((c, i) => {
-          // debugger;
+          //debugger;
           if (i != index) {
             c.checked = false;
           } else {
@@ -70,7 +72,7 @@ export default {
         });
       }
       // 是否一个都没有选中了
-      let selIndex = this.collapses[index].list.findIndex(b => (b.checked = true));
+      let selIndex = this.collapses[index].list.findIndex(b => b.checked == true);
       if (selIndex == -1) {
         this.collapses[index].checked = false;
       }
@@ -94,6 +96,15 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.font-12 {
+  font-size: 12px;
+}
+.title-content {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  // display: inline;
+}
 .left-col {
   display: flex;
   text-align: left;
@@ -108,9 +119,7 @@ export default {
 .right-col {
   margin-left: -16px;
 }
-.mycheck-box {
-  //visibility: hidden;
-}
+
 .mycheck-box + label {
   // display: block;
   // box-sizing: border-box;

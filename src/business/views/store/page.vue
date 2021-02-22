@@ -137,7 +137,10 @@ export default {
             }
             return a;
           }, 0);
+          let ids = selected.list.filter(c => c.checked == true).map(c => c.id);
+          //.join(",");
           let bInfo = {
+            ids: ids,
             operator: this.getBOperators[this.$refs.mySidebarCollapse.$refs.leftSidebar.active].name,
             percent: selected.percent,
             model: selected.model,
@@ -146,14 +149,30 @@ export default {
           };
           this.setSelectedBatteryInfo(bInfo);
         } else {
-          let pInfo = {};
+          let scnt = selected.list.reduce((a, i) => {
+            if (i.checked) {
+              a++;
+            }
+            return a;
+          }, 0);
+          let ids = selected.list.filter(c => c.checked == true).map(c => c.id);
+          //.join(",");
+          let pInfo = {
+            ids: ids,
+            operator: this.getBOperators[this.$refs.mySidebarCollapse.$refs.leftSidebar.active].name,
+            percent: selected.percent,
+            model: selected.model,
+            cnt: scnt,
+            img: this.chargingImg
+          };
           this.setSelectedPileInfo(pInfo);
         }
       }
-      console.log("new111");
-      console.log(this.children);
+      // console.log("new111");
+      // console.log(this.children);
     },
     beforeChange(index) {
+      this.children = [];
       // 设置操作类型
       this.setOperationType(index);
       if (index == 0) {
@@ -184,7 +203,7 @@ export default {
               .then(res => {
                 if (res.code == "1" && res.data && res.data.length > 0) {
                   this.setRepositories({ c: "battery", data: res.data[0].listItemVos });
-                  this.children = [];
+
                   for (let i = 0; i < res.data.length; i++) {
                     let d = res.data[i];
                     // let rows = [];
@@ -240,7 +259,6 @@ export default {
       this.$apis.pile
         .operatorList({})
         .then(r => {
-          debugger;
           if (r.code == "1") {
             this.setOperators({ c: "pile", data: r.data });
             this.bars = r.data;
