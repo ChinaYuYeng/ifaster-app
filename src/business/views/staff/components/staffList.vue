@@ -1,35 +1,33 @@
 <template>
   <div>
-    <div v-for="(item, index) in dataList" :key="index">
-      <van-cell is-link @click="routeTo(item)">
-        <UserInfo :avatar="item.img">
-          <span>{{ item.name }}</span>
-          <span>{{ item.status }}</span>
-        </UserInfo>
-      </van-cell>
-    </div>
+    <van-cell is-link>
+      <UserInfo class="user__info">
+        <span>{{ item.cnName }}</span>
+        <span>{{ item.statusName }}</span>
+      </UserInfo>
+    </van-cell>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    dataList: Array
+    item: Object
   },
   methods: {
-    routeTo(item) {
-      if (item.status == "待审核") {
-        this.$router.push({
-          path: "/staff/detail",
-          query: { data: item }
-        });
-      } else {
-        this.$router.push({
-          path: "/staff/permission",
-          query: { data: item }
-        });
-      }
-    }
+    // routeTo(item) {
+    //   if (item.status == 0) {
+    //     this.$router.push({
+    //       path: "/staff/detail",
+    //       query: { data: item }
+    //     });
+    //   } else if (item.status == 1) {
+    //     this.$router.push({
+    //       path: "/staff/permission",
+    //       query: { data: item }
+    //     });
+    //   }
+    // }
   }
 };
 </script>

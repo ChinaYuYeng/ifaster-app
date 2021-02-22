@@ -1,5 +1,5 @@
 <template>
-  <AppLayout>
+  <AppLayout @onshow="initMap">
     <van-cell is-link @click="routerTo({ name: '/rentMar/detail/edit', params: routerData })">
       <template #title>
         <span class="iconfont theme-font">&#xe635;</span>
@@ -42,18 +42,22 @@ export default {
     });
   },
   mounted() {
-    AMapLoader.load({
-      key: "21a1ca7e415887a172fe8399bd114b28",
-      version: "2.0"
-    }).then(AMap => {
-      new AMap.Map("rentMar__map", {
-        zoom: 11,
-        center: [107.4976, 32.1697]
-      });
-    });
+    this.initMap();
   },
 
-  methods: {}
+  methods: {
+    initMap() {
+      AMapLoader.load({
+        key: "21a1ca7e415887a172fe8399bd114b28",
+        version: "2.0"
+      }).then(AMap => {
+        new AMap.Map("rentMar__map", {
+          zoom: 11,
+          center: [107.4976, 32.1697]
+        });
+      });
+    }
+  }
 };
 </script>
 

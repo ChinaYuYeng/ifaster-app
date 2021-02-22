@@ -36,9 +36,17 @@ export default {
   components: {
     tempList
   },
+  created() {
+    this.getTemplateList();
+  },
   methods: {
     add_temp() {
       this.$router.push("/staff/addtemp");
+    },
+    getTemplateList() {
+      this.$apis.templateList({}).then(res => {
+        console.log(res.data);
+      });
     }
   }
 };

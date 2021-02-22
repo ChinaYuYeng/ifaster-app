@@ -54,7 +54,11 @@ export default {
     submit() {
       return this.$refs.form.validate().then(() => {
         return this.$apis.savePoint(this.formData).then(() => {
-          this.routerTo("/rentMar");
+          this.$router.replace("/rentMar").then(() => {
+            this.$router.go(-2).then(res => {
+              console.log(res);
+            });
+          });
         });
       });
     },

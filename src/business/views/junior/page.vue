@@ -1,6 +1,14 @@
 <template>
   <AppLayout>
-    <item :JuniorList="listData"></item>
+    <Panel>
+      <item :dataItem="listTop" :hasDetail="true" :godetail="godetail" :hasArrow="false"></item>
+    </Panel>
+    <Panel>
+      <van-cell title="下级情况"></van-cell>
+      <div v-for="(item, index) in listData" :key="index" @click="checkJunior(item)">
+        <item :dataItem="item" :hasDetail="false" style="margin-bottom:20px"></item>
+      </div>
+    </Panel>
     <template #body-bottom>
       <van-button text="邀请注册" @click="gotoAdd"></van-button>
     </template>
@@ -8,49 +16,49 @@
 </template>
 
 <script>
-import bac from "./testImg/index-bac.png";
-import item from "./components/juniorItem";
+// import bac from "./testImg/index-bac.png";
+import item from "./components/junior";
 export default {
+  components: {
+    item
+  },
   data() {
     return {
-      listData: {
-        name: "代理商1",
-        phone: "13855456632",
-        order: 88,
-        pile: 45,
-        point: 88,
-        battery: 45,
-        imgurl: bac,
-        children: [
-          {
-            name: "子代理商1",
-            phone: "13855456632",
-            order: 88,
-            pile: 45,
-            imgurl: bac,
-            point: 88,
-            battery: 45
-          },
-          {
-            name: "子代理商2",
-            phone: "13855456632",
-            order: 88,
-            pile: 45,
-            imgurl: bac,
-            point: 88,
-            battery: 45
-          }
-        ]
-      }
+      operate: "",
+      listTop: {},
+      listData: []
     };
+  },
+  created() {
+    this.getInfo();
   },
   methods: {
     gotoAdd() {
       this.$router.push("/junior/invite");
+    },
+    godetail() {
+      this.saveMessage(this.listTop);
+      this.$router.push("/junior/detail");
+    },
+    checkJunior(item) {
+      this.operate = item.id;
+      // this.getInfo();
+      this.listData = [];
+      this.$apis.info({ operate: this.operate }).then(res => {
+        this.listTop = res.data[0];
+        for (let i = 1; i < res.data.length; i++) {
+          this.listData.push(res.data[i]);
+        }
+      });
+    },
+    getInfo() {
+      this.$apis.info({ operate: this.operate }).then(res => {
+        this.listTop = res.data[0];
+        for (let i = 1; i < res.data.length; i++) {
+          this.listData.push(res.data[i]);
+        }
+      });
     }
-  },
-  components: {
-    item
   }
 };
 </script>

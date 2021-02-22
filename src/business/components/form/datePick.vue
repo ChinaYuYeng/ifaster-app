@@ -1,6 +1,6 @@
 <template>
   <div class="datePick">
-    <van-field :value="timeValue" :readonly="true" @click="showPopup" is-link arrow-direction="down" v-bind="$attrs" />
+    <van-field :value="value" :readonly="true" @click="showPopup" is-link arrow-direction="down" v-bind="$attrs" />
     <van-popup v-model="show" position="bottom">
       <van-datetime-picker
         :value="currentDate"
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import dayjs from "dayjs";
 export default {
   name: "datePick",
   props: {
@@ -27,15 +28,16 @@ export default {
   data() {
     let currentDate = this.value;
     switch (this.dateType) {
-      case "datetime":
-        currentDate = (this.value && new Date(this.value)) || new Date();
-        break;
       case "time":
         currentDate = currentDate || "08:00";
         break;
+      case "datetime":
+      case "year-month":
+      case "date":
+        currentDate = currentDate ? new Date(currentDate) : new Date();
+        break;
     }
     return {
-      timeValue: this.value || "",
       show: false,
       isLoadingShow: true,
       currentDate: currentDate
@@ -52,29 +54,21 @@ export default {
     },
     // 确认选择的时间
     confirmPicker(val) {
-      try {
-        let year = val.getFullYear();
-        let month = val.getMonth() + 1;
-        let day = val.getDate();
-        let hour = val.getHours();
-        let minute = val.getMinutes();
-        if (month >= 1 && month <= 9) {
-          month = `0${month}`;
-        }
-        if (day >= 1 && day <= 9) {
-          day = `0${day}`;
-        }
-        if (hour >= 0 && hour <= 9) {
-          hour = `0${hour}`;
-        }
-        if (minute >= 0 && minute <= 9) {
-          minute = `0${minute}`;
-        }
-        this.timeValue = `${year}-${month}-${day} ${hour}:${minute}`;
-      } catch (error) {
-        this.timeValue = val;
+      let timeValue = "";
+      switch (this.dateType) {
+        case "datetime":
+          timeValue = dayjs(val).format("YYYY-MM-DD HH:mm:ss");
+          break;
+        case "time":
+          timeValue = val;
+          break;
+        case "year-month":
+          timeValue = dayjs(val).format("YYYY-MM");
+          break;
+        case "date":
+          timeValue = dayjs(val).format("YYYY-MM-DD");
       }
-      this.$emit("input", this.timeValue);
+      this.$emit("input", timeValue);
       this.show = false;
     }
   }

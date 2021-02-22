@@ -7,7 +7,7 @@
       </van-cell>
     </Panel>
     <Panel>
-      <van-cell border="false" title="权限"></van-cell>
+      <van-cell title="权限"></van-cell>
       <van-collapse v-model="activeNames">
         <van-checkbox-group v-model="result" ref="checkboxGroup">
           <van-collapse-item v-for="(item, index) in permissionList" :key="index" :title="item.name" :name="index">
