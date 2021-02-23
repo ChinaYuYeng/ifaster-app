@@ -4,8 +4,15 @@ export function asyncImport(file, mixins = {}) {
     import(`@/business/views${file}`)
       .then(component => {
         let option = component.default;
-        option.mixins ? option.mixins.push(mixins) : (option.mixins = [mixins]);
-        option.reserveMixin = mixins;
+        if (option._pagePaths) {
+          // 有缓存的情况
+          option._pagePaths.push(mixins.fullPath);
+        } else {
+          option._pagePaths = [mixins.fullPath];
+          delete mixins.fullPath;
+          option.mixins ? option.mixins.push(mixins) : (option.mixins = [mixins]);
+          option.reserveMixin = mixins;
+        }
         return option;
       })
       .catch(err => {

@@ -16,7 +16,7 @@ export default {
   },
   computed: {
     title() {
-      return this.$route.meta.title || "未知";
+      return this.$route.meta.title || "";
     }
   },
   methods: {

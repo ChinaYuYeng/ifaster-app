@@ -36,27 +36,36 @@ export default {
     isScroll: Boolean,
     showFooter: {
       type: Boolean,
-      default: true
+      default: false
     },
     padding: String
   },
   data() {
     return {
-      showSearch: false
+      showSearch: false,
+      pageActived: true /* 如果页面处于缓存非活跃状态，那么不再计算showContent，维持原有状态 。 模块横向路由切换，和模块内纵向内路由切换,不相互穿插*/,
+      showContent: false /* 是否显示当前页面，或者提供router-view */
     };
   },
   inject: ["$pagePath"],
   computed: {
-    /* 是否显示当前页面，或者提供router-view */
-    showContent() {
-      let path = this.$route.fullPath;
-      let index = path.indexOf("?");
-      path = index >= 0 ? path.slice(0, index) : path;
-      return path === this.$pagePath;
-    },
+    /**在keepalive状态下的组件，即使在非活跃状态下也会重新计算计算属性的值，从而导致showContent状态混乱，showContent 理应保持actived时的状态，非actived的状态不应该改变 */
+    // showContent() {
+    //   let path = this.$route.fullPath;
+    //   let index = path.indexOf("?");
+    //   path = index >= 0 ? path.slice(0, index) : path;
+    //   console.log(this.$parent.$options.name, "showContent", path);
+    //   return this.$pagePath.indexOf(path) > -1;
+    // },
     showSearchIcon() {
       return !!this.$slots.search || !!this.$scopedSlots.search;
     }
+  },
+  activated() {
+    this.pageActived = true;
+  },
+  deactivated() {
+    this.pageActived = false;
   },
   components: {
     HeaderNav,
@@ -71,6 +80,17 @@ export default {
       } else {
         this.$emit("onhide");
       }
+    },
+    $route: {
+      handler() {
+        if (!this.pageActived) return;
+        let path = this.$route.fullPath;
+        let index = path.indexOf("?");
+        path = index >= 0 ? path.slice(0, index) : path;
+        this.showContent = this.$pagePath.indexOf(path) > -1;
+        // console.log(this.$parent.$options.name, "showContent", this.showContent);
+      },
+      immediate: true
     }
   }
 };

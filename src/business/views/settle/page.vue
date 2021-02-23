@@ -1,10 +1,10 @@
 <template>
   <AppLayout ref="report__wrap" :onRefresh="onRefresh">
     <LoadList :loadStatus="loadStatus">
-      <van-cell center style="padding:6px 0;" v-for="item in dataList" :key="item.id" @click="routerTo({ name: '/report/statement', params: item })">
+      <van-cell center style="padding:6px 0;" v-for="item in dataList" :key="item.id">
         <van-grid>
           <van-grid-item>
-            <span>{{ item.remitDate }}</span>
+            <span v-html="item.remitDate.replace(/(\d+)-/, '<b>$1</b><br>')"></span>
           </van-grid-item>
           <van-grid-item>
             <span>充电</span>

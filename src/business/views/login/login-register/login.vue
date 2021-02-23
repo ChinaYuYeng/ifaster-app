@@ -74,11 +74,12 @@ export default {
     },
     submit() {
       if (this.checked) {
-        this.$refs.form.validate().then(() => {
+        return this.$refs.form.validate().then(() => {
           return this.$apis
             .login(this.dataForm)
             .then(res => {
-              this.doLogin(res);
+              this.doLogin(res.data);
+              this.routerTo("/home");
             })
             .catch(err => {
               this.$notify(err.msg);
