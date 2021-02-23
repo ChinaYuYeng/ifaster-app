@@ -11,7 +11,15 @@ export default {
       type: Function,
       default: () => Promise.resolve()
     },
-    loadStatus: Object
+    loadStatus: {
+      type: Object,
+      default: () => ({
+        loadList: () => [],
+        loading: false,
+        finished: true,
+        finishedText: "数据准备中..."
+      })
+    }
   }
 };
 </script>

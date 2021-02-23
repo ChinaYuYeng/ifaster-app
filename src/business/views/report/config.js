@@ -1,4 +1,4 @@
-export default function() {
+export default function({ post }) {
   const routes = {
     path: "/report",
     meta: {
@@ -23,5 +23,35 @@ export default function() {
       }
     ]
   };
-  return { routes };
+  const apis = {
+    getList(params) {
+      return post("/earning/list", params);
+    },
+    getDetail(params) {
+      return post("/earning/detail", params);
+    },
+    getOrderDetail(params) {
+      return post("/charge/order/detail", params);
+    }
+  };
+
+  const store = {
+    state: {
+      searchForm: {
+        earningType: 1,
+        date: ""
+      }
+    },
+    getter: {
+      getSearchForm(state) {
+        return state.searchForm;
+      }
+    },
+    mutations: {
+      setSearchForm(state, data) {
+        state.searchForm = Object.assign({}, state.searchForm, data);
+      }
+    }
+  };
+  return { routes, apis, store };
 }

@@ -8,17 +8,17 @@ export default function({ post }) {
     }
   };
   const routes = {
-    path: "/order",
+    path: "/chargeOrder",
     component: "./page.vue",
     meta: {
-      title: "订单列表"
+      title: "充电订单列表"
     },
     children: [
       {
         path: "detail",
         component: "./detail/page.vue",
         meta: {
-          title: "订单详情"
+          title: "充电订单详情"
         }
       }
     ]

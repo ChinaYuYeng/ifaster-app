@@ -19,10 +19,10 @@
           <span>{{ item.customerMobile }}</span>
         </div>
         <div class="content__item order__footer" slot="footer">
-          <span>{{ item.returnTime }}</span>
-          <span>营收：{{ item.payFee }}元</span>
-          <span>实收：{{ item.realIncome }}元</span>
-          <van-button plain type="info" size="mini" @click="routerTo({ name: '/order/detail', params: item })">查看详情</van-button>
+          <span>{{ item.startTime }}</span>
+          <!-- <span>营收：{{ item.payFee }}元</span>
+          <span>实收：{{ item.realIncome }}元</span> -->
+          <van-button plain type="info" size="mini" @click="routerTo({ name: '/rentOrder/detail', params: item })">查看详情</van-button>
         </div>
       </Panel>
     </LoadList>
@@ -40,16 +40,6 @@ export default {
   mixins: [loadList],
   data() {
     return {
-      dataList: [],
-      loadStatus: {
-        finished: false,
-        loading: false,
-        finishedText: "",
-        paging: {
-          pageIndex: 1,
-          pageSize: 10
-        }
-      },
       searchForm: {
         status1: 1,
         date: new Date().toUTCString()

@@ -1,5 +1,5 @@
 <template>
-  <div class="layout__body">
+  <div class="layout__body" :style="{ padding: padding }">
     <slot name="top"></slot>
     <div class="layout__body-content" :class="{ 'layout__main-content--scroll': isScroll }">
       <van-pull-refresh
@@ -25,6 +25,10 @@ export default {
     },
     onRefresh: {
       type: Function
+    },
+    padding: {
+      type: String,
+      default: "10px"
     }
   },
   data() {
@@ -53,8 +57,6 @@ export default {
   display: flex;
   overflow: hidden;
   flex-direction: column;
-  padding: 10px;
-  background-color: #fafafa;
 }
 
 .layout__body-content {
