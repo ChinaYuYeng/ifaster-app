@@ -25,19 +25,17 @@ export default {
     return {
       test,
       searchForm: {
-        // mobile: "",
-        // status: 0
+        mobile: "",
+        rentPointId: ""
       },
       datalist: []
     };
   },
-  created() {
+  activated() {
+    this.searchForm.rentPointId = this.$route.params.id || "";
     this.setListLoader(paging => {
       return this.$apis.list({ ...this.searchForm, ...paging });
     });
-  },
-  mounted() {
-    this.onRefresh();
   },
   components: {
     staffList,

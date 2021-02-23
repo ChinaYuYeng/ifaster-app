@@ -14,7 +14,7 @@
       >
         <van-grid>
           <van-grid-item>
-            <span>{{ item.date }}</span>
+            <span v-html="item.date.replace(/(\d+)-/, '<b>$1</b><br>')"></span>
           </van-grid-item>
           <van-grid-item>
             <span>营收</span>
