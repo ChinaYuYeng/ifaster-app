@@ -57,9 +57,7 @@ export default function({ post }) {
     },
     actions: {
       doLogin({ commit }, data) {
-        commit("setMenu", data);
-        commit("setLogined", true);
-        commit("setToken", "123455");
+        commit("setToken", data.token);
       }
     }
   };

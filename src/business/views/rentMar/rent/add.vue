@@ -48,7 +48,9 @@ export default {
     Object.assign(this.formData, routerData || {});
   },
   mounted() {
-    this.initMap();
+    setTimeout(() => {
+      this.initMap();
+    }, 300);
   },
   methods: {
     submit() {

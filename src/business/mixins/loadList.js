@@ -1,7 +1,12 @@
 export default {
   data() {
     return {
-      loadStatus: {},
+      loadStatus: {
+        loadList: () => [],
+        loading: false,
+        finished: true,
+        finishedText: "数据准备中..."
+      },
       paging: {},
       dataList: []
     };
