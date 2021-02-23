@@ -12,6 +12,9 @@ export default function({ post }) {
       },
       templateList(params) {
         return post("/pers/template/list", params);
+      },
+      templateAdd(params) {
+        return post("/pers/template/add", params);
       }
     }
   };
