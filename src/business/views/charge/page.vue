@@ -9,8 +9,8 @@
       </van-tab>
       <LoadList :loadStatus="loadStatus">
         <van-cell v-for="(item, index) in dataList" :key="index">
-          <CList :item="item" v-if="clist"></CList>
-          <DList :item="item" v-else></DList>
+          <!-- <CList :item="item" v-if="clist"></CList>
+          <DList :item="item" v-else></DList> -->
         </van-cell>
       </LoadList>
       <van-button type="primary" size="large" @click="addM == true ? addRentM() : addPileM()">{{ btnMessage }}</van-button>
@@ -19,13 +19,17 @@
 </template>
 
 <script>
-import CList from "./components/CList";
-import DList from "./components/DList";
+// import batteryImg from "../../../../assets/images/battery.png";
+// import chargingImg from "../../../../assets/images/charging.png";
+// import CList from "./components/CList";
+// import DList from "./components/DList";
 import loadList from "@@/mixins/loadList";
 export default {
   mixins: [loadList],
   data() {
     return {
+      // batteryImg: batteryImg,
+      // chargingImg: chargingImg,
       addM: true,
       btnMessage: "新建电池收费模板",
       active: 0,
@@ -39,25 +43,43 @@ export default {
           name: " 电桩收费模板"
         }
       ],
-      rentInfo: {},
-      pileInfo: {},
+      // rentInfo: {},
+      // pileInfo: {},
+      chargeInfo: {
+        chargeInfoRent: { page: 0, list: [] },
+        chargeInfoPile: { page: 0, list: [] }
+      },
       clist: true
     };
   },
   created() {
-    this.setListLoader(paging => {
-      if (this.active === 0) {
-        this.clist = true;
-        return this.$apis.rent.getRentInfo({ ...paging });
-      } else {
-        this.clist = false;
-        return this.$apis.pile.getPileInfo({ ...paging });
-      }
-    });
+    // this.setListLoader(paging => {
+    //   if (this.active === 0) {
+    //     this.clist = true;
+    //     return this.$apis.rent.getRentInfo({ ...paging });
+    //   } else {
+    //     this.clist = false;
+    //     return this.$apis.pile.getPileInfo({ ...paging });
+    //   }
+    // });
+    this.getRentInfo();
+    this.getPileInfo();
   },
   methods: {
     onRefresh() {
       return this.setListLoader();
+    },
+    // 加载电池收费模板列表
+    getRentInfo() {
+      return this.$apis.pile.getRentInfo().then(res => {
+        console.log("res----------", res);
+      });
+    },
+    // 加载电桩收费模板列表
+    getPileInfo() {
+      return this.$apis.pile.getPileInfo().then(res => {
+        console.log("res----------", res);
+      });
     },
     addRentM() {
       console.log("11");
@@ -85,51 +107,10 @@ export default {
       }
       this.active = index;
     }
-    // getRentInfo() {
-    //   this.$apis.rent
-    //     .getRentInfo({
-    //       pageIndex: 1,
-    //       pageSize: 10
-    //     })
-    //     .then(res => {
-    //       console.log(res.data);
-    //       // this.rentInfo = res.data;
-    //       if (res && res.code === "1") {
-    //         console.log("请求成功！");
-    //         this.rentInfo = res.data; // 把传回来数据赋给rentInfo（列表中的数据）
-    //       } else {
-    //         console.log("请求失败！");
-    //         this.rentInfo = [];
-    //       }
-    //     })
-    //     .catch(function(error) {
-    //       console.log(error);
-    //     });
-    // },
-    // getPileList() {
-    //   this.$apis.pile
-    //     .getPilelist({
-    //       pageIndex: 1,
-    //       pageSize: 10
-    //     })
-    //     .then(res => {
-    //       console.log(res.data);
-    //       if (res && res.code === "1") {
-    //         console.log("请求成功！");
-    //         this.pileInfo = res.data; // 把传回来数据赋给pileInfo（列表中的数据）
-    //       } else {
-    //         console.log("请求失败！");
-    //         this.pileInfo = [];
-    //       }
-    //     })
-    //     .catch(function(error) {
-    //       console.log(error);
-    //     });
-    // }
   },
   components: {
-    CList,
-    DList
+    // CList,
+    // DList
   }
 };
 </script>
