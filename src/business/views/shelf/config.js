@@ -32,7 +32,6 @@ export default function({ post }) {
 
   const store = {
     state: {
-      operationType: 0,
       battery: {
         operatorList: [],
         repositoryList: [],
@@ -51,9 +50,6 @@ export default function({ post }) {
       }
     },
     getters: {
-      getOperationType(state) {
-        return state.operationType;
-      },
       getBOperators(state) {
         return state.battery.operatorList;
       },
@@ -80,9 +76,6 @@ export default function({ post }) {
       }
     },
     mutations: {
-      setOperationType(state, data) {
-        state.operationType = data;
-      },
       setOperators(state, data) {
         state[data.c].operatorList = data.data;
       },
@@ -103,9 +96,6 @@ export default function({ post }) {
       }
     },
     actions: {
-      setOperationType({ commit }, data) {
-        commit("setOperationType", data);
-      },
       setOperators({ commit }, data) {
         commit("setOperators", data);
       },
@@ -117,45 +107,39 @@ export default function({ post }) {
       },
       setSelectedPile({ commit }, data) {
         commit("getSelectedPile", data);
-      },
-      setSelectedBatteryInfo({ commit }, data) {
-        commit("setSelectedBatteryInfo", data);
-      },
-      setSelectedPileInfo({ commit }, data) {
-        commit("setSelectedPileInfo", data);
       }
     }
   };
 
   const routes = {
-    path: "/store",
+    path: "/shelf",
     component: "./page.vue",
     meta: {
-      title: "仓库管理"
+      title: "上下架管理"
     },
     children: [
       {
-        path: "transfer",
-        component: "./transfer/page.vue",
+        path: "onShelf",
+        component: "./onShelf/page.vue",
         meta: {
-          title: "调拨"
+          title: "上架到门店"
         },
         children: [
           {
-            path: "select",
-            component: "./transfer/select/index.vue",
+            path: "shop",
+            component: "./onShelf/shop/page.vue",
             meta: {
-              title: "人员"
+              title: "门店"
+            }
+          },
+          {
+            path: "chargeTemplate",
+            component: "./chargeTemplate/page.vue",
+            meta: {
+              title: "收费模板"
             }
           }
         ]
-      },
-      {
-        path: "claim",
-        component: "./claim/index.vue",
-        meta: {
-          title: "认领"
-        }
       }
     ]
   };
