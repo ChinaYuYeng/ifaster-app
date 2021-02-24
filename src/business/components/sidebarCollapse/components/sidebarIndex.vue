@@ -1,6 +1,6 @@
 <template>
   <van-sidebar v-model="active" @change="onChange" class="left">
-    <van-sidebar-item v-for="bar in bars" :title="bar.name" :key="bar.id" class="sidebar_left" />
+    <van-sidebar-item v-for="bar in bars" :title="bar.shortName" :key="bar.id" class="sidebar_left" />
   </van-sidebar>
 </template>
 
@@ -38,11 +38,10 @@ export default {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  width: 120px;
-  position: fixed;
-  left: 0;
-}
-.sidebar_left + .sidebar_left {
-  margin-top: 60px;
+  width: 100px;
+  line-height: 4px;
+  // height: 45px;
+  // position: fixed;
+  // left: 0;
 }
 </style>

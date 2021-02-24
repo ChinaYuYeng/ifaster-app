@@ -63,61 +63,25 @@ export default {
   },
   created() {
     // 运营商 和 电池数据
-    // for (let i = 1; i < 5; i++) {
-    //   let operator = {
-    //     id: i,
-    //     name: "测试" + i
-    //   };
-    //   this.bOperatorList.push(operator);
-
-    //   if (i == 1) {
-    //     let battery = {
-    //       model: "4815",
-    //       percent: "20%",
-    //       title: "",
-    //       list: []
-    //     };
-    //     battery.title = "比例：" + battery.percent + "（" + battery.model + "）";
-    //     for (let j = 1; j < 2; j++) {
-    //       let row1 = {
-    //         name: "电池imei：",
-    //         value: "123456789"
-    //       };
-    //       let row2 = {
-    //         name: "电池型号：",
-    //         value: "4815"
-    //       };
-    //       let row = [];
-    //       row.push(row1);
-    //       row.push(row2);
-    //       let item = {
-    //         id: j,
-    //         imei: "电池" + j,
-    //         model: "4815",
-    //         rows: row
-    //       };
-
-    //       battery.list.push(item);
-    //     }
-    //     this.batteries.push(battery);
-    //   }
-    // }
-
-    // this.collapseHeader = "运营商ABCDEF";
-    // this.children = this.batteries;
     this.getBatteryInfo();
     // 底部按钮
+    const _this = this;
     let btnChangeB = {
       id: 1,
       name: "批量调拨",
-      click: "changeBattery",
-      route: "/store/transfer"
+      click: function() {
+        debugger;
+        _this.$router.push({ path: "/store/transfer" });
+      },
+      route: ""
     };
     let btnClaimB = {
       id: 2,
       name: "批量认领",
-      click: "claimBattery",
-      route: "/store/claim"
+      click: function() {
+        _this.$router.push({ path: "/store/claim" });
+      },
+      route: ""
     };
     this.btns.push(btnChangeB);
     this.btns.push(btnClaimB);
@@ -217,6 +181,7 @@ export default {
               this.collapseHeader = r.data[0].name;
               this.getOperatorBatteryInfo(r.data[0].value);
             } else {
+              this.children = [];
               this.collapseHeader = "";
             }
           }
@@ -230,9 +195,9 @@ export default {
       this.$apis.battery
         .repositoryList({ id: operaorId })
         .then(res => {
+          this.children = [];
           if (res.code == "1" && res.data && res.data.length > 0) {
             this.setRepositories({ c: "battery", data: res.data[0].listItemVos });
-            this.children = [];
             for (let i = 0; i < res.data.length; i++) {
               let d = res.data[i];
               // let rows = [];
@@ -286,6 +251,7 @@ export default {
               this.collapseHeader = r.data[0].name;
               this.getOperatorPileInfo(r.data[0].value);
             } else {
+              this.children = [];
               this.collapseHeader = "";
             }
           }
@@ -298,9 +264,9 @@ export default {
       this.$apis.pile
         .repositoryList({ id: opertorId })
         .then(res => {
+          this.children = [];
           if (res.code == "1" && res.data && res.data.length > 0) {
             this.setRepositories({ c: "pile", data: res.data[0].listItemVos });
-            this.children = [];
             for (let i = 0; i < res.data.length; i++) {
               let d = res.data[i];
               // let rows = [];

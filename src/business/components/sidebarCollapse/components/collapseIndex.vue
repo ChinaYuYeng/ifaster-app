@@ -66,6 +66,7 @@ export default {
           //debugger;
           if (i != index) {
             c.checked = false;
+            c.list.forEach(t => (t.checked = false));
           } else {
             c.checked = true;
           }
@@ -78,8 +79,16 @@ export default {
       }
     },
     headClick(checked, index) {
-      // debugger;
+      debugger;
       if (!checked) {
+        if (this.seletedHeadIndex != index) {
+          if (this.seletedHeadIndex > -1) {
+            this.collapses[this.seletedHeadIndex].checked = false;
+            this.collapses[this.seletedHeadIndex].list.forEach(c => {
+              c.checked = false;
+            });
+          }
+        }
         this.seletedHeadIndex = index;
         // 下面的checkbox 也选中
         this.collapses[index].list.forEach(c => {

@@ -1,112 +1,62 @@
 export default function({ post }) {
-  let head = "/dispatch";
+  let head = "/rent";
   const apis = {
     scope: {
-      battery: {
-        operatorList(params) {
-          return post(head + "/battery/operator/list", params);
-        },
-        repositoryList(params) {
-          return post(head + "/battery/repository/list", params);
-        },
-        operate(params) {
-          return post(head + "/battery/batch/operate", params);
-        }
+      pointList(params) {
+        return post(head + "/point/all", params);
       },
-      pile: {
-        operatorList(params) {
-          return post(head + "/pile/operator/list", params);
-        },
-        repositoryList(params) {
-          return post(head + "/pile/repository/list", params);
-        },
-        operate(params) {
-          return post(head + "/pile/batch/operate", params);
-        }
+      putawayList(params) {
+        return post(head + "/putaway/list", params);
       },
-      search(params) {
-        return post(head + "/search", params);
+      up(params) {
+        return post(head + "/putaway/up", params);
+      },
+      down(params) {
+        return post(head + "/putaway/down", params);
+      },
+      getRentTemplate(params) {
+        return post(head + "/rate/list", params);
       }
     }
   };
 
   const store = {
     state: {
-      battery: {
-        operatorList: [],
-        repositoryList: [],
-        selectedBattery: {
-          info: {},
-          percent: {}
-        }
-      },
-      pile: {
-        operatorList: [],
-        repositoryList: [],
-        selectedPile: {
-          info: {},
-          percent: {}
-        }
-      }
+      pointList: [],
+      putawayList: [],
+      selectedInfo: {}
     },
     getters: {
-      getBOperators(state) {
-        return state.battery.operatorList;
+      getPointList(state) {
+        return state.pointList;
       },
-      getPOperators(state) {
-        return state.battery.operatorList;
+      getPutawayList(state) {
+        return state.putawayList;
       },
-      getSelectedBattery(state) {
-        return state.battery.selectedBattery;
-      },
-      getSelectedBatteryInfo(state) {
-        return state.battery.selectedBattery.info;
-      },
-      getBRepositories(state) {
-        return state.pile.repositoryList;
-      },
-      getPRepositories(state) {
-        return state.pile.repositoryList;
-      },
-      getSelectedPile(state) {
-        return state.pile.selectedPile;
-      },
-      getSelectedPileInfo(state) {
-        return state.pile.selectedPile.info;
+      getSelectedInfo(state) {
+        return state.selectedInfo;
       }
     },
     mutations: {
-      setOperators(state, data) {
-        state[data.c].operatorList = data.data;
+      setPointList(state, data) {
+        state.pointList = data;
       },
-      setRepositories(state, data) {
-        state[data.c].repositoryList = data.data;
+      setPutawayList(state, data) {
+        state.putawayList = data;
       },
-      setSelectedBattery(state, data) {
-        state.battery.selectedBattery = data;
-      },
-      setSelectedBatteryInfo(state, data) {
-        state.battery.selectedBattery.info = data;
-      },
-      setSelectedPile(state, data) {
-        state.pile.selectedPile = data;
-      },
-      setSelectedPileInfo(state, data) {
-        state.pile.selectedPile.info = data;
+      setSelectedInfo(state, data) {
+        state.selectedInfo = data;
       }
     },
     actions: {
-      setOperators({ commit }, data) {
-        commit("setOperators", data);
+      setPointList({ commit }, data) {
+        commit("setPointList", data);
       },
-      setRepositories({ commit }, data) {
-        commit("setOperators", data);
+      setPutawayList({ commit }, data) {
+        commit("setPutawayList", data);
       },
-      setSelectedBattery({ commit }, data) {
-        commit("setSelectedBattery", data);
-      },
-      setSelectedPile({ commit }, data) {
-        commit("getSelectedPile", data);
+      setSelectedInfo({ commit }, data) {
+        commit("setSelectedInfo", data);
       }
     }
   };
