@@ -48,7 +48,10 @@ export default {
     Object.assign(this.formData, routerData || {});
   },
   mounted() {
-    this.initMap();
+    // 解决地图和页面切换效果同时进行卡顿的问题
+    setTimeout(() => {
+      this.initMap();
+    }, 300);
   },
   methods: {
     submit() {
