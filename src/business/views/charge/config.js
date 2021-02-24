@@ -22,44 +22,52 @@ export default function({ post }) {
     ]
   };
   const apis = {
-    rent: {
-      getRentInfo(params) {
-        return post("/rent/rate/list", params);
-      }
-    },
-    pile: {
-      getPileInfo(params) {
-        return post("/charge/rate/list", params);
+    // rent: {
+    //   getRentInfo(params) {
+    //     return post("/rent/rate/list", params);
+    //   }
+    // },
+    // pile: {
+    //   getPileInfo(params) {
+    //     return post("/charge/rate/list", params);
+    //   }
+    // }
+    scope: {
+      rent(params) {
+        return post("/rent/rate/list", params); // 租赁收费设置
+      },
+      pile(params) {
+        return post("/charge/rate/list", params); // 充电收费设置
       }
     }
   };
   const store = {
     state: {
-      rentInfo: {},
-      pileInfo: {}
+      rent: {},
+      pile: {}
     },
     getters: {
-      getRentInfo(state) {
-        return state.rentInfo;
+      getRentList(state) {
+        return state.rent;
       },
-      getPileInfo(state) {
-        return state.pileInfo;
+      getPileList(state) {
+        return state.pile;
       }
     },
     mutations: {
-      setRentInfo(state, data) {
-        state.rentInfo = data;
+      setRentList(state, data) {
+        state.rent = data;
       },
-      setPileInfo(state, data) {
-        state.pileInfo = data;
+      setPileList(state, data) {
+        state.pile = data;
       }
     },
     actions: {
-      doRentInfo({ commit }, data) {
-        commit("setRentInfo", data);
+      SaveRentList({ commit }, data) {
+        commit("setRentList", data);
       },
-      doPileInfo({ commit }, data) {
-        commit("setPileInfo", data);
+      SavePileInfo({ commit }, data) {
+        commit("setPileList", data);
       }
     }
   };

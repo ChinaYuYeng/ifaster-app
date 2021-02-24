@@ -11,6 +11,7 @@
         <van-cell v-for="(item, index) in dataList" :key="index">
           <!-- <CList :item="item" v-if="clist"></CList>
           <DList :item="item" v-else></DList> -->
+          <!-- <div :getRentList="this.getRentList"></div> -->
         </van-cell>
       </LoadList>
       <van-button type="primary" size="large" @click="addM == true ? addRentM() : addPileM()">{{ btnMessage }}</van-button>
@@ -43,12 +44,12 @@ export default {
           name: " 电桩收费模板"
         }
       ],
-      // rentInfo: {},
-      // pileInfo: {},
-      chargeInfo: {
-        chargeInfoRent: { page: 0, list: [] },
-        chargeInfoPile: { page: 0, list: [] }
-      },
+      rent: {},
+      pile: {},
+      // chargeInfo: {
+      //   chargeInfoRent: { page: 0, list: [] },
+      //   chargeInfoPile: { page: 0, list: [] }
+      // },
       clist: true
     };
   },
@@ -62,22 +63,25 @@ export default {
     //     return this.$apis.pile.getPileInfo({ ...paging });
     //   }
     // });
-    this.getRentInfo();
-    this.getPileInfo();
+    this.getRentData();
+    this.getPileData();
   },
   methods: {
     onRefresh() {
       return this.setListLoader();
     },
     // 加载电池收费模板列表
-    getRentInfo() {
-      return this.$apis.pile.getRentInfo().then(res => {
-        console.log("res----------", res);
+    getRentData() {
+      this.setListLoader(paging => {
+        return this.$apis.rent({ ...paging });
       });
+      // this.$apis.rent({ id: this.rent.id }).then(res => {
+      //   console.log("res----------", res);
+      // });
     },
     // 加载电桩收费模板列表
-    getPileInfo() {
-      return this.$apis.pile.getPileInfo().then(res => {
+    getPileData() {
+      return this.$apis.pile().then(res => {
         console.log("res----------", res);
       });
     },

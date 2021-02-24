@@ -1,7 +1,7 @@
 <template>
   <AppLayout>
     <Panel @touchmove.native.stop.prevent>
-      <div id="rentMar__map" style="width:100%; height:200px;"></div>
+      <div id="rentMar__map-add" style="width:100%; height:200px;"></div>
     </Panel>
     <van-form label-width="100px" ref="form" validate-trigger="onSubmit">
       <van-field v-model="formData.name" label="租还点名称：" placeholder="请输入租还点名称" />
@@ -48,24 +48,32 @@ export default {
     Object.assign(this.formData, routerData || {});
   },
   mounted() {
-    AMapLoader.load({
-      key: "21a1ca7e415887a172fe8399bd114b28",
-      version: "2.0"
-    }).then(AMap => {
-      new AMap.Map("rentMar__map", {
-        zoom: 11,
-        center: [107.4976, 32.1697]
-      });
-    });
+    setTimeout(() => {
+      this.initMap();
+    }, 300);
   },
   methods: {
     submit() {
       return this.$refs.form.validate().then(() => {
-        return this.$apis.addPoint(this.formData).then(() => {
+        return this.$apis.savePoint(this.formData).then(() => {
           this.routerTo("/rentMar");
         });
       });
+    },
+    initMap() {
+      AMapLoader.load({
+        key: "21a1ca7e415887a172fe8399bd114b28",
+        version: "2.0"
+      }).then(AMap => {
+        this.map = new AMap.Map("rentMar__map-add", {
+          zoom: 11,
+          center: [107.4976, 32.1697]
+        });
+      });
     }
+  },
+  beforeDestroy() {
+    this.map && this.map.destroy();
   }
 };
 </script>

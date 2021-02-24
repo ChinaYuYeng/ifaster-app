@@ -22,9 +22,15 @@ export default {
     };
   },
   created() {
+    this.getAuthList();
     this.getData();
   },
   methods: {
+    getAuthList() {
+      // this.$apis.authList().then(res => {
+      //   this.perList = res.data;
+      // });
+    },
     getData() {
       let data = this.$route.query.data;
       this.name = data.name;

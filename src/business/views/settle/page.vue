@@ -1,29 +1,22 @@
 <template>
   <AppLayout ref="report__wrap" :onRefresh="onRefresh">
-    <LoadList :loadData="onLoad">
-      <van-cell
-        is-link
-        center
-        style="padding:6px 0;"
-        v-for="item in dataList"
-        :key="item.id"
-        @click="routerTo({ name: '/report/statement', params: item })"
-      >
+    <LoadList :loadStatus="loadStatus">
+      <van-cell center style="padding:6px 0;" v-for="item in dataList" :key="item.id">
         <van-grid>
           <van-grid-item>
-            <span>{{ item.date }}</span>
+            <span v-html="item.remitDate.replace(/(\d+)-/, '<b>$1</b><br>')"></span>
           </van-grid-item>
           <van-grid-item>
-            <span>营收</span>
-            <span>{{ item.income }}</span>
+            <span>充电</span>
+            <span>{{ item.chargeAmount }}</span>
           </van-grid-item>
           <van-grid-item>
-            <span>分账</span>
-            <span>{{ item.assignment }}</span>
+            <span>租赁</span>
+            <span>{{ item.rentAmount }}</span>
           </van-grid-item>
           <van-grid-item>
-            <span>支出</span>
-            <span>{{ item.pay }}</span>
+            <span>合计</span>
+            <span>{{ item.totalAmount }}</span>
           </van-grid-item>
         </van-grid>
       </van-cell>
@@ -32,30 +25,22 @@
 </template>
 
 <script>
+import loadList from "@@/mixins/loadList";
 export default {
+  mixins: [loadList],
   data() {
     return {
       dataList: []
     };
   },
+  created() {
+    this.setListLoader(paging => {
+      return this.$apis.getList({ ...this.searchForm, ...paging });
+    });
+  },
   methods: {
-    onLoad() {
-      return this.$apis.getList(Object.assign.apply(null, Array.from(arguments))).then(res => {
-        this.dataList = this.dataList.concat(res.data.rows);
-        return res;
-      });
-    },
     onRefresh() {
-      return new Promise(resolve => {
-        this.onLoad = this.onLoad.bind(this, {});
-        this.dataList = [];
-        resolve();
-      });
-    },
-    onSearch({ close }, search) {
-      this.onLoad = this.onLoad.bind(this, search);
-      this.dataList = [];
-      close();
+      return this.setListLoader();
     }
   }
 };

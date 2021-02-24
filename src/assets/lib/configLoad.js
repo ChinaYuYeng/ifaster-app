@@ -73,6 +73,7 @@ contexts.keys().map(item => {
       Object.prototype.toString.call(route.component) === "[object Function]"
         ? route.component()
         : importComp(parseFilePath((currentPath == "/" ? "" : currentPath) + "/" + (route.component || "page.vue")), {
+            fullPath,
             name:
               fullPath
                 .split("/")
@@ -84,7 +85,7 @@ contexts.keys().map(item => {
               });
               // 当前页面的默认路径，用来判断当前路由是否在这个页面上
               Object.defineProperty(this, "$pagePath", {
-                value: fullPath
+                value: this.$options._pagePaths
               });
             },
             // concat({})是为了没数据的时候防止assign报错

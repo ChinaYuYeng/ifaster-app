@@ -1,21 +1,21 @@
 <template>
-  <AppLayout ref="report__wrap">
-    <LoadList :loadData="onLoad" class="mtop10">
-      <Panel v-for="item in datalist" :key="item.date" class="mtop10">
+  <AppLayout ref="report__wrap" :onRefresh="onRefresh">
+    <LoadList :loadStatus="loadStatus">
+      <Panel v-for="item in dataList" :key="item.date" class="mtop10">
         <div class="content__item order__header" slot="header">
           <span class="item__title">操作类型</span>
-          <span>强锁/解锁</span>
+          <span>{{ item.type }}</span>
         </div>
         <div class="content__item">
           <span class="item__label">操作人员:</span>
-          <span>{{ item.name }}</span>
+          <span>{{ item.operatorName }}</span>
         </div>
         <div class="content__item">
-          <span class="item__label">操作时长:</span>
-          <span>{{ item.time }}</span>
+          <span class="item__label">操作时长(分钟):</span>
+          <span>{{ item.duration }}</span>
         </div>
         <div class="content__item order__footer" slot="footer">
-          <span>{{ item.date }}</span>
+          <span>{{ item.createTime }}</span>
         </div>
       </Panel>
     </LoadList>
@@ -23,50 +23,23 @@
 </template>
 
 <script>
+import loadList from "../mixins/loadList";
 export default {
-  created() {
-    console.log(this.$route);
-  },
+  mixins: [loadList],
   data() {
     return {
       finished: false,
-      loading: false,
-      datalist: [
-        {
-          date: "2021-01-16",
-          time: "3小时2分钟",
-          name: "店员1"
-        },
-        {
-          date: "2021-01-17",
-          time: "3小时2分钟",
-          name: "店员2"
-        },
-        {
-          date: "2021-01-18",
-          time: "3小时2分钟",
-          name: "店员3"
-        },
-        {
-          date: "2021-01-19",
-          time: "3小时2分钟",
-          name: "店员4"
-        }
-      ]
+      loading: false
     };
   },
+  created() {
+    this.setListLoader(() => {
+      return this.$apis.log({ id: this.getbatteryInfo.id });
+    });
+  },
   methods: {
-    onLoad() {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          this.datalist.push({
-            date: new Date().toDateString(),
-            time: "2小时30分钟",
-            name: "店员" + (this.datalist.length + 1)
-          });
-          resolve();
-        }, 1000);
-      });
+    onRefresh() {
+      return this.setListLoader();
     }
   }
 };

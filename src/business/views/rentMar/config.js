@@ -1,5 +1,5 @@
 import "./style.less";
-export default function({ post }) {
+export default function({ post, get }) {
   return {
     routes: {
       meta: {
@@ -45,7 +45,7 @@ export default function({ post }) {
             },
             {
               path: "edit",
-              component: "./rent/add.vue",
+              component: "./rent/edit.vue",
               meta: {
                 title: "租还点修改"
               }
@@ -71,11 +71,8 @@ export default function({ post }) {
       deletePoint(params) {
         return post("/rent/point/delete", params);
       },
-      addPoint(params) {
-        return post("/rent/point/add", params);
-      },
-      editPoint(params) {
-        return post("/rent/point/edit", params);
+      savePoint(params) {
+        return post("/rent/point/save", params);
       },
       getAssignList(params) {
         return post("/rent/point/commission/list", params);
@@ -88,6 +85,9 @@ export default function({ post }) {
       },
       getAssignDetail(params) {
         return post("/rent/point/commission/list", params);
+      },
+      getRegisterRoleList(params) {
+        return get("/account/register/role", params);
       }
     }
   };

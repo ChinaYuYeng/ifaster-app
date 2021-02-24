@@ -28,8 +28,8 @@
         </div>
         <div class="content__item order__footer" slot="footer">
           <span>{{ item.returnTime }}</span>
-          <span>营收：{{ item.payFee }}元</span>
-          <span>实收：{{ item.realIncome }}元</span>
+          <!-- <span>营收：{{ item.payFee }}元</span>
+          <span>实收：{{ item.realIncome }}元</span> -->
           <van-button plain type="info" size="mini" @click="routerTo({ name: '/return/detail', params: item })">查看详情</van-button>
         </div>
       </Panel>
