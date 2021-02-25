@@ -24,6 +24,7 @@ export default {
   created() {},
   methods: {
     onChange(index) {
+      debugger;
       this.loading = true;
       this.active = index;
       this.updateData(this.bars[index]);

@@ -23,9 +23,9 @@
   </div>
 </template>
 <script>
-import CollapseIndex from "./components/collapseIndex";
-import SidebarIndex from "./components/sidebarIndex";
-import ActionBar from "./components/actionBar";
+import CollapseIndex from "./collapseIndex";
+import SidebarIndex from "./sidebarIndex";
+import ActionBar from "./actionBar";
 export default {
   name: "sidebarCollapse",
   props: {
