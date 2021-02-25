@@ -11,7 +11,6 @@
         v-model="searchForm.mobile"
       />
     </template>
-    <!-- <LoadList :loadStatus="loadStatus"> -->
     <van-cell center v-for="item in dataList" :key="item.id">
       <UserInfo>
         <span style="font-size:12px;line-height: 12px;">{{ item.name }}</span>
@@ -21,14 +20,11 @@
         </template>
       </UserInfo>
     </van-cell>
-    <!-- </LoadList> -->
   </AppLayout>
 </template>
 
 <script>
-import loadList from "@@/mixins/loadList";
 export default {
-  mixins: [loadList],
   data() {
     return {
       searchForm: { mobile: "" },
@@ -36,31 +32,15 @@ export default {
     };
   },
   created() {
-    // this.setListLoader(paging => {
-    //   return this.$apis.search({ ...this.searchForm, ...paging });
-    // });
-    // this.loadStatus.finished = true;
-    // this.loadStatus.loading = false;
     this.dataList = [];
-    // this.setLoader();
   },
   methods: {
     onSearch() {
-      // this.setLoader();
       this.$apis.search({ ...this.searchForm }).then(res => {
         this.dataList = res.data;
       });
     },
     transfer(id) {
-      //       {
-      // 	"amount": 0,
-      // 	"ids": [],
-      // 	"operateType": 0,
-      // 	"percent": 0,
-      // 	"saleType": 0,
-      // 	"targetOperatorId": 0
-      // }
-      debugger;
       if (this.getOperationType == 0) {
         // 电池
         let params = {

@@ -23,9 +23,9 @@
   </div>
 </template>
 <script>
-import CollapseIndex from "./components/collapseIndex";
-import SidebarIndex from "./components/sidebarIndex";
-import ActionBar from "./components/actionBar";
+import CollapseIndex from "./collapseIndex";
+import SidebarIndex from "./sidebarIndex";
+import ActionBar from "./actionBar";
 export default {
   name: "sidebarCollapse",
   props: {
@@ -60,17 +60,19 @@ export default {
       actives: []
     };
   },
-  created() {
-    // this.summary = "比例：20% 数量：99;比例：20% 数量：99;比例：20% 数量：99;";
+  created() {},
+  updated() {
     // debugger;
-    this.bars.map(b => {
-      if (b.name.length > 4) {
-        b.name = b.name.substring(0, 4);
-      }
-      return b;
-    });
+    // this.$nextTick(function() {
+    //   this.bars.map(b => {
+    //     let short = b.name;
+    //     if (b.name.length > 4) {
+    //       short = b.name.substring(0, 4);
+    //     }
+    //     return Object.assign(b, { shortName: short });
+    //   });
+    // });
   },
-  mounted() {},
   methods: {},
   computed: {
     summary() {
@@ -99,13 +101,20 @@ export default {
     }
   },
   watch: {
-    // "this.actives": function(val) {
-    //   if (val && val.length > 0) {
-    //     this.summary = val.map(v => v.name + v.cnt + ",").join();
-    //   }
-    // },
+    bars: function(val) {
+      if (val && val.length > 0) {
+        this.bars.map(b => {
+          let short = b.name;
+          if (b.name.length > 4) {
+            short = b.name.substring(0, 4);
+          }
+          return Object.assign(b, { shortName: short });
+        });
+      }
+    },
     children: {
       handler: function() {
+        debugger;
         this.setSelected();
         return this.summary;
       },
@@ -126,8 +135,8 @@ export default {
     width: 100%;
   }
   .action-bar {
-    position: fixed;
-    bottom: 50px;
+    position: absolute;
+    bottom: 0;
     text-align: center;
   }
 }

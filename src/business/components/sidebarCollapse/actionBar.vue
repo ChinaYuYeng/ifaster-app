@@ -8,7 +8,7 @@
 
   <van-cell :value="summary" class="van-ellipsis width-100">
     <template #right-icon>
-      <van-button v-for="btn in btns" :key="btn.id" type="primary" @click="routerTo({ path: btn.route })" class="btns" size="mini">
+      <van-button v-for="btn in btns" :key="btn.id" type="primary" @click="btn.click" class="btns" size="mini">
         {{ btn.name }}
       </van-button>
     </template>
