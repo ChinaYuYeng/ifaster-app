@@ -34,7 +34,11 @@
 
 <script>
 export default {
-  inject: ["changeOtherCollapse"],
+  inject: {
+    changeOtherCollapse: {
+      default: id => console.log(id)
+    }
+  },
   name: "collapseIndex",
   props: {
     collapses: {
