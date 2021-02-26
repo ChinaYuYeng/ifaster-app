@@ -16,7 +16,7 @@
       <van-row v-for="box in myCollapse.list" :key="box.id">
         <van-col span="10" class="left-col">
           <van-checkbox name="a" shape="square" icon-size="14" v-model="box.checked" @click.stop="contentClick(box.checked, index)">
-            <van-image :src="errIcon" width="80" height="60" fit="contain">
+            <van-image :src="errIcon" fit="contain" class="list-img">
               <template v-slot:error><van-image :src="errIcon" /></template>
             </van-image>
           </van-checkbox>
@@ -122,6 +122,12 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.list-img {
+  width: 100%;
+  border: 1px solid #dddddd;
+  float: left;
+  margin-left: 10px;
+}
 .font-12 {
   font-size: 12px;
 }
@@ -136,14 +142,14 @@ export default {
   text-align: left;
   height: 100%;
   .van-image {
-    margin-left: -16px;
+    margin-left: -4px;
   }
 }
 .text-black {
   color: #000;
 }
 .right-col {
-  margin-left: -16px;
+  margin-left: 0;
 }
 
 .mycheck-box + label {

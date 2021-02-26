@@ -83,7 +83,7 @@
       <Links
         :links="[
           { icon: '&#xe67f;', title: '仓库管理', path: '/store' },
-          { icon: '&#xe67f;', title: '上下架管理', path: '/onShelf' },
+          { icon: '&#xe67f;', title: '上下架管理', path: '/shelf' },
           { icon: '&#xe67f;', title: '异地还车管理', path: '/otherRent' },
           { icon: '&#xe61a;', title: '我的租还点', path: '/rentMar' },
           { icon: '&#xe62b;', title: '店员管理', path: '/staff' },
