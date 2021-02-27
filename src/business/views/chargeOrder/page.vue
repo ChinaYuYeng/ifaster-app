@@ -42,7 +42,8 @@ export default {
     return {
       searchForm: {
         status1: 1,
-        date: new Date().toUTCString()
+        date: new Date().toUTCString(),
+        operator: ""
       }
     };
   },
@@ -51,7 +52,7 @@ export default {
       parent: this
     };
   },
-  created() {
+  activated() {
     this.setListLoader(paging => {
       return this.$apis.getList({ ...this.searchForm, ...paging });
     });
