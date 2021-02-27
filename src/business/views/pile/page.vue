@@ -6,7 +6,13 @@
       </van-cell>
     </LoadList>
     <template #search="scope">
-      <Search :onSearch="onSearch.bind(this, scope)" :searchForm="searchForm"></Search>
+      <Search
+        v-on:setSearchForm="resetForm"
+        :onSearch="onSearch.bind(this, scope)"
+        :searchForm="searchForm"
+        :model="modelList"
+        :template="tempList"
+      ></Search>
     </template>
   </AppLayout>
 </template>
@@ -23,6 +29,8 @@ export default {
   },
   data() {
     return {
+      modelList: [],
+      tempList: [],
       list: [
         { label: "电桩编号", prop: "number" },
         { label: "所在地点", prop: "address" },
@@ -47,6 +55,8 @@ export default {
     this.setListLoader(paging => {
       return this.$apis.list({ ...this.searchForm, ...paging });
     });
+    this.getModel();
+    this.getTemp();
   },
   methods: {
     onRefresh() {
@@ -58,6 +68,29 @@ export default {
     goDetail(item) {
       this.saveMessage(item);
       this.$router.push("/pile/detail");
+    },
+    resetForm() {
+      this.searchForm = {
+        address: "",
+        chargeFeeTemplateId: "",
+        chargeStatus: [],
+        isOnline: [],
+        model: "",
+        name: "",
+        number: "",
+        status: [],
+        type: []
+      };
+    },
+    getModel() {
+      this.$apis.pileModel({}).then(res => {
+        this.modelList = res.data;
+      });
+    },
+    getTemp() {
+      this.$apis.pileTemp({}).then(res => {
+        this.tempList = res.data;
+      });
     }
   }
 };

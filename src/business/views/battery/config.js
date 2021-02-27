@@ -18,6 +18,12 @@ export default function({ post }) {
       },
       temporary(params) {
         return post("/rent/device/switch/temporary", params);
+      },
+      batteryModel(params) {
+        return post("/rent/device/model/list", params);
+      },
+      batteryPoint(params) {
+        return post("/rent/device/point/list", params);
       }
     }
   };
