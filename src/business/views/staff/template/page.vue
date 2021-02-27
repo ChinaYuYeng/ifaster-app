@@ -1,10 +1,14 @@
 <template>
-  <AppLayout>
-    <tempList :tempList="tempList"></tempList>
+  <AppLayout @onshow="getTemplateList">
+    <Panel v-for="(item, index) in tempList" :key="index" class="temp__bar">
+      <tempList :item="item">
+        <button class="addTemp__btn" @click="useTemp(item)">使用此模板</button>
+        <button class="delTemp__btn" @click="delTemp(item)">删除模板</button>
+      </tempList>
+    </Panel>
     <template #body-bottom>
       <van-button text="新增模板" class="add__temp" @click="add_temp"></van-button>
     </template>
-    <!-- <button class="add__temp" @click="add_temp">新增模板</button> -->
   </AppLayout>
 </template>
 
@@ -13,24 +17,8 @@ import tempList from "../components/tempList";
 export default {
   data() {
     return {
-      tempList: [
-        {
-          name: "店长模板",
-          json: [
-            { pername: "主要权限-1", status: "已授权" },
-            { pername: "主要权限-2", status: "已授权" },
-            { pername: "主要权限-3", status: "已授权" }
-          ]
-        },
-        {
-          name: "店员模板",
-          json: [
-            { pername: "主要权限-1", status: "已授权" },
-            { pername: "主要权限-2", status: "已授权" },
-            { pername: "其他权限-3", status: "已授权" }
-          ]
-        }
-      ]
+      perList: [],
+      tempList: []
     };
   },
   components: {
@@ -43,9 +31,25 @@ export default {
     add_temp() {
       this.$router.push("/staff/addtemp");
     },
+    useTemp(item) {
+      this.$router.go(-1);
+      this.saveTempInfo(item);
+      console.log(1111);
+      this.$apis.audit({ id: this.getStaffInfo.id, status: 1, template: this.getTemplateInfo.id }).then(res => {
+        console.log(res.data);
+      });
+      console.log(this.getTemplateInfo);
+    },
+    delTemp(item) {
+      this.$apis.templateDel({ id: item.id }).then(res => {
+        console.log(res.data);
+      });
+      this.getTemplateList();
+    },
     getTemplateList() {
       this.$apis.templateList({}).then(res => {
         console.log(res.data);
+        this.tempList = res.data;
       });
     }
   }

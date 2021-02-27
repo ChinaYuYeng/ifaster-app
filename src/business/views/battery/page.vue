@@ -6,7 +6,13 @@
       </van-cell>
     </LoadList>
     <template #search="scope">
-      <Search :onSearch="onSearch.bind(this, scope)" :searchForm="searchForm"></Search>
+      <Search
+        v-on:setSearchForm="resetForm"
+        :onSearch="onSearch.bind(this, scope)"
+        :model="modelList"
+        :point="pointList"
+        :searchForm="searchForm"
+      ></Search>
     </template>
   </AppLayout>
 </template>
@@ -23,6 +29,8 @@ export default {
   },
   data() {
     return {
+      modelList: [],
+      pointList: [],
       searchForm: {
         imei: "",
         isOnline: [],
@@ -43,6 +51,8 @@ export default {
     };
   },
   activated() {
+    this.getModel();
+    this.getPoint();
     let { id, rentStatus } = this.$route.params;
     this.searchForm.onRentPointId = id || [];
     this.searchForm.rentStatus = rentStatus || [];
@@ -56,6 +66,23 @@ export default {
     },
     onSearch({ close }) {
       return this.setListLoader().then(close);
+    },
+    getModel() {
+      this.$apis.batteryModel({}).then(res => {
+        this.modelList = res.data;
+      });
+    },
+    resetForm() {
+      this.searchForm = {
+        mobile: "",
+        rentPointId: "",
+        status: ""
+      };
+    },
+    getPoint() {
+      this.$apis.batteryPoint({}).then(res => {
+        this.pointList = res.data;
+      });
     },
     goDetail(item) {
       this.saveMessage(item);

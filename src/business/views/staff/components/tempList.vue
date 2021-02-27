@@ -1,36 +1,36 @@
 <template>
   <div>
-    <Panel v-for="(item, index) in tempList" :key="index" class="temp__bar">
-      <van-cell>
-        <span class="temp__title">{{ item.name }}</span>
-        <button class="edit__btn" @click="gotoEdit(item)">编辑</button>
-      </van-cell>
-      <van-cell v-for="(item1, index) in item.json" :key="index">
-        <span class="per__title">{{ item1.pername }}</span>
-        <span class="per__status">{{ item1.status }}</span>
-      </van-cell>
-      <van-call>
-        <button class="addTemp__btn" @click="useTemp">使用此模板</button>
-      </van-call>
-    </Panel>
+    <van-cell>
+      <span class="temp__title">{{ item.name }}</span>
+      <button class="edit__btn" @click="gotoEdit(item)">编辑</button>
+    </van-cell>
+    <van-cell v-for="(item1, index) in item.json" :key="index">
+      <span class="per__title">{{ item1.pername }}</span>
+      <span class="per__status">{{ item1.status }}</span>
+    </van-cell>
+    <van-cell>
+      <!-- <button class="addTemp__btn" @click="useTemp">使用此模板</button> -->
+      <slot></slot>
+    </van-cell>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    tempList: Array
+    item: Object
   },
   methods: {
     gotoEdit(item) {
       this.$router.push({
-        path: "/staff/addtemp",
+        path: "/staff/editTemp",
         query: { data: item }
       });
-    },
-    useTemp() {
-      this.$router.go(-1);
     }
+    // useTemp(item) {
+    //   this.$router.go(-1);
+    //   this.saveTempId(item.id);
+    // }
   }
 };
 </script>
@@ -56,14 +56,22 @@ export default {
 }
 .addTemp__btn {
   /* float: right; */
-  width: 30%;
+  width: 40%;
   border: 1px solid #55babb;
   border-radius: 5px;
   background-color: #fff;
   color: #55babb;
-  position: relative;
-  left: 70%;
-  top: 5px;
+  float: left;
   margin-bottom: 5px;
+}
+.delTemp__btn {
+  width: 30%;
+  border: 1px solid #55babb;
+  border-radius: 5px;
+  background-color: #55babb;
+  color: #fff;
+  float: left;
+  margin-bottom: 5px;
+  margin-left: 30%;
 }
 </style>
