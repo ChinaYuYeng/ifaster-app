@@ -18,6 +18,12 @@ export default function({ post }) {
       },
       operate(params) {
         return post("/charge/device/update/status", params);
+      },
+      pileModel(params) {
+        return post("/charge/device/model/list", params);
+      },
+      pileTemp(params) {
+        return post("/charge/device/template/list", params);
       }
     }
   };

@@ -52,6 +52,7 @@ export default {
     };
   },
   created() {
+    this.searchForm.operator = this.$route.params.id || "";
     this.setListLoader(paging => {
       return this.$apis.getList({ ...this.searchForm, ...paging });
     });

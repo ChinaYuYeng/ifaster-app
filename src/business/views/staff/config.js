@@ -7,6 +7,9 @@ export default function({ post }) {
       audit(params) {
         return post("/pers/staff/audit", params);
       },
+      detail(params) {
+        return post("/pers/staff/detail", params);
+      },
       authList(params) {
         return post("/pers/auth/list", params);
       },
@@ -15,6 +18,15 @@ export default function({ post }) {
       },
       templateAdd(params) {
         return post("/pers/template/add", params);
+      },
+      templateEdit(params) {
+        return post("/pers/template/edit", params);
+      },
+      templateDel(params) {
+        return post("/pers/template/del", params);
+      },
+      point(params) {
+        return post("/rent/device/point/list", params);
       }
     }
   };
@@ -58,26 +70,43 @@ export default function({ post }) {
         meta: {
           title: "新增模板"
         }
+      },
+      {
+        path: "editTemp",
+        component: "./editTemp/page.vue",
+        meta: {
+          title: "编辑模板"
+        }
       }
     ]
   };
   const store = {
     state: {
-      staffInfo: {}
+      staffInfo: {},
+      templateInfo: {}
     },
     getters: {
       getStaffInfo(state) {
         return state.staffInfo;
+      },
+      getTemplateInfo(state) {
+        return state.templateInfo;
       }
     },
     mutations: {
       setStaffInfo(state, data) {
         state.staffInfo = data;
+      },
+      setTemplateInfo(state, data) {
+        state.templateInfo = data;
       }
     },
     actions: {
       saveMessage({ commit }, data) {
         commit("setStaffInfo", data);
+      },
+      saveTempInfo({ commit }, data) {
+        commit("setTemplateInfo", data);
       }
     }
   };
