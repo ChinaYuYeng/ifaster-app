@@ -32,13 +32,40 @@ export default function({ post }) {
     //     return post("/charge/rate/list", params);
     //   }
     // }
-    scope: {
-      rent(params) {
-        return post("/rent/rate/list", params); // 租赁收费设置
-      },
-      pile(params) {
-        return post("/charge/rate/list", params); // 充电收费设置
-      }
+    // scope: {
+    //   rent(params) {
+    //     return post("/rent/rate/list", params); // 租赁收费设置
+    //   },
+    //   pile(params) {
+    //     return post("/charge/rate/list", params); // 充电收费设置
+    //   }
+    // }
+
+    // 租赁
+    getRentList(params) {
+      return post("/rent/rate/list", params);
+    },
+    createRent(params) {
+      return post("/rent/rate/save", params);
+    },
+    deleteRent(params) {
+      return post("/rent/rate/delete", params);
+    },
+    saveRent(params) {
+      return post("/rent/point/save", params);
+    },
+    // 充电
+    pile(params) {
+      return post("/charge/rate/list", params);
+    },
+    createPile(params) {
+      return post("/charge/rate/list", params);
+    },
+    deletePile(params) {
+      return post("/rent/point/delete", params);
+    },
+    savePile(params) {
+      return post("/rent/point/save", params);
     }
   };
   const store = {

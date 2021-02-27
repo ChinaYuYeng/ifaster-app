@@ -76,7 +76,7 @@
       ></Links>
       <Links
         :links="[
-          { icon: '&#xe60a;', title: '收费设置', path: '' },
+          { icon: '&#xe60a;', title: '收费设置', path: 'charge' },
           { icon: '&#xe666;', title: '结算记录', path: '/settle' }
         ]"
       ></Links>

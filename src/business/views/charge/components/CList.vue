@@ -48,16 +48,16 @@ export default {
         showTips = "";
       }
       return showTips;
-    },
-    imgnResult() {
-      let showImg = "";
-      if (this.item.img) {
-        showImg = this.item.img;
-      } else {
-        showImg = this.batteryImg;
-      }
-      return showImg;
     }
+    // imgnResult() {
+    //   let showImg = "";
+    //   if (this.item.img) {
+    //     showImg = this.item.img;
+    //   } else {
+    //     showImg = this.batteryImg;
+    //   }
+    //   return showImg;
+    // }
   }
 };
 </script>
