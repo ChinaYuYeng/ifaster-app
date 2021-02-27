@@ -8,7 +8,7 @@
 
   <van-cell :value="summary" class="van-ellipsis width-100">
     <template #right-icon>
-      <van-button v-for="btn in btns" :key="btn.id" type="primary" @Click="parentClick(btn.click)" class="btns" size="mini">
+      <van-button v-for="btn in btns" :key="btn.id" type="primary" @click="btn.click" class="btns" size="mini">
         {{ btn.name }}
       </van-button>
     </template>
@@ -33,11 +33,7 @@ export default {
       span2: 12
     };
   },
-  methods: {
-    parentClick(name) {
-      this.$emit(name);
-    }
-  },
+  methods: {},
   watch: {
     // 计算 按钮与汇总信息 显示所占的 比例
     "this.btns": function() {

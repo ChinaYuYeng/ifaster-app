@@ -1,7 +1,7 @@
 <template>
   <div class="wrap">
     <van-row class="row">
-      <van-col span="6"><Sidebar :bars="bars"></Sidebar></van-col>
+      <van-col span="6"><SidebarIndex :bars="bars" ref="leftSidebar"></SidebarIndex></van-col>
       <van-col span="18">
         <van-row>
           <van-col class="row">
@@ -11,11 +11,11 @@
           </van-col>
         </van-row>
         <van-row>
-          <van-col class="row"><Collapse :collapses="children" :errIcon="errIcon"></Collapse></van-col>
+          <van-col class="row"><CollapseIndex :collapses="children" :errIcon="errIcon"></CollapseIndex></van-col>
         </van-row>
       </van-col>
     </van-row>
-    <van-row class="row action-bar">
+    <van-row class="row action-bar" v-if="showAction">
       <van-col span="24">
         <ActionBar :btns="btns" :summary="summary"></ActionBar>
       </van-col>
@@ -23,9 +23,9 @@
   </div>
 </template>
 <script>
-import Collapse from "./components/collapse";
-import Sidebar from "./components/sidebar";
-import ActionBar from "./components/actionBar";
+import CollapseIndex from "./collapseIndex";
+import SidebarIndex from "./sidebarIndex";
+import ActionBar from "./actionBar";
 export default {
   name: "sidebarCollapse",
   props: {
@@ -41,9 +41,9 @@ export default {
       type: Array,
       required: true
     },
-    summary: {
-      type: String
-    },
+    // summary: {
+    //   type: String
+    // },
     errIcon: {
       type: String
     },
@@ -51,36 +51,79 @@ export default {
       type: String
     }
   },
+  inject: ["setSelected"],
   data() {
     return {
+      // 默认选中的哪一类
+      headChekedIndex: -1,
+      // summary: "",
       actives: []
     };
   },
-  created() {
-    this.summary = "比例：20% 数量：99;比例：20% 数量：99;比例：20% 数量：99;";
+  created() {},
+  updated() {
+    // debugger;
+    // this.$nextTick(function() {
+    //   this.bars.map(b => {
+    //     let short = b.name;
+    //     if (b.name.length > 4) {
+    //       short = b.name.substring(0, 4);
+    //     }
+    //     return Object.assign(b, { shortName: short });
+    //   });
+    // });
   },
+  methods: {},
   computed: {
-    /* 是否显示当前页面，或者提供router-view */
-    showContent() {
-      let path = this.$route.fullPath;
-      let index = path.indexOf("?");
-      path = index >= 0 ? path.slice(0, index) : path;
-      return path === this.$pagePath;
+    summary() {
+      // debugger;
+      let sum = "";
+      let seleted = this.children.find(c => c.checked == true);
+      if (seleted) {
+        let name = seleted.name;
+        let cnt = seleted.list.reduce((accumulator, currentValue) => {
+          if (currentValue.checked) {
+            accumulator++;
+          }
+          return accumulator;
+        }, 0);
+        sum = name + " 数量：" + cnt;
+        // this.showAction = true;
+      }
+      return sum;
     },
-    showSearchIcon() {
-      return !!this.$slots.search;
+    showAction() {
+      let seleted = this.children.find(c => c.checked == true);
+      if (seleted) {
+        return true;
+      }
+      return false;
     }
   },
   watch: {
-    "this.actives": function(val) {
+    bars: function(val) {
       if (val && val.length > 0) {
-        this.summary = val.map(v => v.name + v.cnt + ",").join();
+        this.bars.map(b => {
+          let short = b.name;
+          if (b.name.length > 4) {
+            short = b.name.substring(0, 4);
+          }
+          return Object.assign(b, { shortName: short });
+        });
       }
+    },
+    children: {
+      handler: function() {
+        debugger;
+        this.setSelected();
+        return this.summary;
+      },
+      deep: true
     }
   },
   components: {
-    Collapse,
-    Sidebar,
+    CollapseIndex,
+    SidebarIndex,
     ActionBar
   }
 };
@@ -92,8 +135,8 @@ export default {
     width: 100%;
   }
   .action-bar {
-    position: fixed;
-    bottom: 50px;
+    position: absolute;
+    bottom: 0;
     text-align: center;
   }
 }

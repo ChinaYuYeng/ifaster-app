@@ -8,6 +8,9 @@ import LoadList from "./loadList";
 import PileList from "./pileList";
 import UserInfo from "./userInfo";
 import SidebarCollapse from "./sidebarCollapse";
+import ActionBar from "./sidebarCollapse/actionBar";
+import CollapseIndex from "./sidebarCollapse/collapseIndex";
+import SidebarIndex from "./sidebarCollapse/sidebarIndex";
 
 Vue.component("Panel", Panel);
 Vue.component("UserInfo", UserInfo);
@@ -18,3 +21,6 @@ Vue.component("SubmitBtn", SubmitBtn);
 Vue.component("LoadList", LoadList);
 Vue.component("PileList", PileList);
 Vue.component("SidebarCollapse", SidebarCollapse);
+Vue.component("ActionBar", ActionBar);
+Vue.component("CollapseIndex", CollapseIndex);
+Vue.component("SidebarIndex", SidebarIndex);

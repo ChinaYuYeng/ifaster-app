@@ -25,12 +25,12 @@ export default {
     return {
       searchForm: {
         imei: "",
-        isOnline: "",
+        isOnline: [],
         model: "",
         number: "",
-        onRentPointId: "",
-        rentFeeTemplateId: "",
-        rentStatus: "",
+        onRentPointId: [],
+        rentFeeTemplateId: [],
+        rentStatus: [],
         type: []
       },
       list: [
@@ -42,7 +42,10 @@ export default {
       dataform: []
     };
   },
-  created() {
+  activated() {
+    let { id, rentStatus } = this.$route.params;
+    this.searchForm.onRentPointId = id || [];
+    this.searchForm.rentStatus = rentStatus || [];
     this.setListLoader(paging => {
       return this.$apis.list({ ...this.searchForm, ...paging });
     });

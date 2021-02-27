@@ -20,9 +20,19 @@
         <div id="rentMar__map" style="width:100%; height:100px;"></div>
       </Panel>
       <Panel>
-        <van-cell title="店员人数" is-link :value="routerData.staffNum" />
-        <van-cell title="已租设备" is-link :value="routerData.rentDeviceNum" />
-        <van-cell title="空闲设备" is-link :value="routerData.freeDeviceNum" />
+        <van-cell title="店员人数" is-link :value="routerData.staffNum" @click="routerTo({ name: '/staff', params: { id: routerData.id } })" />
+        <van-cell
+          title="已租设备"
+          is-link
+          :value="routerData.rentDeviceNum"
+          @click="routerTo({ name: '/battery', params: { rentStatus: [3], id: [routerData.id] } })"
+        />
+        <van-cell
+          title="空闲设备"
+          is-link
+          :value="routerData.freeDeviceNum"
+          @click="routerTo({ name: '/battery', params: { rentStatus: [1, 2], id: [routerData.id] } })"
+        />
         <van-cell title="分佣设置" is-link @click="routerTo({ name: '/rentMar/detail/assign' })" />
       </Panel>
     </PanelGroup>
@@ -42,7 +52,9 @@ export default {
     });
   },
   mounted() {
-    this.initMap();
+    setTimeout(() => {
+      this.initMap();
+    }, 200);
   },
 
   methods: {
