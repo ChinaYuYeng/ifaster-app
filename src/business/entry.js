@@ -37,10 +37,10 @@ function routerControll(router, store) {
   router.beforeEach((to, from, next) => {
     if (store.getters["login/getToken"]) {
       next();
-    } else if (to.path === "/login" || to.path === "/login/login") {
+    } else if (to.path === "/login/login") {
       next();
     } else {
-      next({ path: "/login" });
+      next({ path: "/login/login" });
     }
   });
   router.afterEach(() => {

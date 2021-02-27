@@ -1,5 +1,7 @@
 <template>
-  <van-form label-width="70px" ref="form" validate-trigger="onSubmit">
+  <van-form label-width="75px" ref="form" validate-trigger="onSubmit">
+    <van-field v-model="searchForm.deviceNo" label="设备编号：" placeholder="请输入设备编号" />
+    <van-field v-model="searchForm.deviceImei" label="设备IMEI：" placeholder="请输入设备IMEI" />
     <Select label="报表类型：" placeholder="请选择类型" v-model="searchForm.earningType" :options="options"></Select>
     <DatePick label="时间：" v-model="searchForm.date" :dateType="dateType"></DatePick>
     <BtnGroup>
