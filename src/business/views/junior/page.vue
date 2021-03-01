@@ -1,10 +1,11 @@
 <template>
   <AppLayout>
+    <!-- {{ history }} -->
     <Panel>
       <item :dataItem="listTop" :hasDetail="true" :godetail="godetail" :hasArrow="false"></item>
     </Panel>
     <Panel>
-      <van-cell title="下级情况"></van-cell>
+      <van-cell title="下级情况"><span class="back" @click="back" v-if="history.length > 1">返回上一级</span></van-cell>
       <div v-for="(item, index) in listData" :key="index" @click="checkJunior(item)">
         <item :dataItem="item" :hasDetail="false" style="margin-bottom:20px"></item>
       </div>
@@ -25,6 +26,7 @@ export default {
   data() {
     return {
       operate: "",
+      history: [],
       listTop: {},
       listData: []
     };
@@ -46,14 +48,27 @@ export default {
       this.listData = [];
       this.$apis.info({ operate: this.operate }).then(res => {
         this.listTop = res.data[0];
+        this.history.push(this.listTop);
+        for (let i = 1; i < res.data.length; i++) {
+          this.listData.push(res.data[i]);
+        }
+      });
+    },
+    back() {
+      let operate = "";
+      operate = this.history[this.history.length - 2].id;
+      this.history.length--;
+      this.$apis.info({ operate: operate }).then(res => {
+        this.listTop = res.data[0];
         for (let i = 1; i < res.data.length; i++) {
           this.listData.push(res.data[i]);
         }
       });
     },
     getInfo() {
-      this.$apis.info({ operate: this.operate }).then(res => {
+      this.$apis.info({ operate: "" }).then(res => {
         this.listTop = res.data[0];
+        this.history.push(this.listTop);
         for (let i = 1; i < res.data.length; i++) {
           this.listData.push(res.data[i]);
         }
@@ -63,4 +78,12 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.back {
+  color: #ffffff;
+  background-color: #55babb;
+  border-radius: 5px;
+  font-size: 5px;
+  padding: 3px 5px;
+}
+</style>

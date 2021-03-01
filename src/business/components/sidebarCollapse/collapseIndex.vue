@@ -34,6 +34,7 @@
 
 <script>
 export default {
+  inject: ["changeOtherCollapse"],
   name: "collapseIndex",
   props: {
     collapses: {
@@ -58,18 +59,25 @@ export default {
   mounted() {},
   methods: {
     contentClick(checked, index) {
-      // debugger;
+      debugger;
       // let cc = box.find(c => c.checked == true);
       if (checked) {
         this.seletedHeadIndex = index;
+        let checkId;
         this.collapses.forEach((c, i) => {
           //debugger;
           if (i != index) {
             c.checked = false;
+            c.list.forEach(t => (t.checked = false));
           } else {
+            checkId = c.list.find(d => d.checked == true).id;
             c.checked = true;
           }
         });
+
+        if (typeof this.changeOtherCollapse == "function") {
+          this.changeOtherCollapse(checkId);
+        }
       }
       // 是否一个都没有选中了
       let selIndex = this.collapses[index].list.findIndex(b => b.checked == true);
@@ -80,11 +88,25 @@ export default {
     headClick(checked, index) {
       // debugger;
       if (!checked) {
+        let checkId;
+        if (this.seletedHeadIndex != index) {
+          if (this.seletedHeadIndex > -1) {
+            this.collapses[this.seletedHeadIndex].checked = false;
+            this.collapses[this.seletedHeadIndex].list.forEach(c => {
+              c.checked = false;
+            });
+          }
+        }
+        checkId = this.collapses[index].list[0].id;
+
         this.seletedHeadIndex = index;
         // 下面的checkbox 也选中
         this.collapses[index].list.forEach(c => {
           c.checked = true;
         });
+        if (typeof this.changeOtherCollapse == "function") {
+          this.changeOtherCollapse(checkId);
+        }
       } else {
         this.collapses[index].list.forEach(c => {
           c.checked = false;

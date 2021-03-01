@@ -1,11 +1,12 @@
 <template>
   <van-sidebar v-model="active" @change="onChange" class="left">
-    <van-sidebar-item v-for="bar in bars" :title="bar.name" :key="bar.id" class="sidebar_left" />
+    <van-sidebar-item v-for="bar in bars" :title="bar.shortName" :key="bar.id" class="sidebar_left" />
   </van-sidebar>
 </template>
 
 <script>
 export default {
+  inject: ["updateData"],
   name: "sidebarIndex",
   props: {
     bars: {
@@ -19,19 +20,14 @@ export default {
       active: 0
     };
   },
-  mounted() {
-    this.bars.map(b => {
-      if (b.name.length > 4) {
-        b.name = b.name.substring(0, 4);
-      }
-    });
-  },
+  mounted() {},
   created() {},
   methods: {
     onChange(index) {
+      debugger;
       this.loading = true;
       this.active = index;
-      this.$emit("getChildren", this.bars[index]);
+      this.updateData(this.bars[index]);
     }
   },
   watch: {}
@@ -43,8 +39,10 @@ export default {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  width: 120px;
-  position: fixed;
-  left: 0;
+  width: 100px;
+  line-height: 4px;
+  // height: 45px;
+  // position: fixed;
+  // left: 0;
 }
 </style>

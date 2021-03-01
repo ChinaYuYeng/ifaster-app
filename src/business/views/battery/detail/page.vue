@@ -68,14 +68,14 @@ export default {
         }
       ],
       columns: [
-        { label: "电池编号", prop: "id" },
+        { label: "电池编号", prop: "number" },
         { label: "电池imei", prop: "imei" },
         { label: "电池类型", prop: "model" }
       ],
       dataForm: {},
       listColumns1: [
         {
-          label: "所属门店",
+          label: "所属租还点",
           prop: "onRentPointName",
           islink: true
         },

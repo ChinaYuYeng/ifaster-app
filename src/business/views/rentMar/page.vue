@@ -26,7 +26,8 @@ export default {
   mixins: [loadList],
   data() {
     return {
-      dataList: []
+      dataList: [],
+      routeData: this.$route.params
     };
   },
   created() {
