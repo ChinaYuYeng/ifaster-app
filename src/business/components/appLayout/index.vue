@@ -49,7 +49,7 @@ export default {
   },
   inject: ["$pagePath"],
   computed: {
-    /**在keepalive状态下的组件，即使在非活跃状态下也会重新计算计算属性的值，从而导致showContent状态混乱，showContent 理应保持actived时的状态，非actived的状态不应该改变 */
+    /**在keepalive状态下的组件，即使在非活跃状态下也会重新计算计算属性的值，从而导致showContent状态混乱，showContent 理应保持在actived时的状态，非actived的状态不应该改变 */
     // showContent() {
     //   let path = this.$route.fullPath;
     //   let index = path.indexOf("?");
@@ -60,6 +60,9 @@ export default {
     showSearchIcon() {
       return !!this.$slots.search || !!this.$scopedSlots.search;
     }
+  },
+  created() {
+    this.firstCreate = true;
   },
   activated() {
     this.pageActived = true;
@@ -75,6 +78,12 @@ export default {
   },
   watch: {
     showContent(val) {
+      if (this.firstCreate) {
+        // 首次创建不触发onshow或者onhide，因为会和created，actived，mounted钩子逻辑重叠
+        // onshow和onhide在纵向路由前进或者后退时触发，横向路由切换和组件创建时可以用actived和deactived满足需求
+        this.firstCreate = false;
+        return;
+      }
       if (val) {
         this.$emit("onshow");
       } else {

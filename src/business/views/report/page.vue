@@ -1,5 +1,5 @@
 <template>
-  <AppLayout ref="report__wrap" @onshow="initChart">
+  <AppLayout ref="report__wrap" @onshow="onRefresh">
     <template slot="body-top">
       <span class="report__title">统计数据</span>
       <canvas id="report__chart"></canvas>
@@ -41,6 +41,12 @@
 import F2 from "@antv/f2";
 import Search from "./components/search";
 import loadList from "@@/mixins/loadList";
+const resetForm = {
+  earningType: 1,
+  date: "",
+  deviceImei: "",
+  deviceNo: ""
+};
 export default {
   components: { Search },
   mixins: [loadList],
@@ -48,19 +54,19 @@ export default {
     return {
       routeData: this.$route.params,
       searchForm: {
-        earningType: 1,
-        date: "",
+        ...resetForm,
         orderType: this.$route.params.orderType
       }
     };
   },
-  created() {
+  mounted() {
+    this.initChart();
+  },
+  activated() {
+    Object.assign(this.searchForm, resetForm);
     this.setListLoader(paging => {
       return this.$apis.getList({ ...this.searchForm, ...paging });
     });
-  },
-  mounted() {
-    this.initChart();
   },
   computed: {
     chartData() {
@@ -72,7 +78,8 @@ export default {
       return this.setListLoader().then(close);
     },
     onRefresh() {
-      return this.setListLoader();
+      this.initChart();
+      // return this.setListLoader();
     },
     initChart() {
       this.$nextTick(() => {
@@ -94,8 +101,7 @@ export default {
 
         chart.render();
       });
-    },
-    getCahrtData() {}
+    }
   },
   watch: {
     dataList(val, old) {

@@ -21,15 +21,17 @@ export default {
     }
   },
   data() {
-    let current = this.options.filter(v => v.value == this.value)[0] || {};
     return {
-      show: false,
-      current
+      show: false
     };
+  },
+  computed: {
+    current() {
+      return this.options.filter(v => v.value == this.value)[0] || {};
+    }
   },
   methods: {
     onSelect(item) {
-      this.current = item;
       this.$emit("input", item.value);
     },
     showPopup() {
