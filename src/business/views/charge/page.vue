@@ -95,13 +95,14 @@ export default {
     // 加载电池收费模板列表
     getRentData() {
       this.setListLoader(paging => {
-        return this.$apis.rent({ ...paging });
+        this.dataList = [];
+        return this.$apis.getRentList({ ...paging });
       });
     },
     // 加载电桩收费模板列表
     getPileData() {
       this.setListLoader(paging => {
-        return this.$apis.pile({ ...paging });
+        return this.$apis.getPileList({ ...paging });
       });
     },
     addRentM() {

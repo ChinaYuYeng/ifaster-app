@@ -43,29 +43,35 @@ export default function({ post }) {
 
     // 租赁
     getRentList(params) {
-      return post("/rent/rate/list", params);
+      return post("/rent/rate/list", params); //获取收费模板列表
     },
-    createRent(params) {
-      return post("/rent/rate/save", params);
+    getRentDetail(params) {
+      return post("/rent/rate/detail", params); //获取收费模板详情
     },
     deleteRent(params) {
-      return post("/rent/rate/delete", params);
+      return post("/rent/rate/delete", params); //删除收费模板
     },
     saveRent(params) {
-      return post("/rent/point/save", params);
+      return post("/rent/rate/save", params); //新增-编辑收费模板
+    },
+    getRentExample(params) {
+      return post("/rent/point/example", params); //获取默认的收费模板
     },
     // 充电
-    pile(params) {
-      return post("/charge/rate/list", params);
+    getPileList(params) {
+      return post("/charge/rate/list", params); //获取收费模板列表
     },
-    createPile(params) {
-      return post("/charge/rate/list", params);
+    getPileDetail(params) {
+      return post("/charge/rate/detail", params); //获取收费模板详情
     },
     deletePile(params) {
-      return post("/rent/point/delete", params);
+      return post("/charge/rate/delete", params); //删除收费模板
     },
     savePile(params) {
-      return post("/rent/point/save", params);
+      return post("/charge/rate/save", params); //新增-编辑收费模板
+    },
+    getPileExample(params) {
+      return post("/charge/rate/example", params); //获取默认的收费模板
     }
   };
   const store = {

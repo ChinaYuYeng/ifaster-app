@@ -3,7 +3,7 @@
     <van-form ref="form">
       <Panel>
         <div class="cell-h">模板</div>
-        <van-field v-model="dataList.name" label="模板名称：" placeholder="请输入模板名称" input-align="right" />
+        <van-field v-model="formData.name" label="模板名称：" placeholder="请输入模板名称" input-align="right" />
         <van-field name="uploader" label="设备图片：">
           <template #input>
             <van-uploader v-model="afterRead" />
@@ -13,7 +13,7 @@
       <Panel>
         <div class="cell-h">按型号</div>
         <div v-for="item in SavePileInfo" :key="item.id">
-          <van-field v-model="dataList.price.once" type="number" label="型号：4815" placeholder="3.00" input-align="right" />
+          <van-field v-model="formData.price.once" type="number" label="型号：4815" placeholder="3.00" input-align="right" />
         </div>
       </Panel>
       <Panel>
@@ -21,36 +21,32 @@
         <!-- <van-field v-model="dataList.price.longRent.week" type="number" label="周租-(元/周):" placeholder="10.00" input-align="right" /> -->
       </Panel>
     </van-form>
-    <btnGroup :leftbtn="'删除'" :rightbtn="'保存'"></btnGroup>
+    <btnGroup :leftbtn="'删除'" :rightbtn="'保存'" :rightFunc="submit"></btnGroup>
   </AppLayout>
 </template>
 <script>
 import btnGroup from "../components/btnGroup";
 export default {
-  setup() {
-    const afterRead = file => {
-      // 此时可以自行将文件上传至服务器
-      console.log(file);
-    };
-
-    return {
-      afterRead
-    };
-  },
   data() {
     return {
-      dataList: {},
-      state: {
-        value1: 1
-      },
-      option: [
-        { text: "保证金模式", value: 1 },
-        { text: "预付费模式", value: 2 }
-      ]
+      formData: {}
     };
   },
   created() {
-    this.dataList = this.setPileList;
+    this.formData = this.setPileList;
+  },
+  methods: {
+    submit() {
+      return this.$refs.form.validate().then(() => {
+        return this.$apis.saveRent(this.formData).then(() => {
+          this.$router.replace("/charge").then(() => {
+            this.$router.go(-2).then(res => {
+              console.log(res);
+            });
+          });
+        });
+      });
+    }
   },
   components: {
     btnGroup
@@ -92,5 +88,11 @@ export default {
 }
 .van-uploader__upload {
   margin: 0;
+}
+.van-uploader__wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
 }
 </style>

@@ -18,18 +18,44 @@
       <Panel>
         <div class="cell-h">押金</div>
         <van-field v-model.number="formData.price.deposit" type="number" label="预交押金：" placeholder="0.00" input-align="right" extra="A" />
-        <van-field label="是否自动审核AAA：">
+        <van-field label="是否自动审核：">
           <template #button>
             <van-switch v-model="formData.price.autoCheck" size="20" active-color="#55BABB" />
           </template>
         </van-field>
+        <van-field label="是否购买保险:">
+          <template #button>
+            <van-switch v-model="formData.price.isPolicy" size="20" active-color="#55BABB" />
+          </template>
+        </van-field>
+      </Panel>
+      <Panel>
+        <div class="cell-h">短租</div>
+        <van-field v-model="formData.price.shortRent.hour" type="number" label="短租收费(元/时)：" placeholder="3.00" input-align="right" />
+        <van-field v-model="formData.price.shortRent.max" type="number" label="收费上限(元/天)：" placeholder="10.00" input-align="right" />
+      </Panel>
+      <Panel>
+        <div class="cell-h">长租</div>
+        <van-field v-model="formData.price.longRent.week" type="number" label="周租-(元/周):" placeholder="10.00" input-align="right" />
+        <van-field v-model="formData.price.longRent.month" type="number" label="月租-(元/月):" placeholder="100.00" input-align="right" />
+        <van-field v-model="formData.price.longRent.year" type="number" label="年租-(元/年):" placeholder="1000.00" input-align="right" />
+      </Panel>
+      <Panel>
+        <div class="cell-h">YO车</div>
+        <van-field v-model="formData.price.yoRent.period" type="number" label="yo车总期数:" placeholder="10.00" input-align="right" />
+        <van-field v-model="formData.price.yoRent.price" type="number" label="每期价格-(元)：" placeholder="22" input-align="right" />
+        <van-field v-model="formData.price.yoRent.points" type="number" label="赠送积分：" placeholder="22" input-align="right" />
       </Panel>
     </van-form>
-    <btnGroup :leftbtn="'删除'" :rightbtn="'保存'" :leftFunc="delt" :rightFunc="savet"></btnGroup>
+    <!-- <btnGroup :leftbtn="'删除'" :rightbtn="'保存'" :leftFunc="delt" :rightFunc="onSubmit"></btnGroup> -->
+    <div class="btn-group">
+      <van-button text="删除" @click="delt"></van-button>
+      <van-button text="保存" type="primary" @click="onSubmit"></van-button>
+    </div>
   </AppLayout>
 </template>
 <script>
-import btnGroup from "../components/btnGroup";
+// import btnGroup from "../components/btnGroup";
 export default {
   data() {
     return {
@@ -41,25 +67,44 @@ export default {
     };
   },
   created() {
-    let routerData = this.$route.params;
+    let routerData = this.getRentList;
     Object.assign(this.formData, routerData || {});
   },
   computed: {
     loadimg() {
-      return [{ url: this.dataList.img }];
+      return [{ url: this.formData.img }];
     }
   },
   methods: {
-    delt() {},
-    savet() {
-      console.log(this.dataList);
+    delt() {
+      console.log("点击删除");
+      this.$dialog
+        .confirm({
+          title: "删除模板",
+          message: "您是否要删除此模板？点击确定，即可删除"
+        })
+        .then(() => {
+          // on confirm
+          return this.$apis.deleteRent(this.formData).then(aaa => {
+            console.log(aaa);
+            return this.$router.replace("/charge").then(() => {
+              this.$toast.success("删除成功！");
+            });
+          });
+        })
+        .catch(() => {
+          // on cancel
+        });
     },
-    onUpdateValue(v) {
-      console.log(v);
+    onSubmit() {
+      return this.$refs.form.validate().then(() => {
+        return this.$apis.saveRent(this.formData).then(() => {
+          return this.$router.replace("/charge").then(() => {
+            this.$toast.success("保存成功！");
+          });
+        });
+      });
     }
-  },
-  components: {
-    btnGroup
   }
 };
 </script>
@@ -98,5 +143,17 @@ export default {
 }
 .van-uploader__upload {
   margin: 0;
+}
+.van-uploader__wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+.btn-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
 }
 </style>
