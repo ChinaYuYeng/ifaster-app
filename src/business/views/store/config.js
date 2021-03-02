@@ -33,7 +33,9 @@ export default function({ post }) {
   const store = {
     state: {
       operationType: 0,
+      sideBarActive: 0,
       battery: {
+        operatorInfo: {},
         operatorList: [],
         repositoryList: [],
         selectedBattery: {
@@ -42,6 +44,7 @@ export default function({ post }) {
         }
       },
       pile: {
+        operatorInfo: {},
         operatorList: [],
         repositoryList: [],
         selectedPile: {
@@ -77,6 +80,15 @@ export default function({ post }) {
       },
       getSelectedPileInfo(state) {
         return state.pile.selectedPile.info;
+      },
+      getBatteryOperatorInfo(state) {
+        return state.battery.operatorInfo;
+      },
+      getPileOperatorInfo(state) {
+        return state.pile.operatorInfo;
+      },
+      getSideBarActive(state) {
+        return state.sideBarActive;
       }
     },
     mutations: {
@@ -85,6 +97,12 @@ export default function({ post }) {
       },
       setOperators(state, data) {
         state[data.c].operatorList = data.data;
+      },
+      setBatteryOperatorInfo(state, data) {
+        state.battery.operatorInfo = data;
+      },
+      setPileOperatorInfo(state, data) {
+        state.pile.operatorInfo = data;
       },
       setRepositories(state, data) {
         state[data.c].repositoryList = data.data;
@@ -100,6 +118,9 @@ export default function({ post }) {
       },
       setSelectedPileInfo(state, data) {
         state.pile.selectedPile.info = data;
+      },
+      setSideBarActive(state, data) {
+        state.sideBarActive = data;
       }
     },
     actions: {
@@ -123,6 +144,15 @@ export default function({ post }) {
       },
       setSelectedPileInfo({ commit }, data) {
         commit("setSelectedPileInfo", data);
+      },
+      setBatteryOperatorInfo({ commit }, data) {
+        commit("setBatteryOPileperatorInfo", data);
+      },
+      setPileOperatorInfo({ commit }, data) {
+        commit("setPileOperatorInfo", data);
+      },
+      setSideBarActive({ commit }, data) {
+        commit("setSideBarActive", data);
       }
     }
   };

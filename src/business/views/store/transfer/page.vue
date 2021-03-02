@@ -49,7 +49,6 @@ export default {
   methods: {
     next() {
       // 保存数据
-      debugger;
       console.log(this.getSelectedBatteryInfo);
       if (this.getOperationType == 0) {
         let bInfo = {
