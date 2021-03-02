@@ -1,4 +1,4 @@
-export default function({ post }) {
+export default function({ post, get }) {
   const routes = {
     path: "/charge",
     meta: {
@@ -55,7 +55,7 @@ export default function({ post }) {
       return post("/rent/rate/save", params); //新增-编辑收费模板
     },
     getRentExample(params) {
-      return post("/rent/point/example", params); //获取默认的收费模板
+      return get("/rent/rate/example", params); //获取默认的收费模板
     },
     // 充电
     getPileList(params) {
@@ -77,7 +77,8 @@ export default function({ post }) {
   const store = {
     state: {
       rent: {},
-      pile: {}
+      pile: {},
+      active: 0
     },
     getters: {
       getRentList(state) {
@@ -85,6 +86,9 @@ export default function({ post }) {
       },
       getPileList(state) {
         return state.pile;
+      },
+      getActivat(state) {
+        return state.active;
       }
     },
     mutations: {
@@ -93,6 +97,9 @@ export default function({ post }) {
       },
       setPileList(state, data) {
         state.pile = data;
+      },
+      setActivat(state, data) {
+        state.active = data;
       }
     },
     actions: {
@@ -101,6 +108,9 @@ export default function({ post }) {
       },
       SavePileInfo({ commit }, data) {
         commit("setPileList", data);
+      },
+      SaveActivat({ commit }, data) {
+        commit("setActivat", data);
       }
     }
   };

@@ -4,30 +4,27 @@
       <Panel>
         <div class="cell-h">模板</div>
         <van-field v-model="formData.name" label="模板名称：" placeholder="请输入模板名称" input-align="right" />
-        <van-cell title="收费模式：">
-          <van-dropdown-menu active-color="#55BABB">
-            <van-dropdown-item v-model="formData.price.rentModel" :options="option" />
-          </van-dropdown-menu>
-        </van-cell>
+
         <van-field name="uploader" label="设备图片：">
           <template #input>
-            <van-uploader v-model="loadimg" />
+            <van-uploader v-model="loadimg" :after-read="afterRead" />
           </template>
         </van-field>
       </Panel>
       <Panel>
         <div class="cell-h">押金</div>
         <van-field v-model.number="formData.price.deposit" type="number" label="预交押金：" placeholder="0.00" input-align="right" extra="A" />
-        <van-field label="是否自动审核：">
-          <template #button>
-            <van-switch v-model="formData.price.autoCheck" size="20" active-color="#55BABB" />
-          </template>
-        </van-field>
-        <van-field label="是否购买保险:">
-          <template #button>
-            <van-switch v-model="formData.price.isPolicy" size="20" active-color="#55BABB" />
-          </template>
-        </van-field>
+        <van-cell title="收费模式：">
+          <van-dropdown-menu active-color="#55BABB">
+            <van-dropdown-item v-model="formData.price.rentModel" :options="option" />
+          </van-dropdown-menu>
+        </van-cell>
+        <van-cell
+          title="还车围栏:"
+          is-link
+          :value="formData.price.returnFenceTempId"
+          @click="routerTo({ name: '/home', params: { id: [formData.id] } })"
+        />
       </Panel>
       <Panel>
         <div class="cell-h">短租</div>
@@ -46,8 +43,35 @@
         <van-field v-model="formData.price.yoRent.price" type="number" label="每期价格-(元)：" placeholder="22" input-align="right" />
         <van-field v-model="formData.price.yoRent.points" type="number" label="赠送积分：" placeholder="22" input-align="right" />
       </Panel>
+      <Panel>
+        <div class="cell-h">其他</div>
+        <van-field label="是否自动审核：">
+          <template #button>
+            <van-switch v-model="formData.price.autoCheck" size="20" active-color="#55BABB" />
+          </template>
+        </van-field>
+        <van-field label="是否购买保险:">
+          <template #button>
+            <van-switch v-model="formData.price.isPolicy" size="20" active-color="#55BABB" />
+          </template>
+        </van-field>
+        <van-field label="是否异地还车:">
+          <template #button>
+            <van-switch v-model="formData.price.otherPlaceReturn" size="20" active-color="#55BABB" />
+          </template>
+        </van-field>
+        <van-field label="是否异点还车:">
+          <template #button>
+            <van-switch v-model="formData.price.otherPointReturn" size="20" active-color="#55BABB" />
+          </template>
+        </van-field>
+        <van-field label="是否短租免费充电:">
+          <template #button>
+            <van-switch v-model="formData.price.freeCharge" size="20" active-color="#55BABB" />
+          </template>
+        </van-field>
+      </Panel>
     </van-form>
-    <!-- <btnGroup :leftbtn="'删除'" :rightbtn="'保存'" :leftFunc="delt" :rightFunc="onSubmit"></btnGroup> -->
     <div class="btn-group">
       <van-button text="删除" @click="delt"></van-button>
       <van-button text="保存" type="primary" @click="onSubmit"></van-button>
@@ -55,11 +79,36 @@
   </AppLayout>
 </template>
 <script>
-// import btnGroup from "../components/btnGroup";
 export default {
   data() {
     return {
-      formData: {},
+      // routeData: this.$route.params,
+      formData: {
+        id: "",
+        name: "",
+        img: "",
+        price: {
+          rentModel: 1,
+          deposit: 0,
+          autoCheck: 1,
+          isPolicy: 1,
+          shortRent: {
+            hour: 10,
+            max: 100
+          },
+          longRent: {
+            week: 58,
+            month: 388,
+            year: 1488
+          },
+          yoRent: {
+            period: 18,
+            price: 500,
+            points: 500
+          },
+          returnFence: [1, 2, 3, 4]
+        }
+      },
       option: [
         { text: "保证金模式", value: 1 },
         { text: "预付费模式", value: 2 }
@@ -67,15 +116,37 @@ export default {
     };
   },
   created() {
-    let routerData = this.getRentList;
-    Object.assign(this.formData, routerData || {});
-  },
-  computed: {
-    loadimg() {
-      return [{ url: this.formData.img }];
+    if (this.$route.params.a == 1) {
+      console.log("进入--新增页面~");
+      this.$apis.getRentExample({}).then(res => {
+        this.formData = res.data;
+        console.log(this.$route.params.a);
+      });
+      // let routerData = this.getRentExample;
+      // Object.assign(this.formData, routerData || {});
+    } else {
+      console.log("进入--详情页面~");
+      let routerData = this.getRentList;
+      Object.assign(this.formData, routerData || {});
     }
   },
+  computed: {
+    loadimg: {
+      get: function() {
+        return [{ url: this.formData.img }];
+      },
+      set: function(v) {
+        return [{ url: v.url }];
+        console.log(v);
+      }
+    }
+    // return [{ url: this.formData.img }];
+  },
   methods: {
+    afterRead(file) {
+      // 此时可以自行将文件上传至服务器
+      console.log(file);
+    },
     delt() {
       console.log("点击删除");
       this.$dialog
@@ -119,9 +190,6 @@ export default {
 .panel {
   margin-bottom: 10px;
 }
-.van-field__label {
-  width: 50%;
-}
 .van-dropdown-item__option {
   text-align: left;
 }
@@ -155,5 +223,8 @@ export default {
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+}
+.van-field__label {
+  width: 40%;
 }
 </style>

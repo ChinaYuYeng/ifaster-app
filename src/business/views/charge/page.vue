@@ -1,5 +1,5 @@
 <template>
-  <AppLayout ref="report__wrap" :onRefresh="onRefresh">
+  <AppLayout ref="report__wrap" :onRefresh="onRefresh" @onshow="onRefresh">
     <van-tabs :before-change="beforeChange" :active="active">
       <van-tab v-for="(t, index) in title" :key="index" :value="index">
         <template #title>
@@ -13,7 +13,7 @@
             <img class="list-img" :src="item.img" alt="" />
             <div class="content_h3">
               <h3>{{ item.name }}</h3>
-              <span class="tips" v-if="active == 0">{{ getTips(item.rentModel) }}</span>
+              <span class="tips" v-if="active == 0">{{ getTips(item.price.rentModel) }}</span>
             </div>
             <van-icon class="arrow-icon" name="arrow" size="20" color="#B2B2B2" />
           </div>
@@ -35,7 +35,7 @@ export default {
       batteryImg: batteryImg,
       chargingImg: chargingImg,
       addM: true,
-      btnMessage: "新建电池收费模板",
+      btnMessage: "新增租赁收费模板",
       active: 0,
       title: [
         {
@@ -92,35 +92,42 @@ export default {
       }
       // return this.setListLoader();
     },
-    // 加载电池收费模板列表
+    // 加载--租赁--收费模板列表
     getRentData() {
+      this.dataList = [];
       this.setListLoader(paging => {
-        this.dataList = [];
         return this.$apis.getRentList({ ...paging });
       });
     },
-    // 加载电桩收费模板列表
+    // 加载--电桩--收费模板列表
     getPileData() {
       this.setListLoader(paging => {
         return this.$apis.getPileList({ ...paging });
       });
     },
+    //进入新增--租赁--模板页面
     addRentM() {
-      console.log("11");
-      this.$router.push({ path: "/charge/editrent" });
+      console.log("11--进入新增--租赁--模板页面");
+      this.$router.push({ name: "/charge/editrent", params: { a: 1 } });
     },
+    //进入新增--充电--模板页面
     addPileM() {
       console.log("22");
-      this.$router.push({ path: "/charge/editpile" });
+      this.$router.push({ name: "/charge/editpile", params: { a: 1 } });
     },
     // 操作Tab选项卡按钮时的方法
     beforeChange(index) {
       if (index == 0) {
         this.getRentData();
+        this.btnMessage = "新增租赁收费模板";
+        this.addM = true;
       } else {
         this.getPileData();
+        this.btnMessage = "新增充电收费模板";
+        this.addM = false;
       }
       this.active = index;
+      this.SaveActivat(index);
     }
   }
 };
