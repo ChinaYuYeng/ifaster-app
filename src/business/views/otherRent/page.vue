@@ -12,7 +12,9 @@
             </van-col>
           </van-row>
           <van-row>
-            <van-col class="row"><CollapseIndex :collapses="box.children" :errIcon="defaultIcon"></CollapseIndex></van-col>
+            <van-col class="row">
+              <CollapseIndex :collapses="box.children" :errIcon="defaultIcon" :activeIndex="getActiveIndex(index)"></CollapseIndex>
+            </van-col>
           </van-row>
         </div>
       </van-col>
@@ -90,6 +92,13 @@ export default {
     }
   },
   methods: {
+    getActiveIndex(index) {
+      if (index == 0) {
+        return 0;
+      } else {
+        return -1;
+      }
+    },
     // 取消其他门店的选中状态
     changeOtherCollapse(checkedId) {
       this.boxes.forEach(b => {

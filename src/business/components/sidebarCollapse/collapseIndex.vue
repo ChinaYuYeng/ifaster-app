@@ -1,6 +1,6 @@
 <template>
   <van-collapse v-model="active" class="right">
-    <van-collapse-item v-for="(myCollapse, index) in collapses" :key="myCollapse.imei" :title="myCollapse.title">
+    <van-collapse-item v-for="(myCollapse, index) in collapses" :key="myCollapse.imei" :title="myCollapse.title" :name="index">
       <template #title>
         <div class="title-content">
           <input type="checkbox" v-model="myCollapse.checked" @click.stop="headClick(myCollapse.checked, index)" class="mycheck-box" />
@@ -13,18 +13,21 @@
       </template>
 
       <!-- 内容 -->
-      <van-row v-for="box in myCollapse.list" :key="box.id">
-        <van-col span="10" class="left-col">
-          <van-checkbox name="a" shape="square" icon-size="14" v-model="box.checked" @click.stop="contentClick(box.checked, index)">
-            <van-image :src="errIcon" fit="contain" class="list-img">
-              <template v-slot:error><van-image :src="errIcon" /></template>
-            </van-image>
-          </van-checkbox>
+      <van-row v-for="box in myCollapse.list" :key="box.id" class="content-row">
+        <van-col span="2" class="left-col">
+          <van-checkbox name="a" shape="square" icon-size="14" v-model="box.checked" @click.stop="contentClick(box.checked, index)"></van-checkbox>
         </van-col>
-        <van-col span="14" offset="0" class="right-col">
+        <van-col span="22" offset="0" class="right-col">
+          <van-row>
+            <van-col span="24">
+              <van-image :src="errIcon" fit="contain" class="list-img">
+                <template v-slot:error><van-image :src="errIcon" /></template>
+              </van-image>
+            </van-col>
+          </van-row>
           <van-row v-for="(rw, index1) in box.rows" :key="index1">
-            <van-col span="10" class="text-black font-12">{{ rw.name }}</van-col>
-            <van-col span="14" class="title-content font-12">{{ rw.value }}</van-col>
+            <van-col span="8" class="text-black font-12">{{ rw.name }}</van-col>
+            <van-col span="16" class="title-content font-12">{{ rw.value }}</van-col>
           </van-row>
         </van-col>
       </van-row>
@@ -48,6 +51,10 @@ export default {
     errIcon: {
       type: String,
       required: true
+    },
+    activeIndex: {
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -58,18 +65,19 @@ export default {
     };
   },
   created() {
-    // console.log(this.errIcon);
+    if (this.activeIndex >= 0) {
+      this.active = [];
+      this.active.push(this.activeIndex);
+    }
   },
   mounted() {},
   methods: {
     contentClick(checked, index) {
-      debugger;
       // let cc = box.find(c => c.checked == true);
       if (checked) {
         this.seletedHeadIndex = index;
         let checkId;
         this.collapses.forEach((c, i) => {
-          //debugger;
           if (i != index) {
             c.checked = false;
             c.list.forEach(t => (t.checked = false));
@@ -123,10 +131,9 @@ export default {
 </script>
 <style lang="less" scoped>
 .list-img {
-  width: 100%;
+  width: 50%;
   border: 1px solid #dddddd;
   float: left;
-  margin-left: 10px;
 }
 .font-12 {
   font-size: 12px;
@@ -140,10 +147,6 @@ export default {
 .left-col {
   display: flex;
   text-align: left;
-  height: 100%;
-  .van-image {
-    margin-left: -4px;
-  }
 }
 .text-black {
   color: #000;
@@ -182,5 +185,12 @@ export default {
   text-align: center;
   font-size: 14px;
   color: white;
+}
+.content-row {
+  margin-top: 5px;
+}
+.content-row + .content-row {
+  border-top: #e6e6e6 1px solid;
+  padding-top: 5px;
 }
 </style>

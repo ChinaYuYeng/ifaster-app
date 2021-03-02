@@ -18,6 +18,7 @@
       :summary="summary"
       :errIcon="defaultIcon"
       :collapseHeader="collapseHeader"
+      :sideBarActive="activeSideBarIndex"
     ></SidebarCollapse>
   </AppLayout>
 </template>
@@ -52,7 +53,8 @@ export default {
       children: [],
       btns: [],
       summary: null,
-      defaultIcon: ""
+      defaultIcon: "",
+      activeSideBarIndex: 0
     };
   },
   provide() {
@@ -62,6 +64,8 @@ export default {
     };
   },
   created() {
+    this.sideBarActive = 0;
+    this.setSideBarActive(0);
     // 运营商 和 电池数据
     this.getBatteryInfo();
     // 底部按钮
@@ -70,7 +74,6 @@ export default {
       id: 1,
       name: "批量调拨",
       click: function() {
-        debugger;
         _this.$router.push({ path: "/store/transfer" });
       },
       route: ""
@@ -89,23 +92,29 @@ export default {
     this.defaultIcon = this.batteryImg;
   },
   methods: {
-    updateData(bar) {
+    updateData(bar, index) {
       this.collapseHeader = bar.name;
       if (this.active == 0) {
         // 电池
-        this.getOperatorBatteryInfo(bar.value);
+        this.getOperatorBatteryInfo(bar);
       } else {
         // 电桩
-        this.getOperatorPileInfo(bar.value);
+        this.getOperatorPileInfo(bar);
       }
+      this.activeSideBarIndex = index;
+      this.setSideBarActive(index);
     },
     // 默认加载数据
     showStore() {
       this.children = [];
-      let index = 0;
-      this.active = index;
-      this.setOperationType(index);
-      this.getBatteryInfo();
+      this.active = this.getOperationType;
+      // this.setOperationType(this.getOperationType);
+      if (this.getOperationType == 0) {
+        this.getBatteryInfo();
+      } else {
+        this.getPileInfo();
+      }
+      this.activeSideBarIndex = this.getSideBarActive;
     },
     // 保存选择信息
     setSelected() {
@@ -123,7 +132,7 @@ export default {
           //.join(",");
           let bInfo = {
             ids: ids,
-            operator: this.getBOperators[this.$refs.mySidebarCollapse.$refs.leftSidebar.active].name,
+            operator: this.getBatteryOperatorInfo.name,
             percent: selected.percent,
             model: selected.model,
             cnt: scnt,
@@ -141,7 +150,7 @@ export default {
           //.join(",");
           let pInfo = {
             ids: ids,
-            operator: this.getBOperators[this.$refs.mySidebarCollapse.$refs.leftSidebar.active].name,
+            operator: this.getPileOperatorInfo.name,
             percent: selected.percent,
             model: selected.model,
             cnt: scnt,
@@ -159,12 +168,10 @@ export default {
       this.setOperationType(index);
       if (index == 0) {
         // 电池
-        console.log(1);
         this.getBatteryInfo();
         // this.defaultIcon = this.batteryImg;
       } else {
         // 电桩
-        console.log(2);
         this.getPileInfo();
         // this.defaultIcon = this.chargingImg;
       }
@@ -178,8 +185,8 @@ export default {
             this.setOperators({ c: "battery", data: r.data });
             this.bars = r.data;
             if (r.data.length > 0) {
-              this.collapseHeader = r.data[0].name;
-              this.getOperatorBatteryInfo(r.data[0].value);
+              this.collapseHeader = r.data[this.getSideBarActive].name;
+              this.getOperatorBatteryInfo(r.data[this.getSideBarActive]);
             } else {
               this.children = [];
               this.collapseHeader = "";
@@ -191,9 +198,10 @@ export default {
       this.defaultIcon = this.batteryImg;
       // console.log(this.defaultIcon);
     },
-    getOperatorBatteryInfo(operaorId) {
+    getOperatorBatteryInfo(operator) {
+      this.setBatteryOperatorInfo(operator);
       this.$apis.battery
-        .repositoryList({ id: operaorId })
+        .repositoryList({ id: operator.value })
         .then(res => {
           this.children = [];
           if (res.code == "1" && res.data && res.data.length > 0) {
@@ -248,8 +256,8 @@ export default {
             this.setOperators({ c: "pile", data: r.data });
             this.bars = r.data;
             if (r.data.length > 0) {
-              this.collapseHeader = r.data[0].name;
-              this.getOperatorPileInfo(r.data[0].value);
+              this.collapseHeader = r.data[this.sideBarActive].name;
+              this.getOperatorPileInfo(r.data[this.sideBarActive]);
             } else {
               this.children = [];
               this.collapseHeader = "";
@@ -260,9 +268,10 @@ export default {
 
       this.defaultIcon = this.chargingImg;
     },
-    getOperatorPileInfo(opertorId) {
+    getOperatorPileInfo(operator) {
+      this.setPileOperatorInfo(operator);
       this.$apis.pile
-        .repositoryList({ id: opertorId })
+        .repositoryList({ id: operator.value })
         .then(res => {
           this.children = [];
           if (res.code == "1" && res.data && res.data.length > 0) {

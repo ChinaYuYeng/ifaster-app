@@ -22,6 +22,7 @@ export default function({ post }) {
 
   const store = {
     state: {
+      pointIndex: 0,
       pointList: [],
       putawayList: [],
       selectedInfo: {}
@@ -35,6 +36,9 @@ export default function({ post }) {
       },
       getSelectedInfo(state) {
         return state.selectedInfo;
+      },
+      getPointIndex(state) {
+        return state.pointIndex;
       }
     },
     mutations: {
@@ -46,6 +50,9 @@ export default function({ post }) {
       },
       setSelectedInfo(state, data) {
         state.selectedInfo = data;
+      },
+      setPointIndex(state, data) {
+        state.pointIndex = data;
       }
     },
     actions: {
@@ -57,6 +64,9 @@ export default function({ post }) {
       },
       setSelectedInfo({ commit }, data) {
         commit("setSelectedInfo", data);
+      },
+      setPointIndex({ commit }, data) {
+        commit("setPointIndex", data);
       }
     }
   };
