@@ -16,16 +16,27 @@
       ></statusList>
     </Panel>
     <Panel style="margin-top:10px">
-      <listItem :listColumns="listColumns1" :listData="dataForm" routePath="/battery/edit"></listItem>
-    </Panel>
-    <Panel>
-      <listItem :listColumns="listColumns2" :listData="dataForm" routePath="/battery/log"></listItem>
+      <van-cell
+        title="所属租还点"
+        :value="dataForm.onRentPointName"
+        is-link
+        @click="routerTo({ name: '/rentMar', params: { $$action: { selectItem } } })"
+      ></van-cell>
+      <van-cell
+        title="操作日志"
+        :value="dataForm.unlock_time"
+        is-link
+        @click="routerTo({ name: '/battery/log', params: { data: dataForm } })"
+      ></van-cell>
+      <listItem :listColumns="listColumns1" :listData="dataForm"></listItem>
     </Panel>
     <Panel style="margin-top:10px">
-      <listItem :listColumns="listColumns3" :listData="dataForm"></listItem>
+      <listItem :listColumns="listColumns2" :listData="dataForm"></listItem>
     </Panel>
     <Panel style="margin-top:10px">
-      <listItem :listColumns="listColumns4" :listData="dataForm"></listItem>
+      <van-cell title="收费模板" :value="dataForm.rentFeeTemplateName" is-link></van-cell>
+      <van-cell title="分账" is-link></van-cell>
+      <van-cell title="运营" is-link></van-cell>
     </Panel>
     <van-popup v-model="isShowPicker1" position="bottom" :style="{ height: '50%', width: '100%' }">
       <van-picker show-toolbar title="设置解锁/锁定" :columns="selectColumn1" @confirm="onConfirm1" @cancel="onCancel1" />
@@ -75,11 +86,6 @@ export default {
       dataForm: {},
       listColumns1: [
         {
-          label: "所属租还点",
-          prop: "onRentPointName",
-          islink: true
-        },
-        {
           label: "设备名称",
           prop: "remark"
         },
@@ -93,7 +99,7 @@ export default {
         },
         {
           label: "当前电压(V)",
-          prop: "acurrentVoltage5"
+          prop: "currentVoltage"
         },
         {
           label: "当前容量(Ah)",
@@ -101,13 +107,6 @@ export default {
         }
       ],
       listColumns2: [
-        {
-          label: "操作日志",
-          prop: "unlock_time",
-          islink: true
-        }
-      ],
-      listColumns3: [
         {
           label: "租赁状态",
           prop: "rentStatusDesc"
@@ -124,16 +123,19 @@ export default {
       listColumns4: [
         {
           label: "收费模板",
-          prop: "rentFeeTemplateName",
-          islink: true
+          prop: "rentFeeTemplateName"
         },
         {
           label: "分账",
-          prop: ""
-        },
+          prop: "",
+          islink: true
+        }
+      ],
+      listColumns6: [
         {
           label: "运营",
-          prop: ""
+          prop: "",
+          islink: true
         }
       ]
     };
@@ -141,6 +143,7 @@ export default {
   created() {
     this.getBatteryDetail();
     this.setSelectColumn2();
+    console.log(this.getbatteryDetail.relationType);
   },
   mounted() {
     AMapLoader.load({
@@ -154,17 +157,34 @@ export default {
     });
   },
   methods: {
+    selectItem(item) {
+      console.log(item);
+      this.dataForm.onRentPointName = item.name;
+    },
     getOnlineStatus() {
-      let id = this.getbatteryDetail.id;
-      this.$apis.online({ id: id }).then(res => {
-        console.log(res.msg);
-      });
+      if (this.getbatteryDetail.relationType == 1) {
+        let id = this.getbatteryDetail.id;
+        this.$apis.online({ id: id }).then(res => {
+          this.$toast.success(res.msg);
+        });
+      } else {
+        this.$toast.fail("当前权限不可操作");
+        // console.log("当前权限不可操作");
+      }
     },
     forceUnlock() {
-      this.isShowPicker1 = true;
+      if (this.getbatteryDetail.relationType != -1) {
+        this.isShowPicker1 = true;
+      } else {
+        this.$toast.fail("当前权限不可操作");
+      }
     },
     temporaryUnlock() {
-      this.isShowPicker = true;
+      if (this.getbatteryDetail.relationType == 1) {
+        this.isShowPicker = true;
+      } else {
+        this.$toast.fail("当前权限不可操作");
+      }
     },
     setSelectColumn2() {
       for (let i = 0; i < 25; i++) {

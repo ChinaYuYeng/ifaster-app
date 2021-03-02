@@ -1,6 +1,6 @@
 <template>
   <van-form label-width="34px" ref="form" validate-trigger="onSubmit">
-    {{ searchForm }}
+    <!-- {{ searchForm }} -->
     <!-- {{ point }} -->
     <van-field label="电池IMEI" label-width="100px" placeholder="请输入电池IMEI" v-model="searchForm.imei" />
     <van-field label="电池编号" label-width="100px" placeholder="请输入电池编号" v-model="searchForm.number" />

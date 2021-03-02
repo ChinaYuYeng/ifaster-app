@@ -32,6 +32,7 @@ export default {
       modelList: [],
       pointList: [],
       searchForm: {
+        operator: "",
         imei: "",
         isOnline: [],
         model: "",
@@ -53,9 +54,12 @@ export default {
   activated() {
     this.getModel();
     this.getPoint();
-    let { id, rentStatus } = this.$route.params;
-    this.searchForm.onRentPointId = id || [];
-    this.searchForm.rentStatus = rentStatus || [];
+    if (this.$route.params.rentStatus) {
+      let { id, rentStatus } = this.$route.params;
+      this.searchForm.onRentPointId = id || [];
+      this.searchForm.rentStatus = rentStatus || [];
+    }
+    this.searchForm.operator = this.$route.params.id || "";
     this.setListLoader(paging => {
       return this.$apis.list({ ...this.searchForm, ...paging });
     });

@@ -55,9 +55,9 @@ export default {
   },
   methods: {
     getEditData() {
-      this.activeNames = this.$route.query.data.auths;
-      this.result = this.$route.query.data.auths;
-      this.name = this.$route.query.data.name;
+      this.activeNames = this.$route.params.data.auths;
+      this.result = this.$route.params.data.auths;
+      this.name = this.$route.params.data.name;
     },
     getAuthList() {
       this.$apis.authList().then(res => {
@@ -85,7 +85,7 @@ export default {
       let dataForm = {};
       dataForm.name = this.name;
       dataForm.auths = this.result;
-      dataForm.id = this.$route.query.data.id;
+      dataForm.id = this.$route.params.data.id;
       this.$apis.templateEdit(dataForm).then(res => {
         console.log(res.data);
       });
