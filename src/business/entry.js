@@ -8,6 +8,8 @@ import "@@/style/main.less";
 import "@@/components";
 import "@@/mixins";
 import "@/assets/directive";
+import regexp from "@/assets/lib/regexp.js";
+Vue.use(regexp);
 Vue.use(Vant);
 
 /* 设置rem */
