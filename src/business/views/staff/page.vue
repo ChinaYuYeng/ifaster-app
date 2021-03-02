@@ -1,5 +1,5 @@
 <template>
-  <AppLayout :onRefresh="onRefresh">
+  <AppLayout :onRefresh="onRefresh" @onshow="onRefresh">
     <LoadList :loadStatus="loadStatus">
       <div v-for="(item, index) in dataList" :key="index" @click="routeTo(item)">
         <staffList :item="item"></staffList>
@@ -9,7 +9,7 @@
       <van-button text="新增店员" @click="gotoAdd"></van-button>
     </template>
     <template #search="scope">
-      <Search :onSearch="onSearch.bind(this, scope)" :searchForm="searchForm"></Search>
+      <Search v-on:setSearchForm="resetForm" :onSearch="onSearch.bind(this, scope)" :point="pointList" :searchForm="searchForm"></Search>
     </template>
   </AppLayout>
 </template>
@@ -24,14 +24,17 @@ export default {
   data() {
     return {
       test,
+      pointList: [],
       searchForm: {
         mobile: "",
-        rentPointId: ""
+        rentPointId: "",
+        status: ""
       },
       datalist: []
     };
   },
   activated() {
+    this.getPointList();
     this.searchForm.rentPointId = this.$route.params.id || "";
     this.setListLoader(paging => {
       return this.$apis.list({ ...this.searchForm, ...paging });
@@ -47,6 +50,19 @@ export default {
     },
     onSearch({ close }) {
       return this.setListLoader().then(close);
+    },
+    getPointList() {
+      this.$apis.point({}).then(res => {
+        // console.log(res.data);
+        this.pointList = res.data;
+      });
+    },
+    resetForm() {
+      this.searchForm = {
+        mobile: "",
+        rentPointId: "",
+        status: ""
+      };
     },
     routeTo(item) {
       this.saveMessage(item);
