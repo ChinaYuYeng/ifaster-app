@@ -6,14 +6,15 @@
           readonly
           clickable
           label="上架到门店"
-          :value="pointName"
           placeholder="选择门店"
+          input-align="right"
+          right-icon="arrow"
           @click="routerTo({ name: '/rentMar', params: { $$action: { selectItem } } })"
-          value-key="name"
+          v-model="pointName"
         />
-        <van-popup v-model="showPicker" round position="bottom">
+        <!-- <van-popup v-model="showPicker" round position="bottom">
           <van-picker show-toolbar :columns="columns" @cancel="showPicker = false" @confirm="onConfirmShop" />
-        </van-popup>
+        </van-popup> -->
       </van-col>
     </van-row>
     <van-row class="main-row">
@@ -22,14 +23,15 @@
           readonly
           clickable
           label="收费模板"
-          :value="templateName"
+          v-model="templateName"
           placeholder="选择收费模板"
-          @click="showPickerTemplate = true"
-          value-key="name"
+          @click="routerTo({ name: '/rentMar', params: { $$action: { selectItem } } })"
+          input-align="right"
+          right-icon="arrow"
         />
-        <van-popup v-model="showPickerTemplate" round position="bottom">
+        <!-- <van-popup v-model="showPickerTemplate" round position="bottom">
           <van-picker show-toolbar :columns="columnsTemplate" @cancel="showPickerTemplate = false" @confirm="onConfirmTemplate" />
-        </van-popup>
+        </van-popup> -->
       </van-col>
     </van-row>
     <!-- <van-cell title="上架到门店" is-link v-model="dataForm.pointId" :value="dataForm.pointName" />
@@ -73,6 +75,8 @@ export default {
   methods: {
     selectItem(item) {
       console.log(item);
+      this.pointName = item.name;
+      this.pointId = item.id;
     },
     getTemplateList() {
       this.$apis.getRentTemplate({ pageIndex: 1, pageSize: 1000 }).then(res => {
@@ -120,5 +124,8 @@ export default {
 .wrap {
   width: 100%;
   text-align: center;
+}
+.main-row + .main-row {
+  border-top: #ecebeb 1px solid;
 }
 </style>
