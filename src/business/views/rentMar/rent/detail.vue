@@ -1,5 +1,5 @@
 <template>
-  <AppLayout @onshow="initMap">
+  <AppLayout @onshow="onRefresh">
     <van-cell is-link @click="routerTo({ name: '/rentMar/detail/edit', params: routerData })">
       <template #title>
         <span class="iconfont theme-font">&#xe635;</span>
@@ -17,9 +17,9 @@
     </van-cell>
     <PanelGroup>
       <Panel @touchmove.native.stop.prevent>
-        <div id="rentMar__map" style="width:100%; height:100px;"></div>
+        <div id="rentMar__map" style="width:100%; height:200px;"></div>
       </Panel>
-      <Panel>
+      <Panel v-if="!selectMod">
         <van-cell title="店员人数" is-link :value="routerData.staffNum" @click="routerTo({ name: '/staff', params: { id: routerData.id } })" />
         <van-cell
           title="已租设备"
@@ -46,27 +46,37 @@ export default {
       routerData: this.$route.params
     };
   },
-  created() {
-    this.$apis.getPointDetail({ id: this.routerData.id }).then(res => {
-      this.routerData = res.data;
-    });
-  },
+  inject: ["selectMod"],
   mounted() {
+    this.fetchData();
     setTimeout(() => {
       this.initMap();
     }, 200);
   },
 
   methods: {
+    onRefresh() {
+      this.fetchData().then(this.initMap);
+    },
+    fetchData() {
+      return this.$apis.getPointDetail({ id: this.routerData.id }).then(res => {
+        this.routerData = res.data;
+      });
+    },
     initMap() {
+      const lnglat = [this.routerData.lng || 120.755511, this.routerData.lat || 30.746992];
       AMapLoader.load({
         key: "21a1ca7e415887a172fe8399bd114b28",
         version: "2.0"
       }).then(AMap => {
         new AMap.Map("rentMar__map", {
-          zoom: 11,
-          center: [107.4976, 32.1697]
-        });
+          zoom: 15,
+          center: lnglat
+        }).add(
+          new AMap.Marker({
+            position: lnglat
+          })
+        );
       });
     }
   }

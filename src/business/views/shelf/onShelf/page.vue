@@ -2,7 +2,15 @@
   <AppLayout>
     <van-row class="main-row">
       <van-col span="24">
-        <van-field readonly clickable label="上架到门店" :value="pointName" placeholder="选择门店" @click="showPicker = true" value-key="name" />
+        <van-field
+          readonly
+          clickable
+          label="上架到门店"
+          :value="pointName"
+          placeholder="选择门店"
+          @click="routerTo({ name: '/rentMar', params: { $$action: { selectItem } } })"
+          value-key="name"
+        />
         <van-popup v-model="showPicker" round position="bottom">
           <van-picker show-toolbar :columns="columns" @cancel="showPicker = false" @confirm="onConfirmShop" />
         </van-popup>
@@ -63,6 +71,9 @@ export default {
     this.getTemplateList();
   },
   methods: {
+    selectItem(item) {
+      console.log(item);
+    },
     getTemplateList() {
       this.$apis.getRentTemplate({ pageIndex: 1, pageSize: 1000 }).then(res => {
         if (res.code == "1") {
