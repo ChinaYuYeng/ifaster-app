@@ -35,17 +35,18 @@ export default {
     });
   },
   created() {
-    this.columns = this.$route.query.column;
+    console.log(this.$route.params);
+    this.columns = this.$route.params.column;
     this.setDataForm();
     console.log(this.dataForm);
   },
   methods: {
     setDataForm() {
-      this.dataForm.address = this.$route.query.data.address;
-      this.dataForm.id = this.$route.query.data.id;
-      this.dataForm.lat = this.$route.query.data.lat;
-      this.dataForm.lng = this.$route.query.data.lng;
-      this.dataForm.name = this.$route.query.data.name;
+      this.dataForm.address = this.$route.params.data.address;
+      this.dataForm.id = this.$route.params.data.id;
+      this.dataForm.lat = this.$route.params.data.lat;
+      this.dataForm.lng = this.$route.params.data.lng;
+      this.dataForm.name = this.$route.params.data.name;
     },
     submit() {
       this.$apis.edit(this.dataForm).then(res => {

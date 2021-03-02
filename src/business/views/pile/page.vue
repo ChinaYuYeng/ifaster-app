@@ -38,6 +38,7 @@ export default {
         { label: "状态", prop: "chargeStatusDesc" }
       ],
       searchForm: {
+        operator: "",
         address: "",
         chargeFeeTemplateId: "",
         chargeStatus: [],
@@ -51,7 +52,8 @@ export default {
       dataList: []
     };
   },
-  created() {
+  activated() {
+    this.searchForm.operator = this.$route.params.id || "";
     this.setListLoader(paging => {
       return this.$apis.list({ ...this.searchForm, ...paging });
     });

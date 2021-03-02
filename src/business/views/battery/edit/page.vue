@@ -3,13 +3,13 @@
     <Panel @touchmove.native.stop.prevent>
       <div id="rentMar__map" style="width:100%; height:100px;"></div>
     </Panel>
-    <inputList :columns="columns" :data="dataForm"></inputList>
-    <SubmitBtn :onSubmit="submit" class="submit" text="保 存"></SubmitBtn>
+    <!-- <inputList :columns="columns" :data="dataForm"></inputList>
+    <SubmitBtn :onSubmit="submit" class="submit" text="保 存"></SubmitBtn> -->
   </AppLayout>
 </template>
 
 <script>
-import inputList from "../components/input-list";
+// import inputList from "../components/input-list";
 export default {
   data() {
     return {
@@ -18,8 +18,7 @@ export default {
     };
   },
   created() {
-    this.columns = this.$route.query.column;
-    this.dataForm = this.$route.query.data;
+    console.log(this.$route.params);
   },
   mounted() {
     AMapLoader.load({
@@ -39,7 +38,7 @@ export default {
     }
   },
   components: {
-    inputList
+    // inputList
   }
 };
 </script>

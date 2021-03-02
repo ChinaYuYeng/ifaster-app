@@ -51,7 +51,13 @@ export default {
       parent: this
     };
   },
-  created() {
+  // created() {
+  //   this.searchForm.operator = this.$route.params.id || "";
+  //   this.setListLoader(paging => {
+  //     return this.$apis.getList({ ...this.searchForm, ...paging });
+  //   });
+  // },
+  activated() {
     this.searchForm.operator = this.$route.params.id || "";
     this.setListLoader(paging => {
       return this.$apis.getList({ ...this.searchForm, ...paging });
