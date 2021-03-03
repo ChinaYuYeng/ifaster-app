@@ -61,7 +61,7 @@ export default {
             duration: 1000,
             message: "操作成功",
             onClose: () => {
-              this.routerTo("/return");
+              this.$router.go(-2);
             }
           });
         });

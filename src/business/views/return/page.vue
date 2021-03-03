@@ -1,5 +1,5 @@
 <template>
-  <AppLayout ref="report__wrap" :onRefresh="onRefresh">
+  <AppLayout ref="report__wrap" :onRefresh="onRefresh" @onshow="onRefresh">
     <LoadList :loadStatus="loadStatus">
       <Panel v-for="item in dataList" :key="item.date" class="mtop10">
         <div class="content__item order__header" slot="header">

@@ -19,7 +19,7 @@
       <Panel @touchmove.native.stop.prevent>
         <div id="rentMar__map" style="width:100%; height:200px;"></div>
       </Panel>
-      <Panel v-if="!selectMod">
+      <Panel v-if="!getSelectMod">
         <van-cell title="店员人数" is-link :value="routerData.staffNum" @click="routerTo({ name: '/staff', params: { id: routerData.id } })" />
         <van-cell
           title="已租设备"
@@ -46,7 +46,6 @@ export default {
       routerData: this.$route.params
     };
   },
-  inject: ["selectMod"],
   mounted() {
     this.fetchData();
     setTimeout(() => {
