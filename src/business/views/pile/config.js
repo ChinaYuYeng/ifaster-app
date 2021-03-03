@@ -53,7 +53,8 @@ export default function({ post }) {
   const store = {
     state: {
       pileInfo: {},
-      pileDetail: {}
+      pileDetail: {},
+      flag: ""
     },
     getters: {
       getPileInfo(state) {
@@ -61,6 +62,9 @@ export default function({ post }) {
       },
       getPileDetail(state) {
         return state.pileDetail;
+      },
+      getFlag(state) {
+        return state.flag;
       }
     },
     mutations: {
@@ -69,6 +73,9 @@ export default function({ post }) {
       },
       setPileDetail(state, data) {
         state.pileDetail = data;
+      },
+      setFlag(state, data) {
+        state.flag = data;
       }
     },
     actions: {
@@ -77,6 +84,9 @@ export default function({ post }) {
       },
       saveDetail({ commit }, data) {
         commit("setPileDetail", data);
+      },
+      saveFlag({ commit }, data) {
+        commit("setFlag", data);
       }
     }
   };

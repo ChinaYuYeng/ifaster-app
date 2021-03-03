@@ -3,9 +3,8 @@
     <van-cell>
       <pileList :columns="columns" :item1="dataForm" :hasArrow="false" imgProp="rentFeeTemplateImg"></pileList>
     </van-cell>
-
     <Panel @touchmove.native.stop.prevent>
-      <div id="rentMar__map" style="width:100%; height:100px;"></div>
+      <div id="rentMar__map" style="width:100%; height:200px;"></div>
     </Panel>
     <Panel>
       <statusList
@@ -16,25 +15,15 @@
       ></statusList>
     </Panel>
     <Panel style="margin-top:10px">
-      <van-cell
-        title="所属租还点"
-        :value="dataForm.onRentPointName"
-        is-link
-        @click="routerTo({ name: '/rentMar', params: { $$action: { selectItem } } })"
-      ></van-cell>
-      <van-cell
-        title="操作日志"
-        :value="dataForm.unlock_time"
-        is-link
-        @click="routerTo({ name: '/battery/log', params: { data: dataForm } })"
-      ></van-cell>
+      <van-cell title="电池上架" is-link @click="batteryPutOn"></van-cell>
+      <van-cell title="操作日志" :value="dataForm.unlock_time" is-link @click="checkLog"></van-cell>
       <listItem :listColumns="listColumns1" :listData="dataForm"></listItem>
     </Panel>
     <Panel style="margin-top:10px">
       <listItem :listColumns="listColumns2" :listData="dataForm"></listItem>
     </Panel>
     <Panel style="margin-top:10px">
-      <van-cell title="收费模板" :value="dataForm.rentFeeTemplateName" is-link></van-cell>
+      <van-cell title="收费模板" :value="dataForm.rentFeeTemplateName"></van-cell>
       <van-cell title="分账" is-link></van-cell>
       <van-cell title="运营" is-link></van-cell>
     </Panel>
@@ -85,6 +74,10 @@ export default {
       ],
       dataForm: {},
       listColumns1: [
+        {
+          label: "所处租还点",
+          prop: "onRentPointName"
+        },
         {
           label: "设备名称",
           prop: "remark"
@@ -143,47 +136,59 @@ export default {
   created() {
     this.getBatteryDetail();
     this.setSelectColumn2();
-    console.log(this.getbatteryDetail.relationType);
   },
   mounted() {
-    AMapLoader.load({
-      key: "21a1ca7e415887a172fe8399bd114b28",
-      version: "2.0"
-    }).then(AMap => {
-      new AMap.Map("rentMar__map", {
-        zoom: 11,
-        center: [107.4976, 32.1697]
-      });
-    });
+    this.getBatteryDetail();
+    setTimeout(() => {
+      this.initMap();
+    }, 200);
   },
   methods: {
+    batteryPutOn() {
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作！");
+      } else {
+        this.$router.push({ name: "/battery/puton", params: { data: this.dataForm } });
+      }
+    },
+    checkLog() {
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作！");
+      } else {
+        this.$router.push({ name: "/battery/log", params: { data: this.dataForm } });
+      }
+    },
     selectItem(item) {
       console.log(item);
       this.dataForm.onRentPointName = item.name;
     },
     getOnlineStatus() {
-      if (this.getbatteryDetail.relationType == 1) {
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作！");
+        // console.log("当前权限不可操作");
+      } else {
         let id = this.getbatteryDetail.id;
         this.$apis.online({ id: id }).then(res => {
-          this.$toast.success(res.msg);
+          if (res.code == 1) {
+            this.$toast.success("在线状态刷新成功！");
+          } else {
+            this.$toast.fail("在线状态刷新失败！");
+          }
         });
-      } else {
-        this.$toast.fail("当前权限不可操作");
-        // console.log("当前权限不可操作");
       }
     },
     forceUnlock() {
       if (this.getbatteryDetail.relationType != -1) {
         this.isShowPicker1 = true;
       } else {
-        this.$toast.fail("当前权限不可操作");
+        this.$toast.fail("当前权限不可操作!");
       }
     },
     temporaryUnlock() {
-      if (this.getbatteryDetail.relationType == 1) {
-        this.isShowPicker = true;
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作!");
       } else {
-        this.$toast.fail("当前权限不可操作");
+        this.isShowPicker = true;
       }
     },
     setSelectColumn2() {
@@ -231,9 +236,24 @@ export default {
     getBatteryDetail() {
       let id = this.getbatteryInfo.id;
       this.$apis.detail({ id: id }).then(res => {
-        console.log(res.data);
         this.dataForm = res.data;
         this.saveDetail(res.data);
+      });
+    },
+    initMap() {
+      const lnglat = [this.dataForm.lng || 120.755511, this.dataForm.lat || 30.746992];
+      AMapLoader.load({
+        key: "21a1ca7e415887a172fe8399bd114b28",
+        version: "2.0"
+      }).then(AMap => {
+        new AMap.Map("rentMar__map", {
+          zoom: 15,
+          center: lnglat
+        }).add(
+          new AMap.Marker({
+            position: lnglat
+          })
+        );
       });
     }
   },

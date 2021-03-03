@@ -1,11 +1,24 @@
 <template>
   <AppLayout>
     {{ formData }}
-    <Panel @touchmove.native.stop.prevent>
+    <Panel @touchmove.native.stop.prevent v-if="this.$route.params.flag == 'address'">
       <div id="rentMar__map-add" style="width:100%; height:200px;"></div>
     </Panel>
     <van-form label-width="70px" ref="form" validate-trigger="onSubmit" :show-error-message="false">
-      <van-field v-model="formData.address" label="电桩地址:" placeholder="请输入电桩地址" :rules="[{ required: true, message: '请输入电桩地址' }]" />
+      <van-field
+        v-if="this.$route.params.flag == 'address'"
+        v-model="formData.address"
+        label="电桩地址:"
+        placeholder="请输入电桩地址"
+        :rules="[{ required: true, message: '请输入电桩地址' }]"
+      />
+      <van-field
+        v-if="this.$route.params.flag == 'name'"
+        v-model="formData.name"
+        label="电桩名称:"
+        placeholder="请输入电桩名称"
+        :rules="[{ required: true, message: '请输入电桩名称' }]"
+      />
       <BtnGroup class="mtop10">
         <SubmitBtn text="保存" size="small" :onSubmit="submit" block></SubmitBtn>
       </BtnGroup>
@@ -34,9 +47,11 @@ export default {
   },
   mounted() {
     // 解决地图和页面切换效果同时进行卡顿的问题
-    setTimeout(() => {
-      this.initMap();
-    }, 300);
+    if (this.$route.params.flag == "address") {
+      setTimeout(() => {
+        this.initMap();
+      }, 300);
+    }
   },
   methods: {
     initMap() {
@@ -73,8 +88,13 @@ export default {
       this.formData.name = this.$route.params.data.name;
     },
     submit() {
-      this.$apis.edit(this.formData).then(res => {
+      return this.$apis.edit(this.formData).then(res => {
         console.log(res);
+        if (res.code == 1) {
+          this.$toast.success("信息修改成功");
+        } else {
+          this.$toast.fail("操作失败");
+        }
         this.$router.go(-1);
       });
     }

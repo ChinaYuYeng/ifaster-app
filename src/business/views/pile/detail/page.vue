@@ -16,6 +16,8 @@
       ></statusList>
     </Panel>
     <Panel style="margin-top:10px">
+      <van-cell title="电桩名称" :value="dataForm.name" is-link @click="nameEdit"></van-cell>
+      <van-cell title="详细地址" :value="dataForm.address" is-link @click="addressEdit"></van-cell>
       <listItem :listColumns="listColumns1" :listData="listData" routePath="/pile/edit"></listItem>
     </Panel>
     <Panel style="margin-top:10px">
@@ -46,18 +48,8 @@ export default {
       dataForm: {},
       listColumns1: [
         {
-          label: "电桩名称",
-          prop: "name",
-          islink: true
-        },
-        {
           label: "电桩编号",
           prop: "number"
-        },
-        {
-          label: "详细地址",
-          prop: "address",
-          islink: true
         },
         {
           label: "充电次数(次)",
@@ -93,31 +85,61 @@ export default {
     this.getDetail();
   },
   mounted() {
-    this.getDetail();
+    // this.getDetail();
     setTimeout(() => {
       this.initMap();
     }, 200);
   },
   methods: {
+    nameEdit() {
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作");
+      } else {
+        this.$router.push({ name: "/pile/edit", params: { data: this.dataForm, flag: "name" } });
+      }
+    },
+    addressEdit() {
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作");
+      } else {
+        this.$router.push({ name: "/pile/edit", params: { data: this.dataForm, flag: "address" } });
+      }
+    },
     getOnlineStatus() {
-      this.$apis.online({ id: this.getPileInfo.id }).then(res => {
-        if (res.code == 1) {
-          this.$toast.success("在线状态检测成功！");
-          this.getDetail();
-        }
-        // console.log(res.msg);
-      });
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作");
+      } else {
+        this.$apis.online({ id: this.getPileInfo.id }).then(res => {
+          if (res.code == 1) {
+            this.$toast.success("在线状态检测成功！");
+            this.getDetail();
+          } else {
+            this.$toast.fail("在线状态检测出错！");
+          }
+          // console.log(res.msg);
+        });
+      }
     },
     getUseStatus() {
-      this.$apis.use({ id: this.getPileInfo.id }).then(res => {
-        if (res.code == 1) {
-          this.$toast.success("使用状态刷新成功！");
-          this.getDetail();
-        }
-      });
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作");
+      } else {
+        this.$apis.use({ id: this.getPileInfo.id }).then(res => {
+          if (res.code == 1) {
+            this.$toast.success("使用状态刷新成功！");
+            this.getDetail();
+          } else {
+            this.$toast.fail("使用状态检测出错！");
+          }
+        });
+      }
     },
     setOperateStatus() {
-      this.isShowPicker = true;
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作");
+      } else {
+        this.isShowPicker = true;
+      }
     },
     onConfirm(value, index) {
       this.status = index - 1;
@@ -126,6 +148,8 @@ export default {
         if (res.code == 1) {
           this.$toast.success("运营状态设置成功！");
           this.getDetail();
+        } else {
+          this.$toast.fail("运营状态检测出错！");
         }
       });
       this.status = "";

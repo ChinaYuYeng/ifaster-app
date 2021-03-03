@@ -54,6 +54,8 @@ export default {
   activated() {
     this.getModel();
     this.getPoint();
+    this.saveFlag(this.$route.params.flag);
+    console.log(this.getFlag);
     if (this.$route.params.rentStatus) {
       let { id, rentStatus } = this.$route.params;
       this.searchForm.onRentPointId = id || [];
@@ -63,6 +65,10 @@ export default {
     this.setListLoader(paging => {
       return this.$apis.list({ ...this.searchForm, ...paging });
     });
+  },
+  beforeDestroy() {
+    this.setFlag("");
+    console.log(this.getFlag);
   },
   methods: {
     onRefresh() {

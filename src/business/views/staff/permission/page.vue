@@ -51,16 +51,25 @@ export default {
     },
 
     save() {
-      this.$apis.audit(this.dataForm).then(res => {
-        console.log(res.data);
-        this.$router.push("/staff");
+      return this.$apis.audit(this.dataForm).then(res => {
+        if (res.code == 1) {
+          this.$toast.success("保存成功！");
+          this.$router.push("/staff");
+        } else {
+          this.$toast.fail("保存失败！");
+        }
       });
     },
     deleteStaff() {
-      this.$apis.audit({ id: this.staffData.id, status: 0 }).then(res => {
+      return this.$apis.audit({ id: this.staffData.id, status: 0 }).then(res => {
         console.log(res.data);
+        if (res.code == 1) {
+          this.$toast.success("已成功删除该店员！");
+          this.$router.push("/staff");
+        } else {
+          this.$toast.fail("删除店员失败！");
+        }
       });
-      this.$router.push("/staff");
     }
   },
   components: {
