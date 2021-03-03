@@ -12,7 +12,7 @@
             <van-tag type="success" v-if="item.otherPointReturn">异点收</van-tag>
           </div>
         </template>
-        <template #extra v-if="selectMod">
+        <template #extra v-if="getSelectMod">
           <van-button size="small" icon="plus" style="margin-left:20px;" @click.stop="selectItem(item)"></van-button>
         </template>
       </van-cell>
@@ -32,19 +32,10 @@ export default {
       dataList: []
     };
   },
-  created() {
+  activated() {
     this.setListLoader(this.$apis.getPointList);
-  },
-  computed: {
-    // 开启列表选择模式
-    selectMod() {
-      return !!this.routeAction.selectItem;
-    }
-  },
-  provide() {
-    return {
-      selectMod: this.selectMod
-    };
+    // 是否开启列表选择模式
+    this.setSelectMod(!!this.routeAction.selectItem);
   },
   methods: {
     onRefresh() {
