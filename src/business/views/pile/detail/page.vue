@@ -5,7 +5,7 @@
       <pileList :columns="columns" :item1="dataForm" :hasArrow="false" :useRoute="false" imgProp="chargeFeeTemplateImg"></pileList>
     </van-cell>
     <Panel @touchmove.native.stop.prevent>
-      <div id="rentMar__map" style="width:100%; height:100px;"></div>
+      <div id="rentMar__map" style="width:100%; height:200px;"></div>
     </Panel>
     <Panel>
       <statusList
@@ -93,27 +93,27 @@ export default {
     this.getDetail();
   },
   mounted() {
-    AMapLoader.load({
-      key: "21a1ca7e415887a172fe8399bd114b28",
-      version: "2.0"
-    }).then(AMap => {
-      new AMap.Map("rentMar__map", {
-        zoom: 11,
-        center: [107.4976, 32.1697]
-      });
-    });
+    this.getDetail();
+    setTimeout(() => {
+      this.initMap();
+    }, 200);
   },
   methods: {
     getOnlineStatus() {
       this.$apis.online({ id: this.getPileInfo.id }).then(res => {
-        console.log(res.msg);
-        this.getDetail();
+        if (res.code == 1) {
+          this.$toast.success("在线状态检测成功！");
+          this.getDetail();
+        }
+        // console.log(res.msg);
       });
     },
     getUseStatus() {
       this.$apis.use({ id: this.getPileInfo.id }).then(res => {
-        console.log(res.msg);
-        this.getDetail();
+        if (res.code == 1) {
+          this.$toast.success("使用状态刷新成功！");
+          this.getDetail();
+        }
       });
     },
     setOperateStatus() {
@@ -123,10 +123,11 @@ export default {
       this.status = index - 1;
       console.log(this.status);
       this.$apis.operate({ id: this.getPileDetail.id, status: this.status }).then(res => {
-        console.log(res.msg);
-        this.getDetail();
+        if (res.code == 1) {
+          this.$toast.success("运营状态设置成功！");
+          this.getDetail();
+        }
       });
-
       this.status = "";
       this.isShowPicker = false;
     },
@@ -144,6 +145,22 @@ export default {
     getDataForm(data) {
       this.listData = data;
       console.log(data);
+    },
+    initMap() {
+      const lnglat = [this.dataForm.lng || 120.755511, this.dataForm.lat || 30.746992];
+      AMapLoader.load({
+        key: "21a1ca7e415887a172fe8399bd114b28",
+        version: "2.0"
+      }).then(AMap => {
+        new AMap.Map("rentMar__map", {
+          zoom: 15,
+          center: lnglat
+        }).add(
+          new AMap.Marker({
+            position: lnglat
+          })
+        );
+      });
     }
   },
   components: {

@@ -19,6 +19,7 @@ export default {
   created() {
     this.$apis.getRegisterRoleList().then(res => {
       this.options = res.data;
+      console.log(res.data);
       this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
         width: 160,
         height: 160,

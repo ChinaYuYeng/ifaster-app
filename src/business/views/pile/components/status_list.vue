@@ -8,7 +8,7 @@
         <div class="font__bar">
           <i class="iconfont" :class="{ online: isOnline }">&#xe65f;</i>
         </div>
-        <p class="value">当前状态：{{ this.statusData.isOnlineDesc }}</p>
+        <p class="value">{{ this.statusData.isOnlineDesc }}</p>
         <button class="btn" @click="getOnlineStatus()">检测</button>
       </van-col>
       <van-col :span="8">
@@ -18,7 +18,7 @@
         <div class="font__bar">
           <i class="iconfont" :class="{ operate: isOperate }">&#xe65a;</i>
         </div>
-        <p class="value">当前状态：{{ this.statusData.statusDesc }}</p>
+        <p class="value">{{ this.statusData.statusDesc }}</p>
         <button class="btn" @click="setOperateStatus()">设置</button>
       </van-col>
       <van-col :span="8">
@@ -28,7 +28,7 @@
         <div class="font__bar">
           <i class="iconfont" :class="{ charge: isCharge }">&#xe687;</i>
         </div>
-        <p class="value">当前状态：{{ this.statusData.chargeStatusDesc }}</p>
+        <p class="value">{{ this.statusData.chargeStatusDesc }}</p>
         <button class="btn" @click="getUseStatus()">刷新</button>
       </van-col>
     </van-row>
