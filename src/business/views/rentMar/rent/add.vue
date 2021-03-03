@@ -94,29 +94,54 @@ export default {
       });
     },
     initMap() {
-      const lnglat = [this.formData.lng || 120.755511, this.formData.lat || 30.746992];
+      let lnglat = this.formData.lng && this.formData.lat && [this.formData.lng, this.formData.lat];
       AMapLoader.load({
         key: "21a1ca7e415887a172fe8399bd114b28",
-        plugins: ["AMap.Geocoder"],
+        plugins: ["AMap.Geocoder", "AMap.Geolocation"],
         version: "2.0"
       }).then(AMap => {
-        const location = (this.LocMark = new AMap.Marker({
-          position: lnglat,
-          draggable: true,
-          raiseOnDrag: true
-        })).on("dragend", () => {
-          const newPos = location.getPosition();
-          this.formData.lng = newPos.lng;
-          this.formData.lat = newPos.lat;
-        });
         this.map = new AMap.Map("rentMar__map-add", {
-          zoom: 18,
-          center: lnglat
+          zoom: 18
         });
-        this.map.add(location);
-        this.geoc = new AMap.Geocoder({
-          batch: false
-        });
+        let showMap = () => {
+          const LocMark = (this.LocMark = new AMap.Marker({
+            position: lnglat,
+            draggable: true,
+            raiseOnDrag: true
+          })).on("dragend", () => {
+            const newPos = LocMark.getPosition();
+            this.formData.lng = newPos.lng;
+            this.formData.lat = newPos.lat;
+          });
+          this.map.add(LocMark);
+          this.map.setCenter(lnglat);
+          this.geoc = new AMap.Geocoder({
+            batch: false
+          });
+        };
+        if (!lnglat) {
+          const location = new AMap.Geolocation({
+            enableHighAccuracy: true,
+            timeout: 4000,
+            buttonOffset: new AMap.Pixel(10, 20),
+            zoomToAccuracy: true,
+            buttonPosition: "RB",
+            showButton: false,
+            showMarker: false,
+            showCircle: false,
+            panToLocation: false
+          });
+          location.getCurrentPosition((status, result) => {
+            if (status == "complete") {
+              lnglat = [result.position.lng, result.position.lat];
+            } else {
+              lnglat = [120.755511, 30.746992];
+            }
+            showMap();
+          });
+        } else {
+          showMap();
+        }
       });
     }
   },
