@@ -89,6 +89,21 @@ export default function({ post, get }) {
       getRegisterRoleList(params) {
         return get("/account/register/role", params);
       }
+    },
+    store: {
+      state: {
+        selectMod: false
+      },
+      getters: {
+        getSelectMod(state) {
+          return state.selectMod;
+        }
+      },
+      mutations: {
+        setSelectMod(state, data) {
+          state.selectMod = data;
+        }
+      }
     }
   };
 }
