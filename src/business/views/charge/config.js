@@ -9,14 +9,14 @@ export default function({ post, get }) {
         path: "editrent",
         component: "./editrent/page.vue",
         meta: {
-          title: "新增/编辑-电池收费模板"
+          title: "新增/编辑-租赁收费模板"
         }
       },
       {
         path: "editpile",
         component: "./editpile/page.vue",
         meta: {
-          title: "新增/编辑-电桩收费模板"
+          title: "新增/编辑-充电收费模板"
         }
       }
     ]
@@ -40,7 +40,14 @@ export default function({ post, get }) {
     //     return post("/charge/rate/list", params); // 充电收费设置
     //   }
     // }
-
+    uploadImg(file) {
+      const param = new FormData();
+      param.append("file", file.file);
+      return post("http://dev.issks.com/issksimg/upload", param, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+      // return post("http://dev.issks.com/issksimg/upload", params);
+    },
     // 租赁
     getRentList(params) {
       return post("/rent/rate/list", params); //获取收费模板列表
@@ -106,7 +113,7 @@ export default function({ post, get }) {
       SaveRentList({ commit }, data) {
         commit("setRentList", data);
       },
-      SavePileInfo({ commit }, data) {
+      SavePileList({ commit }, data) {
         commit("setPileList", data);
       },
       SaveActivat({ commit }, data) {

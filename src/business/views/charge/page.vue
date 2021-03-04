@@ -25,33 +25,28 @@
 </template>
 
 <script>
-import batteryImg from "../../../assets/images/battery.png";
-import chargingImg from "../../../assets/images/charging.png";
 import loadList from "@@/mixins/loadList";
 export default {
   mixins: [loadList],
   data() {
     return {
-      batteryImg: batteryImg,
-      chargingImg: chargingImg,
       addM: true,
       btnMessage: "新增租赁收费模板",
       active: 0,
       title: [
         {
           icon: "&#xe609;",
-          name: " 电池收费模板"
+          name: " 租赁收费模板"
         },
         {
           icon: "&#xe65c;",
-          name: " 电桩收费模板"
+          name: " 充电收费模板"
         }
       ]
     };
   },
   created() {
     this.getRentData();
-    // this.getPileData();
   },
   methods: {
     gotoDetail(item) {
@@ -61,7 +56,7 @@ export default {
           path: "/charge/editrent"
         });
       } else {
-        this.SavePileInfo(item);
+        this.SavePileList(item);
         this.$router.push({
           path: "/charge/editpile"
         });
@@ -101,6 +96,7 @@ export default {
     },
     // 加载--电桩--收费模板列表
     getPileData() {
+      this.dataList = [];
       this.setListLoader(paging => {
         return this.$apis.getPileList({ ...paging });
       });

@@ -9,6 +9,7 @@ module.exports = {
       proxy: {
         "/ifaster-v2-wechat": {
           target: "http://192.168.1.16:8899",
+          changeOrigin: true, //是否允许跨越
           autoRewrite: true
         }
       }

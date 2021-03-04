@@ -16,7 +16,7 @@
         <van-field v-model.number="formData.price.deposit" type="number" label="预交押金：" placeholder="0.00" input-align="right" extra="A" />
         <van-cell title="收费模式：">
           <van-dropdown-menu active-color="#55BABB">
-            <van-dropdown-item v-model="formData.price.rentModel" :options="option" />
+            <van-dropdown-item v-model="formData.price.rentModel" :options="option" disabled />
           </van-dropdown-menu>
         </van-cell>
         <van-cell
@@ -82,6 +82,10 @@
 export default {
   data() {
     return {
+      fileList: [], //图片
+      imgurl: "", //图片路径
+      oneurl: "", //传给后台的图片类型
+      imgs: "", //截图
       // routeData: this.$route.params,
       formData: {
         id: "",
@@ -137,7 +141,6 @@ export default {
       },
       set: function(v) {
         return [{ url: v.url }];
-        console.log(v);
       }
     }
     // return [{ url: this.formData.img }];
@@ -145,7 +148,20 @@ export default {
   methods: {
     afterRead(file) {
       // 此时可以自行将文件上传至服务器
+      // http://dev.issks.com/issksimg/upload
+      // console.log(file); //控制台可以看见图片信息
+      // const param = new FormData();
+      // param.append("file", file.file);
+      // this.$post("http://dev.issks.com/issksimg/upload", param, {
+      //   headers: { "Content-Type": "multipart/form-data" }
+      // }).then(res => {
+      //   console.log(res);
+      // });
       console.log(file);
+      this.$apis.uploadImg(file).then(res => {
+        console.log(res);
+      });
+      //console.log(file);
     },
     delt() {
       console.log("点击删除");

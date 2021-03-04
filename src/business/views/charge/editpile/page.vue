@@ -11,19 +11,26 @@
         </van-field>
       </Panel>
       <Panel>
-        <div class="cell-h">按次数：</div>
-        <!-- <div v-for="item in SavePileInfo" :key="item.id">
-          <van-field v-model="formData.price.once" type="number" label="型号：4815" placeholder="3.00" input-align="right" />
-        </div> -->
-        <van-field v-model="formData.price.once" type="number" label="型号：4815" placeholder="3.00" input-align="right" />
-        <van-field v-model="formData.price.once" type="number" label="型号：4825" placeholder="3.00" input-align="right" />
-        <van-field v-model="formData.price.once" type="number" label="型号：4840" placeholder="3.00" input-align="right" />
+        <div class="cell-h">按设备：</div>
+        <van-field
+          v-for="item in formData.price.once"
+          v-model="item.price"
+          type="number"
+          :label="'型号 (元/次)：' + item.type"
+          placeholder="0"
+          input-align="right"
+        />
       </Panel>
       <Panel>
         <div class="cell-h">按时长</div>
-        <van-field v-model="formData.price.time" type="number" label="5分钟:" placeholder="0.00" input-align="right" />
-        <van-field v-model="formData.price.time" type="number" label="10分钟:" placeholder="0.00" input-align="right" />
-        <van-field v-model="formData.price.time" type="number" label="15分钟:" placeholder="0.00" input-align="right" />
+        <van-field
+          v-for="item in formData.price.time"
+          v-model="item.price"
+          type="number"
+          :label="item.type + '分钟'"
+          placeholder="0"
+          input-align="right"
+        />
       </Panel>
     </van-form>
     <div class="btn-group">
@@ -58,18 +65,15 @@ export default {
     };
   },
   created() {
-    // this.formData = this.setPileList;
     if (this.$route.params.a == 1) {
-      console.log("进入--新增页面~");
+      console.log("进入--充电收费--新增页面~");
       this.$apis.getPileExample({}).then(res => {
         this.formData = res.data;
         console.log(this.$route.params.a);
       });
-      // let routerData = this.getRentExample;
-      // Object.assign(this.formData, routerData || {});
     } else {
-      console.log("进入--详情页面~");
-      let routerData = this.getPileDetail;
+      console.log("进入--充电收费--详情页面~");
+      let routerData = this.getPileList;
       Object.assign(this.formData, routerData || {});
     }
   },
