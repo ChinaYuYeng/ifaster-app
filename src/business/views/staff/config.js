@@ -80,6 +80,13 @@ export default function({ post, get }) {
         meta: {
           title: "编辑模板"
         }
+      },
+      {
+        path: "authList",
+        component: "./authList/page.vue",
+        meta: {
+          title: "个人权限"
+        }
       }
     ]
   };

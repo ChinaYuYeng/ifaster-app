@@ -46,6 +46,13 @@ export default function({ post }) {
         meta: {
           title: "电桩imei"
         }
+      },
+      {
+        path: "account",
+        component: "./account/page.vue",
+        meta: {
+          title: "分账信息"
+        }
       }
     ]
   };

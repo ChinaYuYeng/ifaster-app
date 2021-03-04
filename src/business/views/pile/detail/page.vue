@@ -1,6 +1,5 @@
 <template>
-  <AppLayout ref="report__wrap">
-    <!-- {{ this.$route.query.data }} -->
+  <AppLayout ref="report__wrap" @onshow="onRefresh">
     <van-cell>
       <pileList :columns="columns" :item1="dataForm" :hasArrow="false" :useRoute="false" imgProp="chargeFeeTemplateImg"></pileList>
     </van-cell>
@@ -22,6 +21,7 @@
     </Panel>
     <Panel style="margin-top:10px">
       <listItem :listColumns="listColumns2" :listData="listData" routePath=""></listItem>
+      <van-cell title="分账" is-link @click="checkAccount"></van-cell>
     </Panel>
     <van-popup v-model="isShowPicker" position="bottom" :style="{ height: '50%', width: '100%' }">
       <van-picker show-toolbar title="选择运营状态" :columns="selectList" @cancel="onCancel" @confirm="onConfirm" />
@@ -67,11 +67,6 @@ export default {
           islink: true
         },
         {
-          label: "分账",
-          prop: "",
-          islink: true
-        },
-        {
           label: "运营",
           prop: "",
           islink: true
@@ -88,9 +83,12 @@ export default {
     // this.getDetail();
     setTimeout(() => {
       this.initMap();
-    }, 200);
+    }, 500);
   },
   methods: {
+    onRefresh() {
+      this.getDetail().then(this.initMap);
+    },
     nameEdit() {
       if (this.getFlag) {
         this.$toast.fail("当前权限不可操作");
@@ -103,6 +101,13 @@ export default {
         this.$toast.fail("当前权限不可操作");
       } else {
         this.$router.push({ name: "/pile/edit", params: { data: this.dataForm, flag: "address" } });
+      }
+    },
+    checkAccount() {
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作");
+      } else {
+        this.$router.push({ name: "/pile/account", params: { data: this.dataForm } });
       }
     },
     getOnlineStatus() {
@@ -165,10 +170,6 @@ export default {
         this.listData = res.data;
         this.saveDetail(res.data);
       });
-    },
-    getDataForm(data) {
-      this.listData = data;
-      console.log(data);
     },
     initMap() {
       const lnglat = [this.dataForm.lng || 120.755511, this.dataForm.lat || 30.746992];

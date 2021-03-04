@@ -1,6 +1,5 @@
 <template>
   <AppLayout>
-    {{ formData }}
     <Panel @touchmove.native.stop.prevent v-if="this.$route.params.flag == 'address'">
       <div id="rentMar__map-add" style="width:100%; height:200px;"></div>
     </Panel>

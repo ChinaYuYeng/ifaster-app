@@ -24,7 +24,7 @@
     </Panel>
     <Panel style="margin-top:10px">
       <van-cell title="收费模板" :value="dataForm.rentFeeTemplateName"></van-cell>
-      <van-cell title="分账" is-link></van-cell>
+      <van-cell title="分账" is-link @click="checkAccount"></van-cell>
       <van-cell title="运营" is-link></van-cell>
     </Panel>
     <van-popup v-model="isShowPicker1" position="bottom" :style="{ height: '50%', width: '100%' }">
@@ -112,24 +112,6 @@ export default {
           label: "联系电话",
           prop: "rentUserMobile"
         }
-      ],
-      listColumns4: [
-        {
-          label: "收费模板",
-          prop: "rentFeeTemplateName"
-        },
-        {
-          label: "分账",
-          prop: "",
-          islink: true
-        }
-      ],
-      listColumns6: [
-        {
-          label: "运营",
-          prop: "",
-          islink: true
-        }
       ]
     };
   },
@@ -141,7 +123,7 @@ export default {
     this.getBatteryDetail();
     setTimeout(() => {
       this.initMap();
-    }, 200);
+    }, 500);
   },
   methods: {
     batteryPutOn() {
@@ -156,6 +138,13 @@ export default {
         this.$toast.fail("当前权限不可操作！");
       } else {
         this.$router.push({ name: "/battery/log", params: { data: this.dataForm } });
+      }
+    },
+    checkAccount() {
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作！");
+      } else {
+        this.$router.push({ name: "/battery/account", params: { data: this.dataForm } });
       }
     },
     selectItem(item) {
