@@ -5,7 +5,7 @@
     </div>
     <div class="form-bar">
       <div>
-        <van-form ref="form">
+        <van-form ref="form" :show-error-message="false">
           <span class="label">手机</span>
           <van-field class="input" v-model="dataForm.mobile" :rules="telRules" name="mobile" placeholder="请输入手机号码" />
           <span class="label">验证码</span>
@@ -87,6 +87,7 @@ export default {
         });
       } else {
         this.$notify("请阅读并同意协议");
+        return Promise.resolve();
       }
     },
     getSms() {
