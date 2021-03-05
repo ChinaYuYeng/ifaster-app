@@ -1,8 +1,11 @@
-export default function({ post }) {
+export default function({ post, get }) {
   const apis = {
     scope: {
       info(params) {
         return post("/partner/info", params);
+      },
+      getRegisterRoleList() {
+        return get("/account/register/role");
       }
     }
   };

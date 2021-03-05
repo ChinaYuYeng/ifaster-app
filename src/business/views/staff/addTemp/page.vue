@@ -52,10 +52,7 @@ export default {
       name: "",
       activeNames: [],
       result: [],
-      perList: [
-        // { name: "上下架权限", json: [{ pername: "主要权限-1" }, { pername: "主要权限-2" }, { pername: "主要权限-3" }] },
-        // { name: "其他权限", json: [{ pername: "其他权限-1" }, { pername: "其他权限-2" }, { pername: "其他权限-3" }] }
-      ]
+      perList: []
     };
   },
   created() {
@@ -88,18 +85,16 @@ export default {
       let dataForm = {};
       dataForm.name = this.name;
       dataForm.auths = this.result;
-      this.$apis.templateAdd(dataForm).then(res => {
+      return this.$apis.templateAdd(dataForm).then(res => {
         console.log(res.data);
+        if (res.code == 1) {
+          this.$toast.success("权限模板保存成功！");
+          this.$router.go(-1);
+        } else {
+          this.$toast.fail("权限模板保存失败！");
+        }
       });
-      this.$router.go(-1);
     }
-    // getData() {
-    //   let data = this.$route.query.data;
-    //   this.name = data.name;
-    //   for (let i = 0; i < data.json.length; i++) {
-    //     this.result.push(data.json[i].pername);
-    //   }...
-    // }
   },
   watch: {
     result: {

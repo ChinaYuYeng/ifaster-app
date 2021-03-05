@@ -1,4 +1,4 @@
-export default function({ post }) {
+export default function({ post, get }) {
   const apis = {
     scope: {
       list(params) {
@@ -27,6 +27,9 @@ export default function({ post }) {
       },
       point(params) {
         return post("/rent/device/point/list", params);
+      },
+      getRegisterRoleList() {
+        return get("/account/register/role");
       }
     }
   };
@@ -76,6 +79,13 @@ export default function({ post }) {
         component: "./editTemp/page.vue",
         meta: {
           title: "编辑模板"
+        }
+      },
+      {
+        path: "authList",
+        component: "./authList/page.vue",
+        meta: {
+          title: "个人权限"
         }
       }
     ]

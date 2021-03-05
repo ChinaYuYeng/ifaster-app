@@ -2,7 +2,7 @@
   <AppLayout @onshow="getTemplateList">
     <Panel v-for="(item, index) in tempList" :key="index" class="temp__bar">
       <tempList :item="item">
-        <button class="addTemp__btn" @click="useTemp(item)">使用此模板</button>
+        <button class="addTemp__btn" @click="routerTo({ name: '/staff/authList', params: { auths: item.auths } })">使用此模板</button>
         <button class="delTemp__btn" @click="delTemp(item)">删除模板</button>
       </tempList>
     </Panel>
@@ -31,18 +31,22 @@ export default {
     add_temp() {
       this.$router.push("/staff/addtemp");
     },
-    useTemp(item) {
-      this.$router.go(-1);
-      this.saveTempInfo(item);
-      console.log(1111);
-      this.$apis.audit({ id: this.getStaffInfo.id, status: 1, template: this.getTemplateInfo.id }).then(res => {
-        console.log(res.data);
-      });
-      console.log(this.getTemplateInfo);
-    },
+    // useTemp(item) {
+    //   this.$router.go(-1);
+    //   this.saveTempInfo(item);
+    //   this.$apis.audit({ id: this.getStaffInfo.id, status: 1, template: this.getTemplateInfo.id }).then(res => {
+    //     console.log(res.data);
+    //   });
+    //   console.log(this.getTemplateInfo);
+    // },
     delTemp(item) {
       this.$apis.templateDel({ id: item.id }).then(res => {
-        console.log(res.data);
+        if (res.code == 1) {
+          this.$toast.success("权限模板删除成功！");
+          this.getTemplateList();
+        } else {
+          this.$toast.fail("权限模板删除失败！");
+        }
       });
       this.getTemplateList();
     },
