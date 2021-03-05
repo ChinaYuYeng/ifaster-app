@@ -24,6 +24,9 @@ export default function({ post }) {
       },
       batteryPoint(params) {
         return post("/rent/device/point/list", params);
+      },
+      account(params) {
+        return post("/rent/device/funds/list", params);
       }
     }
   };

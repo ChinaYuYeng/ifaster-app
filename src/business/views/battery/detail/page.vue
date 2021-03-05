@@ -148,7 +148,6 @@ export default {
       }
     },
     selectItem(item) {
-      console.log(item);
       this.dataForm.onRentPointName = item.name;
     },
     getOnlineStatus() {
@@ -189,8 +188,7 @@ export default {
       }
     },
     onConfirm1(index, value) {
-      this.$apis.force({ batteryId: this.getbatteryInfo.id, forceLockStatus: value[0] }).then(res => {
-        console.log(res.msg);
+      this.$apis.force({ batteryId: this.getbatteryInfo.id, forceLockStatus: value[0] }).then(() => {
         this.getBatteryDetail();
         this.isShowPicker1 = false;
       });
@@ -214,9 +212,7 @@ export default {
           temporaryLockStatus: this.temporaryLockStatus,
           temporaryLockTime: min
         })
-        .then(res => {
-          console.log(res.msg);
-        });
+        .then(() => {});
       this.isShowPicker2 = false;
     },
     onCancel2() {

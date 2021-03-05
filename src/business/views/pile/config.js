@@ -24,6 +24,9 @@ export default function({ post }) {
       },
       pileTemp(params) {
         return post("/charge/device/template/list", params);
+      },
+      account(params) {
+        return post("/charge/device/funds/list", params);
       }
     }
   };

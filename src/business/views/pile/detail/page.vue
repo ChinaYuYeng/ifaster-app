@@ -15,8 +15,8 @@
       ></statusList>
     </Panel>
     <Panel style="margin-top:10px">
-      <van-cell title="电桩名称" :value="dataForm.name" is-link @click="nameEdit"></van-cell>
-      <van-cell title="详细地址" :value="dataForm.address" is-link @click="addressEdit"></van-cell>
+      <van-cell title="电桩名称" :value="listData.name" is-link @click="nameEdit"></van-cell>
+      <van-cell title="详细地址" :value="listData.address" is-link @click="addressEdit"></van-cell>
       <listItem :listColumns="listColumns1" :listData="listData" routePath="/pile/edit"></listItem>
     </Panel>
     <Panel style="margin-top:10px">
@@ -77,13 +77,14 @@ export default {
   },
   created() {
     console.log(this.getPileInfo);
+    this.dataForm = this.getPileInfo;
     this.getDetail();
   },
   mounted() {
     // this.getDetail();
     setTimeout(() => {
       this.initMap();
-    }, 500);
+    }, 600);
   },
   methods: {
     onRefresh() {
@@ -93,14 +94,14 @@ export default {
       if (this.getFlag) {
         this.$toast.fail("当前权限不可操作");
       } else {
-        this.$router.push({ name: "/pile/edit", params: { data: this.dataForm, flag: "name" } });
+        this.$router.push({ name: "/pile/edit", params: { data: this.listData, flag: "name" } });
       }
     },
     addressEdit() {
       if (this.getFlag) {
         this.$toast.fail("当前权限不可操作");
       } else {
-        this.$router.push({ name: "/pile/edit", params: { data: this.dataForm, flag: "address" } });
+        this.$router.push({ name: "/pile/edit", params: { data: this.listData, flag: "address" } });
       }
     },
     checkAccount() {
@@ -166,13 +167,12 @@ export default {
     getDetail() {
       let id = this.getPileInfo.id;
       this.$apis.detail({ id: id }).then(res => {
-        this.dataForm = res.data;
         this.listData = res.data;
         this.saveDetail(res.data);
       });
     },
     initMap() {
-      const lnglat = [this.dataForm.lng || 120.755511, this.dataForm.lat || 30.746992];
+      const lnglat = [this.listData.lng || 120.755511, this.listData.lat || 30.746992];
       AMapLoader.load({
         key: "21a1ca7e415887a172fe8399bd114b28",
         version: "2.0"
