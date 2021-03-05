@@ -18,7 +18,8 @@ export default function({ post }) {
         path: "detail",
         component: "./detail/page.vue",
         meta: {
-          title: "充电订单详情"
+          title: "充电订单详情",
+          export: true
         }
       }
     ]

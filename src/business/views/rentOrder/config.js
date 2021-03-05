@@ -21,7 +21,8 @@ export default function({ post }) {
         path: "detail",
         component: "./detail/page.vue",
         meta: {
-          title: "租赁订单详情"
+          title: "租赁订单详情",
+          export: true
         },
         children: [
           {

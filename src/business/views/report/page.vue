@@ -52,10 +52,10 @@ export default {
   mixins: [loadList],
   data() {
     return {
-      routeData: this.$route.params,
+      routeData: {},
       searchForm: {
         ...resetForm,
-        orderType: this.$route.params.orderType
+        orderType: ""
       }
     };
   },
@@ -63,7 +63,8 @@ export default {
     this.initChart();
   },
   activated() {
-    Object.assign(this.searchForm, resetForm);
+    this.routeData = this.$route.params;
+    Object.assign(this.searchForm, resetForm, this.routeData);
     this.setListLoader(paging => {
       return this.$apis.getList({ ...this.searchForm, ...paging });
     });

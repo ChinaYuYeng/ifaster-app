@@ -2,6 +2,7 @@ import "./style.less";
 export default function({ post, get }) {
   return {
     routes: {
+      path: "/rentMar",
       meta: {
         title: "租还点管理"
       },
@@ -45,7 +46,7 @@ export default function({ post, get }) {
             },
             {
               path: "edit",
-              component: "./rent/edit.vue",
+              component: "./rent/add.vue",
               meta: {
                 title: "租还点修改"
               }

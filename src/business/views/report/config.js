@@ -13,11 +13,18 @@ export default function({ post }) {
         },
         children: [
           {
-            path: "detail",
+            path: "chargeDetail",
             meta: {
-              title: "订单详情"
+              title: "充电订单详情"
             },
-            component: "./detail/page.vue"
+            import: "/chargeOrder/detail"
+          },
+          {
+            path: "rentDetail",
+            meta: {
+              title: "租赁订单详情"
+            },
+            import: "/rentOrder/detail"
           }
         ]
       }
