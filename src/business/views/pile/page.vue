@@ -53,12 +53,18 @@ export default {
     };
   },
   activated() {
+    this.setFlag(this.$route.params.flag);
+    console.log(this.getFlag);
     this.searchForm.operator = this.$route.params.id || "";
     this.setListLoader(paging => {
       return this.$apis.list({ ...this.searchForm, ...paging });
     });
     this.getModel();
     this.getTemp();
+  },
+  beforeDestroy() {
+    this.setFlag("");
+    console.log(this.getFlag);
   },
   methods: {
     onRefresh() {

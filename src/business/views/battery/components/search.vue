@@ -1,14 +1,14 @@
 <template>
   <van-form label-width="34px" ref="form" validate-trigger="onSubmit">
-    <!-- {{ searchForm }} -->
-    <!-- {{ point }} -->
-    <van-field label="电池IMEI" label-width="100px" placeholder="请输入电池IMEI" v-model="searchForm.imei" />
-    <van-field label="电池编号" label-width="100px" placeholder="请输入电池编号" v-model="searchForm.number" />
-    <Select label-width="100px" label="设备类型" v-model="searchForm.model" :options="modelList"></Select>
-    <MultiCheck label="设备关系" v-model="searchForm.type" :options="type"></MultiCheck>
-    <MultiCheck label-width="100px" label="所属租还点" v-model="searchForm.onRentPointId" :options="point"></MultiCheck>
-    <MultiCheck label="电池状态" v-model="searchForm.isOnline" :options="isOnline"></MultiCheck>
-    <MultiCheck label="租赁状态" v-model="searchForm.rentStatus" :options="rentStatus"></MultiCheck>
+    <div style="height:450px;overflow:scroll">
+      <van-field label="电池IMEI" label-width="100px" placeholder="请输入电池IMEI" v-model="searchForm.imei" />
+      <van-field label="电池编号" label-width="100px" placeholder="请输入电池编号" v-model="searchForm.number" />
+      <Select label-width="100px" label="设备类型" v-model="searchForm.model" :options="modelList"></Select>
+      <MultiCheck label="设备关系" v-model="searchForm.type" :options="type"></MultiCheck>
+      <MultiCheck label-width="100px" label="所属租还点" v-model="searchForm.onRentPointId" :options="point"></MultiCheck>
+      <MultiCheck label="电池状态" v-model="searchForm.isOnline" :options="isOnline"></MultiCheck>
+      <MultiCheck label="租赁状态" v-model="searchForm.rentStatus" :options="rentStatus"></MultiCheck>
+    </div>
     <BtnGroup style="margin-bottom:20px">
       <SubmitBtn text="搜索" size="small" :onSubmit="submit" width="30%"></SubmitBtn>
       <button class="reset" @click="reset">重置</button>

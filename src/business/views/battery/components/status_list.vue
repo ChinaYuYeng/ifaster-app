@@ -8,7 +8,7 @@
         <div class="font__bar">
           <i class="iconfont" :class="{ online: isOnline }">&#xe617;</i>
         </div>
-        <p class="value">当前状态：{{ this.statusData.isOnlineDesc }}</p>
+        <p class="value">{{ this.statusData.isOnlineDesc }}</p>
         <button class="btn" @click="getOnline">检测</button>
       </van-col>
       <van-col :span="8">
@@ -18,7 +18,7 @@
         <div class="font__bar">
           <i class="iconfont" :class="{ lock: isLock }">&#xe658;</i>
         </div>
-        <p class="value">当前状态：{{ this.statusData.lockStatusDesc }}</p>
+        <p class="value">{{ this.statusData.lockStatusDesc }}</p>
         <button class="btn" @click="forceUnlock">锁定</button>
       </van-col>
       <van-col :span="8">
@@ -28,7 +28,7 @@
         <div class="font__bar">
           <i class="iconfont">&#xe659;</i>
         </div>
-        <p class="value">当前状态：{{ this.statusData.lockStatusDesc }}</p>
+        <p class="value">{{ this.statusData.lockStatusDesc }}</p>
         <button class="btn" @click="temporaryUnlock">解锁</button>
       </van-col>
     </van-row>

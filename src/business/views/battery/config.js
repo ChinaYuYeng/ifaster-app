@@ -24,6 +24,9 @@ export default function({ post }) {
       },
       batteryPoint(params) {
         return post("/rent/device/point/list", params);
+      },
+      account(params) {
+        return post("/rent/device/funds/list", params);
       }
     }
   };
@@ -50,13 +53,28 @@ export default function({ post }) {
         meta: {
           title: "累计解锁"
         }
+      },
+      {
+        path: "puton",
+        component: "./putOn/page.vue",
+        meta: {
+          title: "电池上架"
+        }
+      },
+      {
+        path: "account",
+        component: "./account/page.vue",
+        meta: {
+          title: "分账信息"
+        }
       }
     ]
   };
   const store = {
     state: {
       batteryInfo: {},
-      batteryDetail: {}
+      batteryDetail: {},
+      flag: ""
     },
     getters: {
       getbatteryInfo(state) {
@@ -64,6 +82,9 @@ export default function({ post }) {
       },
       getbatteryDetail(state) {
         return state.batteryDetail;
+      },
+      getFlag(state) {
+        return state.flag;
       }
     },
     mutations: {
@@ -72,6 +93,9 @@ export default function({ post }) {
       },
       setbatteryDetail(state, data) {
         state.batteryDetail = data;
+      },
+      setFlag(state, data) {
+        state.flag = data;
       }
     },
     actions: {
@@ -80,6 +104,9 @@ export default function({ post }) {
       },
       saveDetail({ commit }, data) {
         commit("setbatteryDetail", data);
+      },
+      saveFlag({ commit }, data) {
+        commit("setFlag", data);
       }
     }
   };

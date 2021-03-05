@@ -1,7 +1,7 @@
 <template>
   <div>
-    <SubmitBtn :onSubmit="leftFunc" class="reject" :text="leftbtn"></SubmitBtn>
-    <SubmitBtn :onSubmit="rightFunc" class="submit" :text="rightbtn"></SubmitBtn>
+    <SubmitBtn :onSubmit="leftFunc" class="staff_reject_btn" :text="leftbtn"></SubmitBtn>
+    <SubmitBtn :onSubmit="rightFunc" class="staff_submit_btn" :text="rightbtn"></SubmitBtn>
   </div>
 </template>
 
@@ -28,7 +28,7 @@ export default {
 </script>
 
 <style scoped>
-.reject {
+.staff_reject_btn {
   background-color: #fff;
   color: #55babb;
   width: 30%;
@@ -36,10 +36,12 @@ export default {
   margin-top: 20px;
   margin-bottom: 10px;
   border-radius: 7px;
+  font-size: 13px;
 }
-.submit {
+.staff_submit_btn {
   width: 30%;
   margin-left: 10%;
   border-radius: 7px;
+  font-size: 13px;
 }
 </style>

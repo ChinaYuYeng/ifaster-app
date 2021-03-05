@@ -1,11 +1,10 @@
 <template>
-  <AppLayout ref="report__wrap">
-    <!-- {{ this.$route.query.data }} -->
+  <AppLayout ref="report__wrap" @onshow="onRefresh">
     <van-cell>
       <pileList :columns="columns" :item1="dataForm" :hasArrow="false" :useRoute="false" imgProp="chargeFeeTemplateImg"></pileList>
     </van-cell>
     <Panel @touchmove.native.stop.prevent>
-      <div id="rentMar__map" style="width:100%; height:100px;"></div>
+      <div id="rentMar__map" style="width:100%; height:200px;"></div>
     </Panel>
     <Panel>
       <statusList
@@ -16,10 +15,13 @@
       ></statusList>
     </Panel>
     <Panel style="margin-top:10px">
+      <van-cell title="电桩名称" :value="listData.name" is-link @click="nameEdit"></van-cell>
+      <van-cell title="详细地址" :value="listData.address" is-link @click="addressEdit"></van-cell>
       <listItem :listColumns="listColumns1" :listData="listData" routePath="/pile/edit"></listItem>
     </Panel>
     <Panel style="margin-top:10px">
       <listItem :listColumns="listColumns2" :listData="listData" routePath=""></listItem>
+      <van-cell title="分账" is-link @click="checkAccount"></van-cell>
     </Panel>
     <van-popup v-model="isShowPicker" position="bottom" :style="{ height: '50%', width: '100%' }">
       <van-picker show-toolbar title="选择运营状态" :columns="selectList" @cancel="onCancel" @confirm="onConfirm" />
@@ -46,18 +48,8 @@ export default {
       dataForm: {},
       listColumns1: [
         {
-          label: "电桩名称",
-          prop: "name",
-          islink: true
-        },
-        {
           label: "电桩编号",
           prop: "number"
-        },
-        {
-          label: "详细地址",
-          prop: "address",
-          islink: true
         },
         {
           label: "充电次数(次)",
@@ -75,11 +67,6 @@ export default {
           islink: true
         },
         {
-          label: "分账",
-          prop: "",
-          islink: true
-        },
-        {
           label: "运营",
           prop: "",
           islink: true
@@ -90,43 +77,87 @@ export default {
   },
   created() {
     console.log(this.getPileInfo);
+    this.dataForm = this.getPileInfo;
     this.getDetail();
   },
   mounted() {
-    AMapLoader.load({
-      key: "21a1ca7e415887a172fe8399bd114b28",
-      version: "2.0"
-    }).then(AMap => {
-      new AMap.Map("rentMar__map", {
-        zoom: 11,
-        center: [107.4976, 32.1697]
-      });
-    });
+    // this.getDetail();
+    setTimeout(() => {
+      this.initMap();
+    }, 600);
   },
   methods: {
+    onRefresh() {
+      this.getDetail().then(this.initMap);
+    },
+    nameEdit() {
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作");
+      } else {
+        this.$router.push({ name: "/pile/edit", params: { data: this.listData, flag: "name" } });
+      }
+    },
+    addressEdit() {
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作");
+      } else {
+        this.$router.push({ name: "/pile/edit", params: { data: this.listData, flag: "address" } });
+      }
+    },
+    checkAccount() {
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作");
+      } else {
+        this.$router.push({ name: "/pile/account", params: { data: this.dataForm } });
+      }
+    },
     getOnlineStatus() {
-      this.$apis.online({ id: this.getPileInfo.id }).then(res => {
-        console.log(res.msg);
-        this.getDetail();
-      });
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作");
+      } else {
+        this.$apis.online({ id: this.getPileInfo.id }).then(res => {
+          if (res.code == 1) {
+            this.$toast.success("在线状态检测成功！");
+            this.getDetail();
+          } else {
+            this.$toast.fail("在线状态检测出错！");
+          }
+          // console.log(res.msg);
+        });
+      }
     },
     getUseStatus() {
-      this.$apis.use({ id: this.getPileInfo.id }).then(res => {
-        console.log(res.msg);
-        this.getDetail();
-      });
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作");
+      } else {
+        this.$apis.use({ id: this.getPileInfo.id }).then(res => {
+          if (res.code == 1) {
+            this.$toast.success("使用状态刷新成功！");
+            this.getDetail();
+          } else {
+            this.$toast.fail("使用状态检测出错！");
+          }
+        });
+      }
     },
     setOperateStatus() {
-      this.isShowPicker = true;
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作");
+      } else {
+        this.isShowPicker = true;
+      }
     },
     onConfirm(value, index) {
       this.status = index - 1;
       console.log(this.status);
       this.$apis.operate({ id: this.getPileDetail.id, status: this.status }).then(res => {
-        console.log(res.msg);
-        this.getDetail();
+        if (res.code == 1) {
+          this.$toast.success("运营状态设置成功！");
+          this.getDetail();
+        } else {
+          this.$toast.fail("运营状态检测出错！");
+        }
       });
-
       this.status = "";
       this.isShowPicker = false;
     },
@@ -136,14 +167,25 @@ export default {
     getDetail() {
       let id = this.getPileInfo.id;
       this.$apis.detail({ id: id }).then(res => {
-        this.dataForm = res.data;
         this.listData = res.data;
         this.saveDetail(res.data);
       });
     },
-    getDataForm(data) {
-      this.listData = data;
-      console.log(data);
+    initMap() {
+      const lnglat = [this.listData.lng || 120.755511, this.listData.lat || 30.746992];
+      AMapLoader.load({
+        key: "21a1ca7e415887a172fe8399bd114b28",
+        version: "2.0"
+      }).then(AMap => {
+        new AMap.Map("rentMar__map", {
+          zoom: 15,
+          center: lnglat
+        }).add(
+          new AMap.Marker({
+            position: lnglat
+          })
+        );
+      });
     }
   },
   components: {
