@@ -6,6 +6,12 @@ export default function({ post, get }) {
       },
       getRegisterRoleList() {
         return get("/account/register/role");
+      },
+      auditList() {
+        return post("/partner/audit/list");
+      },
+      audit(params) {
+        return post("/partner/audit", params);
       }
     }
   };
@@ -27,6 +33,13 @@ export default function({ post, get }) {
         component: "./detail/page.vue",
         meta: {
           title: "详情"
+        }
+      },
+      {
+        path: "auditList",
+        component: "./auditList/page.vue",
+        meta: {
+          title: "待审核列表"
         }
       }
     ]
