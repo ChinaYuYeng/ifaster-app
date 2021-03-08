@@ -37,9 +37,9 @@ function setLoginRouter() {
 /* 路由拦截 */
 function routerControll(router, store) {
   router.beforeEach((to, from, next) => {
-    if (store.getters["login/getToken"]) {
+    if (to.path === "/login/login") {
       next();
-    } else if (to.path === "/login/login") {
+    } else if (store.getters["login/getToken"]) {
       next();
     } else {
       next({ path: "/login/login" });
