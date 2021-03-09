@@ -14,7 +14,8 @@ export default function({ post }) {
     path: "/rentOrder",
     component: "./page.vue",
     meta: {
-      title: "租赁订单列表"
+      title: "租赁订单列表",
+      permission: "rent:order:view"
     },
     children: [
       {
@@ -22,6 +23,7 @@ export default function({ post }) {
         component: "./detail/page.vue",
         meta: {
           title: "租赁订单详情",
+          permission: "rent:order:detail",
           export: true
         },
         children: [
@@ -29,7 +31,8 @@ export default function({ post }) {
             path: "settle",
             component: "./detail/settle.vue",
             meta: {
-              title: "异常订单结算"
+              title: "异常订单结算",
+              permission: "rent:order:stop"
             }
           }
         ]

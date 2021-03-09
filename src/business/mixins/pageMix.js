@@ -17,7 +17,9 @@ export default {
     if (exclude.indexOf(to.path) > -1) {
       next();
     } else {
-      if (checkAuth(to.meta.permission)) {
+      if (to.meta.permission === false) {
+        next();
+      } else if (checkAuth(to.meta.permission)) {
         next();
       } else {
         Vue.prototype.$notify({ type: "warning", message: "您尚未获得相应权限！" });

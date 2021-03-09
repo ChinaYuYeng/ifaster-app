@@ -2,27 +2,31 @@ export default function({ post }) {
   const routes = {
     path: "/report",
     meta: {
-      title: "日报/月报"
+      title: "日报/月报",
+      permission: false
     },
     children: [
       {
         path: "statement",
         component: "./statement/page.vue",
         meta: {
-          title: "日报/月报-订单"
+          title: "日报/月报-订单",
+          permission: false
         },
         children: [
           {
             path: "chargeDetail",
             meta: {
-              title: "充电订单详情"
+              title: "充电订单详情",
+              permission: "report:charge:detail"
             },
             import: "/chargeOrder/detail"
           },
           {
             path: "rentDetail",
             meta: {
-              title: "租赁订单详情"
+              title: "租赁订单详情",
+              permission: "report:rent:detail"
             },
             import: "/rentOrder/detail"
           }
