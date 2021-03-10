@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-field :value="current.name" :readonly="true" @click="showPopup" is-link arrow-direction="down" v-bind="$attrs" />
-    <van-action-sheet v-model="show" :actions="options" @select="onSelect" close-on-click-action />
+    <van-action-sheet v-model="show" :actions="options" @select="onSelect" :close-on-click-action="true" />
   </div>
 </template>
 

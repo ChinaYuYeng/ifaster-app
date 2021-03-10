@@ -20,22 +20,31 @@
     <template #body-bottom>
       <van-button text="新增租还点" @click="routerTo({ name: '/rentMar/add' })"></van-button>
     </template>
+    <template #search="scope">
+      <Search :onSearch="onSearch.bind(this, scope)" :searchForm="searchForm"></Search>
+    </template>
   </AppLayout>
 </template>
 
 <script>
+import Search from "./components/search";
 import loadList from "@@/mixins/loadList";
 export default {
+  components: { Search },
   mixins: [loadList],
   data() {
     return {
       dataList: [],
-      routeAction: {}
+      routeAction: {},
+      searchForm: {
+        name: "",
+        operator: ""
+      }
     };
   },
   activated() {
     this.routeAction = this.$route.params.$$action || {};
-    this.setListLoader(this.$apis.getPointList);
+    this.setListLoader(paging => this.$apis.getPointList({ ...this.searchForm, ...paging }));
     // 是否开启列表选择模式
     this.setSelectMod(!!this.routeAction.selectItem);
   },
@@ -46,6 +55,9 @@ export default {
     selectItem(item) {
       this.routeAction.selectItem(item);
       this.$router.back();
+    },
+    onSearch({ close }) {
+      return this.setListLoader().then(close);
     }
   }
 };
