@@ -1,9 +1,9 @@
 import Vue from "vue";
 let globleApi = {};
-Object.defineProperty(Vue.prototype, "$api", {
+Object.defineProperty(Vue.prototype, "$apis", {
   configurable: true,
   set() {
-    console.warn("$api is readyonly");
+    console.warn("$apis is readyonly");
   },
   get() {
     return globleApi;
@@ -13,7 +13,6 @@ Object.defineProperty(Vue.prototype, "$api", {
 export const registerApi = function(apis) {
   if (!apis) return;
   Object.assign(globleApi, apis);
-  console.log("g_api", globleApi);
 };
 
 export const UnregisterApi = function(api) {
