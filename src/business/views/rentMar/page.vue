@@ -29,10 +29,12 @@ export default {
   mixins: [loadList],
   data() {
     return {
-      dataList: []
+      dataList: [],
+      routeAction: {}
     };
   },
   activated() {
+    this.routeAction = this.$route.params.$$action || {};
     this.setListLoader(this.$apis.getPointList);
     // 是否开启列表选择模式
     this.setSelectMod(!!this.routeAction.selectItem);

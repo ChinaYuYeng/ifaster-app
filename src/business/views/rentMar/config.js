@@ -2,52 +2,60 @@ import "./style.less";
 export default function({ post, get }) {
   return {
     routes: {
+      path: "/rentMar",
       meta: {
-        title: "租还点管理"
+        title: "租还点管理",
+        permission: "rent:point:view"
       },
       children: [
         {
           path: "detail",
           component: "./rent/detail.vue",
           meta: {
-            title: "租还点管理"
+            title: "租还点详情",
+            permission: "rent:point:detail"
           },
           children: [
             {
               path: "assign",
               component: "./assign/index.vue",
               meta: {
-                title: "分佣列表"
+                title: "分佣列表",
+                permission: "rent:commission:view"
               },
               children: [
                 {
                   path: "detail",
                   component: "./assign/detail.vue",
                   meta: {
-                    title: "分佣设置"
+                    title: "分佣详情",
+                    permission: "rent:commission:detail"
                   }
                 },
                 {
                   path: "add",
                   component: "./assign/add.vue",
                   meta: {
-                    title: "分佣人员"
+                    title: "新增人员",
+                    permission: "rent:commission:add"
                   }
                 },
                 {
                   path: "invite",
                   component: "./assign/invite.vue",
                   meta: {
-                    title: "人员邀请"
+                    title: "人员邀请",
+                    permission: "rent:commission:invite"
                   }
                 }
               ]
             },
             {
               path: "edit",
-              component: "./rent/edit.vue",
+              component: "./rent/add.vue",
               meta: {
-                title: "租还点修改"
+                title: "租还点修改",
+                permission: "rent:point:edit"
               }
             }
           ]
@@ -56,7 +64,8 @@ export default function({ post, get }) {
           path: "add",
           component: "./rent/add.vue",
           meta: {
-            title: "租还点新增"
+            title: "租还点新增",
+            permission: "rent:point:add"
           }
         }
       ]

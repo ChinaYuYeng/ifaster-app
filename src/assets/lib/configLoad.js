@@ -1,5 +1,5 @@
 import { asyncImport } from "./importInjectMixin";
-import router, { registerRoute } from "@/router";
+import router, { registerRoute, queueCopyRoute } from "@/router";
 import { registerModule, getStore } from "@/store";
 import request from "@/api/request";
 import { registerApi } from "@/api";
@@ -69,40 +69,45 @@ contexts.keys().map(item => {
   // 设置默认path
   traverse({ path: currentPath, ...(config.routes || {}) }, (route, fullPath) => {
     route.name = fullPath;
-    route.component =
-      Object.prototype.toString.call(route.component) === "[object Function]"
-        ? route.component()
-        : importComp(parseFilePath((currentPath == "/" ? "" : currentPath) + "/" + (route.component || "page.vue")), {
-            fullPath,
-            name:
-              fullPath
-                .split("/")
-                .filter(v => v)
-                .join("-") || "root",
-            beforeCreate() {
-              Object.defineProperty(this, "$apis", {
-                value: Object.assign(Object.create(this.$api), apis.scope)
-              });
-              // 当前页面的默认路径，用来判断当前路由是否在这个页面上
-              Object.defineProperty(this, "$pagePath", {
-                value: this.$options._pagePaths
-              });
-            },
-            // concat({})是为了没数据的时候防止assign报错
-            computed: {
-              ...mapGetters(Object.assign.apply({}, getAlias.concat({})))
-            },
-            methods: {
-              ...mapActions(Object.assign.apply({}, actionAlias.concat({}))),
-              ...mapMutations(Object.assign.apply({}, mutationsAlias.concat({})))
-            },
-            // 如果报mergeData溢出，可能和这个选项的合并策略有关
-            provide() {
-              return {
-                $pagePath: this.$pagePath
-              };
-            }
-          });
+    if (route.import) {
+      queueCopyRoute(route.import, route);
+      delete route.import;
+    } else {
+      route.component =
+        Object.prototype.toString.call(route.component) === "[object Function]"
+          ? route.component()
+          : importComp(parseFilePath((currentPath == "/" ? "" : currentPath) + "/" + (route.component || "page.vue")), {
+              name:
+                fullPath
+                  .split("/")
+                  .filter(v => v)
+                  .join("-") || "root",
+              beforeCreate() {
+                Object.defineProperty(this, "$apis", {
+                  value: Object.assign(Object.create(this.$api), apis.scope)
+                });
+                // 当前页面的默认路径，用来判断当前路由是否在这个页面上
+                Object.defineProperty(this, "$pagePath", {
+                  value: this.$options._pagePaths
+                });
+              },
+              // concat({})是为了没数据的时候防止assign报错
+              computed: {
+                ...mapGetters(Object.assign.apply({}, getAlias.concat({})))
+              },
+              methods: {
+                ...mapActions(Object.assign.apply({}, actionAlias.concat({}))),
+                ...mapMutations(Object.assign.apply({}, mutationsAlias.concat({})))
+              },
+              // 如果报mergeData溢出，可能和这个选项的合并策略有关
+              provide() {
+                return {
+                  $pagePath: this.$pagePath
+                };
+              }
+            });
+      (route.component._pagePaths || (route.component._pagePaths = [])).push(fullPath);
+    }
     registerRoute(fullPath, route);
   });
 });

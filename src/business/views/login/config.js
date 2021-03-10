@@ -25,7 +25,8 @@ export default function({ post }) {
       menu: null,
       logined: false,
       token: "",
-      userInfo: {}
+      userInfo: {},
+      permissions: []
     },
     getters: {
       getMenu(state) {
@@ -39,6 +40,9 @@ export default function({ post }) {
       },
       getToken(state) {
         return state.token;
+      },
+      getPermissions(state) {
+        return state.permissions;
       }
     },
     mutations: {
@@ -53,11 +57,15 @@ export default function({ post }) {
       },
       setToken(state, data) {
         state.token = data;
+      },
+      setPermissions(state, data) {
+        state.permissions = data;
       }
     },
     actions: {
       doLogin({ commit }, data) {
         commit("setToken", data.token);
+        commit("setPermissions", data.loginAuthVos);
       }
     }
   };
