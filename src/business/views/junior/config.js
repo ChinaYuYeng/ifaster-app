@@ -18,28 +18,32 @@ export default function({ post, get }) {
   const routes = {
     path: "/junior",
     meta: {
-      title: "下级管理"
+      title: "下级管理",
+      permission: "junior:view"
     },
     children: [
       {
         path: "invite",
         component: "./invite/page.vue",
         meta: {
-          title: "邀请注册"
+          title: "邀请注册",
+          permission: "junior:invite"
         }
       },
       {
         path: "detail",
         component: "./detail/page.vue",
         meta: {
-          title: "详情"
+          title: "详情",
+          permission: "junior:detail"
         }
       },
       {
         path: "auditList",
         component: "./auditList/page.vue",
         meta: {
-          title: "待审核列表"
+          title: "待审核列表",
+          permission: "junior:auditList"
         }
       }
     ]

@@ -66,9 +66,14 @@ export default {
     confirm() {
       return this.$apis.audit({ authList: this.result, id: this.getStaffInfo.id, status: 1 }).then(res => {
         if (res.code == 1) {
-          this.$toast.success("个人权限保存成功！");
-          this.$router.go(-1);
-          this.$router.go(-1);
+          if (this.$route.params.flag) {
+            this.$toast.success("个人权限保存成功！");
+            this.$router.go(-1);
+            this.$router.go(-1);
+          } else {
+            this.$toast.success("个人权限保存成功！");
+            this.$router.go(-1);
+          }
         } else {
           this.$toast.fail("个人权限保存失败！");
         }

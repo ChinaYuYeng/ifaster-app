@@ -2,7 +2,7 @@
   <AppLayout @onshow="getTemplateList">
     <Panel v-for="(item, index) in tempList" :key="index" class="temp__bar">
       <tempList :item="item">
-        <button class="addTemp__btn" @click="routerTo({ name: '/staff/authList', params: { auths: item.auths } })">使用此模板</button>
+        <button class="addTemp__btn" @click="routerTo({ name: '/staff/authList', params: { auths: item.auths, flag: true } })">使用此模板</button>
         <button class="delTemp__btn" @click="delTemp(item)">删除模板</button>
       </tempList>
     </Panel>

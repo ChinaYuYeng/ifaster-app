@@ -29,7 +29,8 @@ export default {
   },
   methods: {
     pass() {
-      return this.$router.push("/staff/permission");
+      this.$router.push("/staff/permission");
+      this.savePassFlag(true);
     },
     reject() {
       return this.$apis.audit({ id: this.staffData.id, status: 0 }).then(res => {
