@@ -22,7 +22,8 @@
           <span>{{ item.startTime }}</span>
           <!-- <span>营收：{{ item.payFee }}元</span>
           <span>实收：{{ item.realIncome }}元</span> -->
-          <van-button plain type="info" size="mini" @click="routerTo({ name: '/chargeOrder/detail', params: item })">查看详情</van-button>
+          <!-- <van-button plain type="info" size="mini" @click="routerTo({ name: '/chargeOrder/detail', params: item })">查看详情</van-button> -->
+          <van-button plain type="info" size="mini" @click="routerTo({ name: 'detail', params: item })">查看详情</van-button>
         </div>
       </Panel>
     </LoadList>
