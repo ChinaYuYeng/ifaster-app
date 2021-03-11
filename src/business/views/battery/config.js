@@ -33,39 +33,40 @@ export default function({ post }) {
   const routes = {
     path: "/battery",
     meta: {
-      title: "电池管理"
+      title: "电池管理",
+      permission: "battery:view"
     },
     children: [
       {
         path: "detail",
         component: "./detail/page.vue",
         meta: {
-          title: "电池详情"
+          title: "电池详情",
+          permission: "battery:detail"
         }
-      },
-      {
-        path: "edit",
-        component: "./edit/page.vue"
       },
       {
         path: "log",
         component: "./log/page.vue",
         meta: {
-          title: "累计解锁"
+          title: "累计解锁",
+          permission: "battery:log"
         }
       },
       {
         path: "puton",
         component: "./putOn/page.vue",
         meta: {
-          title: "电池上架"
+          title: "电池上架",
+          permission: "battery:puton"
         }
       },
       {
         path: "account",
         component: "./account/page.vue",
         meta: {
-          title: "分账信息"
+          title: "分账信息",
+          permission: "battery:account"
         }
       }
     ]

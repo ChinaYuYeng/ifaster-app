@@ -1,7 +1,5 @@
 <template>
   <AppLayout>
-    <!-- {{ name }}
-    {{ result }} -->
     <Panel>
       <van-cell title="模板"></van-cell>
       <van-cell title="模板名称">
@@ -13,30 +11,14 @@
       <van-collapse v-model="activeNames">
         <van-collapse-item v-for="(item, index) in perList" :key="index" :name="item.id">
           <div slot="title">
-            <van-checkbox-group v-model="result">
-              <van-checkbox checked-color="#55BABB" shape="square" icon-size="15px" :name="item.id">{{ item.name }}</van-checkbox>
-            </van-checkbox-group>
+            {{ item.name }}
           </div>
-          <van-collapse-item v-for="(item1, index) in item.child" :key="index" :name="item1.id">
-            <div slot="title">
-              <van-checkbox-group v-model="result">
-                <van-checkbox checked-color="#55BABB" shape="square" icon-size="15px" :name="item1.id">{{ item1.name }}</van-checkbox>
-              </van-checkbox-group>
-            </div>
-            <van-cell v-for="(item2, index) in item1.child" :key="index">
-              <van-checkbox-group v-model="result">
-                <van-checkbox checked-color="#55BABB" shape="square" icon-size="15px" :name="item2.id">{{ item2.name }}</van-checkbox>
-              </van-checkbox-group>
-            </van-cell>
-          </van-collapse-item>
+          <van-checkbox-group v-model="result">
+            <van-checkbox v-for="(item1, index) in item.child" :key="index" checked-color="#55BABB" shape="square" icon-size="15px" :name="item1.id">
+              {{ item1.name }}
+            </van-checkbox>
+          </van-checkbox-group>
         </van-collapse-item>
-        <!-- <van-checkbox-group v-model="result" ref="checkboxGroup">
-          <van-collapse-item v-for="(item, index) in perList" :key="index" :title="item.name" :name="item.id">
-            <van-cell v-for="(item1, index) in item.child" :key="index">
-              <van-checkbox checked-color="#55BABB" shape="square" icon-size="15px" :name="item1.id">{{ item1.name }}</van-checkbox>
-            </van-cell>
-          </van-collapse-item>
-        </van-checkbox-group> -->
       </van-collapse>
     </Panel>
     <template #body-bottom>
@@ -64,23 +46,6 @@ export default {
         this.perList = res.data;
       });
     },
-    searchTree(List) {
-      for (let i = 0; i < List.length; i++) {
-        let child = List[i].child;
-        if (this.result.indexOf(List[i].id) != -1) {
-          if (List[i].parentId != 0 && this.result.indexOf(List[i].parentId) == -1) {
-            // console.log(List[i].name);
-            this.result.splice(
-              this.result.findIndex(item => item == List[i].id),
-              1
-            );
-          }
-        }
-        if (child != []) {
-          this.searchTree(child);
-        }
-      }
-    },
     confirm() {
       let dataForm = {};
       dataForm.name = this.name;
@@ -95,18 +60,6 @@ export default {
         }
       });
     }
-  },
-  watch: {
-    result: {
-      handler: function() {
-        this.searchTree(this.perList);
-      },
-      deep: true,
-      immediate: true
-    }
-  },
-  components: {
-    // perList
   }
 };
 </script>
