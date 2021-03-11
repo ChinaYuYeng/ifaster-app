@@ -9,7 +9,7 @@
           <i class="iconfont" :class="{ online: isOnline }">&#xe65f;</i>
         </div>
         <p class="value">{{ this.statusData.isOnlineDesc }}</p>
-        <button class="btn" @click="getOnlineStatus()">检测</button>
+        <button class="btn" @click="getOnlineStatus()" v-if="checkAuth('pile:online')">检测</button>
       </van-col>
       <van-col :span="8">
         <p class="title">
@@ -19,7 +19,7 @@
           <i class="iconfont" :class="{ operate: isOperate }">&#xe65a;</i>
         </div>
         <p class="value">{{ this.statusData.statusDesc }}</p>
-        <button class="btn" @click="setOperateStatus()">设置</button>
+        <button class="btn" @click="setOperateStatus()" v-if="checkAuth('pile:status')">设置</button>
       </van-col>
       <van-col :span="8">
         <p class="title">
@@ -29,7 +29,7 @@
           <i class="iconfont" :class="{ charge: isCharge }">&#xe687;</i>
         </div>
         <p class="value">{{ this.statusData.chargeStatusDesc }}</p>
-        <button class="btn" @click="getUseStatus()">刷新</button>
+        <button class="btn" @click="getUseStatus()" v-if="checkAuth('pile:use')">刷新</button>
       </van-col>
     </van-row>
   </div>

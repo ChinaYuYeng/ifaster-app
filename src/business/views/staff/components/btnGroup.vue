@@ -1,7 +1,7 @@
 <template>
   <div>
     <SubmitBtn :onSubmit="leftFunc" class="staff_reject_btn" :text="leftbtn"></SubmitBtn>
-    <SubmitBtn :onSubmit="rightFunc" class="staff_submit_btn" :text="rightbtn"></SubmitBtn>
+    <van-button @click="rightFunc" class="staff_submit_btn" :text="rightbtn"></van-button>
   </div>
 </template>
 
@@ -39,6 +39,8 @@ export default {
   font-size: 13px;
 }
 .staff_submit_btn {
+  background-color: #55babb;
+  color: #fff;
   width: 30%;
   margin-left: 10%;
   border-radius: 7px;
