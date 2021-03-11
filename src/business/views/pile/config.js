@@ -33,28 +33,32 @@ export default function({ post }) {
   const routes = {
     path: "/pile",
     meta: {
-      title: "电桩管理"
+      title: "电桩管理",
+      permission: "pile:view"
     },
     children: [
       {
         path: "detail",
         component: "./detail/page.vue",
         meta: {
-          title: "电桩详情"
+          title: "电桩详情",
+          permission: "pile:detail"
         }
       },
       {
         path: "edit",
         component: "./edit/page.vue",
         meta: {
-          title: "电桩imei"
+          title: "电桩编辑",
+          permission: "pile:edit"
         }
       },
       {
         path: "account",
         component: "./account/page.vue",
         meta: {
-          title: "分账信息"
+          title: "分账信息",
+          permission: "pile:account"
         }
       }
     ]

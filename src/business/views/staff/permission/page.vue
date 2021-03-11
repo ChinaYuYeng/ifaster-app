@@ -1,6 +1,6 @@
 <template>
   <AppLayout @onshow="getStaffDetail">
-    <!-- {{ this.getStaffInfo }} -->
+    {{ this.$route.params.passFlag }}
     <Panel>
       <UserInfo class="user__info">
         <span>{{ staffData.cnName }}</span>
@@ -36,7 +36,13 @@ export default {
       });
     },
     save() {
-      return this.$router.push("/staff");
+      if (this.getPassFlag) {
+        this.$router.go(-1);
+        this.$router.go(-1);
+        this.savePassFlag(false);
+      } else {
+        this.$router.go(-1);
+      }
     },
     deleteStaff() {
       return this.$apis.audit({ id: this.staffData.id, status: 0 }).then(res => {
