@@ -151,9 +151,9 @@ export default {
       this.dataForm.onRentPointName = item.name;
     },
     getOnlineStatus() {
+      //刷新在线状态
       if (this.getFlag) {
         this.$toast.fail("当前权限不可操作！");
-        // console.log("当前权限不可操作");
       } else {
         let id = this.getbatteryDetail.id;
         this.$apis.online({ id: id }).then(res => {
@@ -166,6 +166,7 @@ export default {
       }
     },
     forceUnlock() {
+      //运营商强锁
       if (this.getbatteryDetail.relationType != -1) {
         this.isShowPicker1 = true;
       } else {
@@ -173,6 +174,7 @@ export default {
       }
     },
     temporaryUnlock() {
+      //运营商临时改变锁状态
       if (this.getFlag) {
         this.$toast.fail("当前权限不可操作!");
       } else {
@@ -180,6 +182,7 @@ export default {
       }
     },
     setSelectColumn2() {
+      //临时解锁时间选择
       for (let i = 0; i < 25; i++) {
         this.selectColumn2[0].values.push(i + "小时");
       }
@@ -188,23 +191,52 @@ export default {
       }
     },
     onConfirm1(index, value) {
-      this.$apis.force({ batteryId: this.getbatteryInfo.id, forceLockStatus: value[0] }).then(() => {
-        this.getBatteryDetail();
-        this.isShowPicker1 = false;
+      //运营商强锁确定
+      this.$apis.force({ batteryId: this.getbatteryInfo.id, forceLockStatus: value[0] }).then(res => {
+        if (res.code == 1) {
+          this.$toast.success("运营商强锁成功！");
+          this.getBatteryDetail();
+          this.isShowPicker1 = false;
+        } else {
+          this.$toast.success("运营商强锁失败！");
+          this.isShowPicker1 = false;
+        }
       });
     },
     onCancel() {
       this.isShowPicker = false;
     },
     onConfirm(index, value) {
+      //运营商选择临时改变锁状态，解锁或锁定
       this.temporaryLockStatus = value[0];
-      this.isShowPicker = false;
-      this.isShowPicker2 = true;
+      if (this.temporaryLockStatus == 1) {
+        //选择锁定
+        this.$apis
+          .temporary({
+            batteryId: this.getbatteryInfo.id,
+            temporaryLockStatus: this.temporaryLockStatus
+          })
+          .then(res => {
+            if (res.code == 1) {
+              this.$toast.success("运营商临时锁定成功！");
+              this.getBatteryDetail();
+              this.isShowPicker = false;
+            } else {
+              this.$toast.success("运营商临时锁定失败！");
+              this.isShowPicker = false;
+            }
+          });
+      } else {
+        //选择解锁
+        this.isShowPicker = false;
+        this.isShowPicker2 = true;
+      }
     },
     onCancel1() {
       this.isShowPicker1 = false;
     },
     onConfirm2(index, value) {
+      //运营商临时解锁选择时间
       let min = value[0] * 60 + value[1] + 1;
       this.$apis
         .temporary({
@@ -212,8 +244,16 @@ export default {
           temporaryLockStatus: this.temporaryLockStatus,
           temporaryLockTime: min
         })
-        .then(() => {});
-      this.isShowPicker2 = false;
+        .then(res => {
+          if (res.code == 1) {
+            this.$toast.success("运营商临时解锁成功！");
+            this.getBatteryDetail();
+            this.isShowPicker2 = false;
+          } else {
+            this.$toast.success("运营商临时解锁失败！");
+            this.isShowPicker2 = false;
+          }
+        });
     },
     onCancel2() {
       this.isShowPicker2 = false;

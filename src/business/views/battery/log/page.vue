@@ -10,7 +10,7 @@
           <span class="item__label">操作人员:</span>
           <span>{{ item.operatorName }}</span>
         </div>
-        <div class="content__item">
+        <div class="content__item" v-if="item.type == '临时解锁'">
           <span class="item__label">操作时长(分钟):</span>
           <span>{{ item.duration }}</span>
         </div>
