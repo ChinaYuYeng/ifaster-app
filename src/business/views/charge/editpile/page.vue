@@ -6,9 +6,6 @@
         <van-field v-model="formData.name" label="模板名称：" placeholder="请输入模板名称" input-align="right" />
         <van-field name="uploader" label="设备图片：">
           <template #input>
-            <!-- <van-uploader :after-read="Uploader">
-              <img width="50px" :src="formData.img" alt="" />
-            </van-uploader> -->
             <van-uploader class="mt-3" :max-size="3 * 1024 * 1024" :before-read="beforeRead" @oversize="onOversize">
               <img width="50px" :src="formData.img" alt="" />
             </van-uploader>
@@ -18,23 +15,25 @@
       <Panel>
         <div class="cell-h">按设备：</div>
         <van-field
-          v-for="item in formData.price.once"
+          v-for="(item, index) in formData.price.once"
           v-model="item.price"
           type="number"
           :label="'型号 (元/次)：' + item.type"
           placeholder="0"
           input-align="right"
+          :key="index"
         />
       </Panel>
       <Panel>
         <div class="cell-h">按时长</div>
         <van-field
-          v-for="item in formData.price.time"
+          v-for="(item, index) in formData.price.time"
           v-model="item.price"
           type="number"
           :label="item.type + '分钟'"
           placeholder="0"
           input-align="right"
+          :key="index"
         />
       </Panel>
     </van-form>
