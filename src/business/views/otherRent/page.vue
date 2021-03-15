@@ -1,7 +1,7 @@
 <template>
   <AppLayout @onshow="showOtherRent">
     <van-row class="row">
-      <van-col span="6"><SidebarIndex :bars="bars" ref="leftSidebar"></SidebarIndex></van-col>
+      <van-col span="6"><SidebarIndex :bars="bars" ref="leftSidebar" :sideBarActive="sideBarActive"></SidebarIndex></van-col>
       <van-col span="18">
         <div v-for="(box, index) in boxes" :key="index">
           <van-row>
@@ -12,16 +12,20 @@
             </van-col>
           </van-row>
           <van-row>
-            <van-col class="row"><CollapseIndex :collapses="box.children" :errIcon="defaultIcon"></CollapseIndex></van-col>
+            <van-col class="row">
+              <CollapseIndex :collapses="box.children" :errIcon="defaultIcon" :activeIndex="getActiveIndex(index)"></CollapseIndex>
+            </van-col>
           </van-row>
         </div>
       </van-col>
     </van-row>
-    <van-row class="row action-bar" v-if="showAction">
-      <van-col span="24">
-        <ActionBar :btns="btns" :summary="summary"></ActionBar>
-      </van-col>
-    </van-row>
+    <template #body-bottom>
+      <van-row class="row action-bar" v-if="showAction">
+        <van-col span="24">
+          <ActionBar :btns="btns" :summary="summary"></ActionBar>
+        </van-col>
+      </van-row>
+    </template>
   </AppLayout>
 </template>
 
@@ -43,7 +47,8 @@ export default {
       bars: [],
       boxes: [],
       btns: [],
-      defaultIcon: ""
+      defaultIcon: "",
+      sideBarActive: 0
     };
   },
   created() {
@@ -59,6 +64,8 @@ export default {
     this.btns.push(btn);
 
     this.defaultIcon = this.batteryImg;
+    this.sideBarActive = 0;
+    this.setSideBarActive(0);
   },
   mounted() {},
   computed: {
@@ -90,6 +97,13 @@ export default {
     }
   },
   methods: {
+    getActiveIndex(index) {
+      if (index == 0) {
+        return 0;
+      } else {
+        return -1;
+      }
+    },
     // 取消其他门店的选中状态
     changeOtherCollapse(checkedId) {
       this.boxes.forEach(b => {
@@ -106,7 +120,8 @@ export default {
       this.children = [];
       this.getManagerInfo();
     },
-    updateData(bar) {
+    updateData(bar, index) {
+      this.setSideBarActive(index);
       this.setManager({ operatorName: bar.name, operatorMobile: bar.mobile });
       this.getBatteryInfo(bar.id);
     },
@@ -140,8 +155,8 @@ export default {
             });
             console.log(this.bars);
             if (r.data.length > 0) {
-              this.setManager(r.data[0]);
-              this.getBatteryInfo(r.data[0].operatorId);
+              this.setManager(r.data[this.getSideBarActive]);
+              this.getBatteryInfo(r.data[this.getSideBarActive].operatorId);
             }
           }
         })
@@ -245,8 +260,6 @@ export default {
   width: 100%;
 }
 .action-bar {
-  position: absolute;
-  bottom: 0;
   text-align: center;
 }
 .header-cell {

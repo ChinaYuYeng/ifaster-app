@@ -4,7 +4,7 @@
     <van-field label="店员手机" label-width="100px" placeholder="请输入手机号码" v-model="searchForm.mobile" />
     <Select
       label-width="100px"
-      label="类型"
+      label="租还点"
       placeholder="请选择租还点"
       v-model="searchForm.rentPointId"
       :options="point"

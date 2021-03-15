@@ -51,7 +51,6 @@ export default {
 
 <style lang="less" scoped>
 .width-100 {
-  width: 100%;
   justify-content: flex-end;
 }
 .floatFoot {

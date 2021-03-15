@@ -8,6 +8,7 @@
       :summary="summary"
       :errIcon="defaultIcon"
       :collapseHeader="collapseHeader"
+      :sideBarActive="sideBarActive"
     ></SidebarCollapse>
   </AppLayout>
 </template>
@@ -36,11 +37,12 @@ export default {
       children: [],
       btns: [],
       summary: null,
-      defaultIcon: ""
+      defaultIcon: "",
+      sideBarActive: ""
     };
   },
   created() {
-    debugger;
+    this.sideBarActive = 0;
     this.getPointInfo();
     // 底部按钮
     const _this = this;
@@ -56,12 +58,12 @@ export default {
     this.btns.push(btnChangeB);
 
     this.defaultIcon = this.batteryImg;
+    this.setPointIndex(0);
   },
   mounted() {
     const _this = this;
     this.$nextTick(() => {
       this.$watch("$refs.mySidebarCollapse.$refs.leftSidebar.active", val => {
-        // debugger;
         this.btns = [];
         if (this.bars[val].id > 0) {
           this.btns.push({
@@ -102,9 +104,37 @@ export default {
     },
     showShelf() {
       this.children = [];
+      this.sideBarActive = this.getPointIndex;
       this.getPointInfo();
+      const _this = this;
+      this.$nextTick(() => {
+        this.$watch("$refs.mySidebarCollapse.$refs.leftSidebar.active", val => {
+          this.btns = [];
+          if (this.bars[val].id > 0) {
+            this.btns.push({
+              id: 1,
+              name: "批量下架",
+              click: function() {
+                _this.getDown();
+              },
+              route: "/shelf/getOff"
+            });
+          } else {
+            this.btns.push({
+              id: 2,
+              name: "批量上架",
+              click: function() {
+                _this.getOn();
+              },
+              route: "/shelf/getOn"
+            });
+          }
+        });
+      });
     },
-    updateData(bar) {
+    updateData(bar, index) {
+      // let bar = this.bars[index];
+      this.setPointIndex(index);
       this.collapseHeader = bar.name;
       this.getPointPutawayList(bar.id);
     },
@@ -142,8 +172,8 @@ export default {
             this.bars = r.data;
             this.bars.push({ id: 0, name: "未上架", shortName: "未上架" });
             if (r.data.length > 0) {
-              this.collapseHeader = r.data[0].name;
-              this.getPointPutawayList(r.data[0].id);
+              this.collapseHeader = r.data[this.getPointIndex].name;
+              this.getPointPutawayList(r.data[this.getPointIndex].id);
             } else {
               this.collapseHeader = "";
             }

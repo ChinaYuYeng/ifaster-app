@@ -12,6 +12,10 @@ export default {
     bars: {
       type: Array,
       required: true
+    },
+    sideBarActive: {
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -21,13 +25,16 @@ export default {
     };
   },
   mounted() {},
-  created() {},
+  created() {
+    if (this.sideBarActive >= 0) {
+      this.active = this.sideBarActive;
+    }
+  },
   methods: {
     onChange(index) {
-      debugger;
       this.loading = true;
       this.active = index;
-      this.updateData(this.bars[index]);
+      this.updateData(this.bars[index], index);
     }
   },
   watch: {}

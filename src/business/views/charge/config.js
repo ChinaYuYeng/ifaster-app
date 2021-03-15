@@ -22,31 +22,10 @@ export default function({ post, get }) {
     ]
   };
   const apis = {
-    // rent: {
-    //   getRentInfo(params) {
-    //     return post("/rent/rate/list", params);
-    //   }
-    // },
-    // pile: {
-    //   getPileInfo(params) {
-    //     return post("/charge/rate/list", params);
-    //   }
-    // }
-    // scope: {
-    //   rent(params) {
-    //     return post("/rent/rate/list", params); // 租赁收费设置
-    //   },
-    //   pile(params) {
-    //     return post("/charge/rate/list", params); // 充电收费设置
-    //   }
-    // }
-    uploadImg(file) {
-      const param = new FormData();
-      param.append("file", file.file);
-      return post("http://dev.issks.com/issksimg/upload", param, {
+    uploadImage(formData) {
+      return post("http://dev.issks.com/issksimg/upload/", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
-      // return post("http://dev.issks.com/issksimg/upload", params);
     },
     // 租赁
     getRentList(params) {

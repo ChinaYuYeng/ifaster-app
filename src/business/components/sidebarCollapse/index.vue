@@ -1,9 +1,9 @@
 <template>
   <div class="wrap">
     <van-row class="row">
-      <van-col span="6"><SidebarIndex :bars="bars" ref="leftSidebar"></SidebarIndex></van-col>
+      <van-col span="6"><SidebarIndex :bars="bars" ref="leftSidebar" :sideBarActive="sideBarActive"></SidebarIndex></van-col>
       <van-col span="18">
-        <van-row>
+        <van-row v-if="collapseHeader != ''">
           <van-col class="row">
             <van-cell-group>
               <van-cell :value="collapseHeader" value-class="header-cell" />
@@ -11,7 +11,7 @@
           </van-col>
         </van-row>
         <van-row>
-          <van-col class="row"><CollapseIndex :collapses="children" :errIcon="errIcon"></CollapseIndex></van-col>
+          <van-col class="row"><CollapseIndex :collapses="children" :errIcon="errIcon" :activeIndex="0"></CollapseIndex></van-col>
         </van-row>
       </van-col>
     </van-row>
@@ -49,6 +49,10 @@ export default {
     },
     collapseHeader: {
       type: String
+    },
+    sideBarActive: {
+      type: Number,
+      default: 0
     }
   },
   inject: ["setSelected"],
@@ -76,7 +80,6 @@ export default {
   methods: {},
   computed: {
     summary() {
-      // debugger;
       let sum = "";
       let seleted = this.children.find(c => c.checked == true);
       if (seleted) {
@@ -114,7 +117,6 @@ export default {
     },
     children: {
       handler: function() {
-        debugger;
         this.setSelected();
         return this.summary;
       },

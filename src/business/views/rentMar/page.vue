@@ -1,5 +1,5 @@
 <template>
-  <AppLayout :onRefresh="onRefresh">
+  <AppLayout :onRefresh="onRefresh" @onshow="onRefresh">
     <LoadList :loadStatus="loadStatus">
       <van-cell center v-for="(item, index) in dataList" :key="index" is-link @click="routerTo({ name: '/rentMar/detail', params: item })">
         <template #title>
@@ -11,6 +11,9 @@
             <van-tag type="success" v-if="item.otherPlaceReturn">异地收</van-tag>
             <van-tag type="success" v-if="item.otherPointReturn">异点收</van-tag>
           </div>
+        </template>
+        <template #extra v-if="getSelectMod">
+          <van-button size="small" icon="plus" style="margin-left:20px;" @click.stop="selectItem(item)"></van-button>
         </template>
       </van-cell>
     </LoadList>
@@ -27,15 +30,22 @@ export default {
   data() {
     return {
       dataList: [],
-      routeData: this.$route.params
+      routeAction: {}
     };
   },
-  created() {
+  activated() {
+    this.routeAction = this.$route.params.$$action || {};
     this.setListLoader(this.$apis.getPointList);
+    // 是否开启列表选择模式
+    this.setSelectMod(!!this.routeAction.selectItem);
   },
   methods: {
     onRefresh() {
       return this.setListLoader();
+    },
+    selectItem(item) {
+      this.routeAction.selectItem(item);
+      this.$router.back();
     }
   }
 };

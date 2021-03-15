@@ -8,8 +8,8 @@
         <div class="font__bar">
           <i class="iconfont" :class="{ online: isOnline }">&#xe617;</i>
         </div>
-        <p class="value">当前状态：{{ this.statusData.isOnlineDesc }}</p>
-        <button class="btn" @click="getOnline">检测</button>
+        <p class="value">{{ this.statusData.isOnlineDesc }}</p>
+        <button class="btn" @click="getOnline" v-if="checkAuth('battery:online')">检测</button>
       </van-col>
       <van-col :span="8">
         <p class="title">
@@ -18,8 +18,8 @@
         <div class="font__bar">
           <i class="iconfont" :class="{ lock: isLock }">&#xe658;</i>
         </div>
-        <p class="value">当前状态：{{ this.statusData.lockStatusDesc }}</p>
-        <button class="btn" @click="forceUnlock">锁定</button>
+        <p class="value">{{ this.statusData.lockStatusDesc }}</p>
+        <button class="btn" @click="forceUnlock" v-if="checkAuth('battery:forceLock')">锁定</button>
       </van-col>
       <van-col :span="8">
         <p class="title">
@@ -28,8 +28,8 @@
         <div class="font__bar">
           <i class="iconfont">&#xe659;</i>
         </div>
-        <p class="value">当前状态：{{ this.statusData.lockStatusDesc }}</p>
-        <button class="btn" @click="temporaryUnlock">解锁</button>
+        <p class="value">{{ this.statusData.lockStatusDesc }}</p>
+        <button class="btn" @click="temporaryUnlock" v-if="checkAuth('battery:temporaryLock')">解锁</button>
       </van-col>
     </van-row>
   </div>

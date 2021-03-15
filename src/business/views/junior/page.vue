@@ -1,8 +1,12 @@
 <template>
   <AppLayout>
-    <!-- {{ history }} -->
     <Panel>
       <item :dataItem="listTop" :hasDetail="true" :godetail="godetail" :hasArrow="false"></item>
+    </Panel>
+    <Panel v-if="history.length == 1">
+      <van-cell title="待审核">
+        <span class="check_audit_btn" @click="routerTo({ name: '/junior/auditList' })">查看审核列表</span>
+      </van-cell>
     </Panel>
     <Panel>
       <van-cell title="下级情况"><span class="back" @click="back" v-if="history.length > 1">返回上一级</span></van-cell>
@@ -28,7 +32,8 @@ export default {
       operate: "",
       history: [],
       listTop: {},
-      listData: []
+      listData: [],
+      auditList: []
     };
   },
   created() {
@@ -85,5 +90,13 @@ export default {
   border-radius: 5px;
   font-size: 5px;
   padding: 3px 5px;
+}
+
+.check_audit_btn {
+  border: 1px solid #55babb;
+  border-radius: 5px;
+  color: #fff;
+  background-color: #55babb;
+  padding: 2px 10px;
 }
 </style>

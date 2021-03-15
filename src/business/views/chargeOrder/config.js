@@ -11,14 +11,17 @@ export default function({ post }) {
     path: "/chargeOrder",
     component: "./page.vue",
     meta: {
-      title: "充电订单列表"
+      title: "充电订单列表",
+      permission: "charge:order:view"
     },
     children: [
       {
         path: "detail",
         component: "./detail/page.vue",
         meta: {
-          title: "充电订单详情"
+          title: "充电订单详情",
+          permission: "charge:order:detail",
+          export: true
         }
       }
     ]

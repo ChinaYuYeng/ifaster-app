@@ -122,7 +122,7 @@
 export default {
   data() {
     return {
-      activeName: "1",
+      activeName: "",
       routeData: this.$route.params
     };
   },

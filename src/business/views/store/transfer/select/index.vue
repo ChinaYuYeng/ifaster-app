@@ -5,11 +5,15 @@
         label="手机号："
         shape="round"
         placeholder="请输入对方手机号码"
-        right-icon="search"
         left-icon=""
+        maxlength="11"
         @search="onSearch"
         v-model="searchForm.mobile"
-      />
+      >
+        <template #right-icon>
+          <van-icon name="search" @click="onSearch" />
+        </template>
+      </van-search>
     </template>
     <van-cell center v-for="item in dataList" :key="item.id">
       <UserInfo>
@@ -36,6 +40,10 @@ export default {
   },
   methods: {
     onSearch() {
+      if (this.searchForm.mobile.length < 6) {
+        this.$toast("最少输入6位数字");
+        return;
+      }
       this.$apis.search({ ...this.searchForm }).then(res => {
         this.dataList = res.data;
       });
@@ -51,7 +59,6 @@ export default {
           saleType: 0,
           targetOperatorId: id
         };
-        debugger;
         this.$apis.battery.operate(params).then(res => {
           if (res.code == "1") {
             this.$toast.success(res.msg);
@@ -70,9 +77,7 @@ export default {
           saleType: 0,
           targetOperatorId: id
         };
-        debugger;
         this.$apis.pile.operate(params).then(res => {
-          debugger;
           if (res.code == "1") {
             this.$toast.success(res.msg);
             this.$router.push({ path: "/store" });

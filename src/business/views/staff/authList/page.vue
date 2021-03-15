@@ -1,12 +1,6 @@
 <template>
   <AppLayout>
     <Panel>
-      <van-cell title="模板"></van-cell>
-      <van-cell title="模板名称">
-        <van-field v-model="name" placeholder="请输入模板名称" class="input__bar" />
-      </van-cell>
-    </Panel>
-    <Panel>
       <van-cell title="权限"></van-cell>
       <van-collapse v-model="activeNames">
         <van-collapse-item v-for="(item, index) in perList" :key="index" :name="item.id">
@@ -22,7 +16,7 @@
       </van-collapse>
     </Panel>
     <template #body-bottom>
-      <SubmitBtn :onSubmit="confirm" text="确定"></SubmitBtn>
+      <SubmitBtn :onSubmit="confirm" text="保存"></SubmitBtn>
     </template>
   </AppLayout>
 </template>
@@ -31,28 +25,33 @@
 export default {
   data() {
     return {
-      name: "",
       activeNames: [],
       result: [],
       perList: []
     };
   },
   created() {
-    this.getAuthData();
+    this.getAuthList();
+    this.getEditData();
   },
   methods: {
     getEditData() {
-      this.result = this.$route.params.data.auths;
-      this.name = this.$route.params.data.name;
+      if (this.$route.params.auths) {
+        console.log(this.$route.params);
+        this.result = this.$route.params.auths;
+        this.hasChecked(this.perList);
+      } else {
+        console.log(this.getStaffInfo);
+        this.result = this.getStaffInfo.authList || [];
+        this.hasChecked(this.perList);
+      }
     },
-    getAuthData() {
+    getAuthList() {
       this.$apis.authList().then(res => {
-        this.getEditData();
         this.perList = res.data;
         this.hasChecked(res.data);
       });
     },
-
     hasChecked(List) {
       for (let i = 0; i < List.length; i++) {
         let child = List[i].child;
@@ -65,17 +64,18 @@ export default {
       }
     },
     confirm() {
-      let dataForm = {};
-      dataForm.name = this.name;
-      dataForm.auths = this.result;
-      dataForm.id = this.$route.params.data.id;
-      return this.$apis.templateEdit(dataForm).then(res => {
-        console.log(res.data);
+      return this.$apis.audit({ authList: this.result, id: this.getStaffInfo.id, status: 1 }).then(res => {
         if (res.code == 1) {
-          this.$toast.success("权限模板保存成功！");
-          this.$router.go(-1);
+          if (this.$route.params.flag) {
+            this.$toast.success("个人权限保存成功！");
+            this.$router.go(-1);
+            this.$router.go(-1);
+          } else {
+            this.$toast.success("个人权限保存成功！");
+            this.$router.go(-1);
+          }
         } else {
-          this.$toast.fail("权限模板保存失败！");
+          this.$toast.fail("个人权限保存失败！");
         }
       });
     }

@@ -103,12 +103,12 @@ export default {
     },
     //进入新增--租赁--模板页面
     addRentM() {
-      console.log("11--进入新增--租赁--模板页面");
+      // console.log("11--进入新增--租赁--模板页面");
       this.$router.push({ name: "/charge/editrent", params: { a: 1 } });
     },
     //进入新增--充电--模板页面
     addPileM() {
-      console.log("22");
+      // console.log("22--进入新增--充电--模板页面");
       this.$router.push({ name: "/charge/editpile", params: { a: 1 } });
     },
     // 操作Tab选项卡按钮时的方法

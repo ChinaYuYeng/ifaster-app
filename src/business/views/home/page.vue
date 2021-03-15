@@ -16,7 +16,15 @@
               <small>历史充电收益</small>
               <h5 class="income__num">{{ operator.chargeCurrentIncome }}</h5>
               <small>当前充电收益</small>
-              <van-button round size="mini" @click="routerTo({ name: '/report', params: { orderType: 1 } })" class="mtop10">查看详情</van-button>
+              <van-button
+                round
+                size="mini"
+                @click="routerTo({ name: '/report', params: { orderType: 1 } })"
+                class="mtop10"
+                v-if="checkAuth('report:charge:view')"
+              >
+                查看详情
+              </van-button>
             </div>
           </van-col>
           <van-col span="12">
@@ -26,7 +34,15 @@
               <small>历史租赁收益</small>
               <h5 class="income__num">{{ operator.rentCurrentIncome }}</h5>
               <small>当前租赁收益</small>
-              <van-button round size="mini" @click="routerTo({ name: '/report', params: { orderType: 2 } })" class="mtop10">查看详情</van-button>
+              <van-button
+                round
+                size="mini"
+                @click="routerTo({ name: '/report', params: { orderType: 2 } })"
+                class="mtop10"
+                v-if="checkAuth('report:rent:view')"
+              >
+                查看详情
+              </van-button>
             </div>
           </van-col>
         </van-row>
@@ -103,7 +119,7 @@ export default {
       operator: {}
     };
   },
-  created() {
+  activated() {
     this.onRefresh();
   },
   methods: {
