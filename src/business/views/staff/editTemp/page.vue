@@ -1,8 +1,5 @@
 <template>
   <AppLayout>
-    <!-- {{ name }}
-    {{ result }}
-    {{ activeNames }} -->
     <Panel>
       <van-cell title="模板"></van-cell>
       <van-cell title="模板名称">
@@ -14,22 +11,13 @@
       <van-collapse v-model="activeNames">
         <van-collapse-item v-for="(item, index) in perList" :key="index" :name="item.id">
           <div slot="title">
-            <van-checkbox-group v-model="result">
-              <van-checkbox checked-color="#55BABB" shape="square" icon-size="15px" :name="item.id">{{ item.name }}</van-checkbox>
-            </van-checkbox-group>
+            {{ item.name }}
           </div>
-          <van-collapse-item v-for="(item1, index) in item.child" :key="index" :name="item1.id">
-            <div slot="title">
-              <van-checkbox-group v-model="result">
-                <van-checkbox checked-color="#55BABB" shape="square" icon-size="15px" :name="item1.id">{{ item1.name }}</van-checkbox>
-              </van-checkbox-group>
-            </div>
-            <van-cell v-for="(item2, index) in item1.child" :key="index">
-              <van-checkbox-group v-model="result">
-                <van-checkbox checked-color="#55BABB" shape="square" icon-size="15px" :name="item2.id">{{ item2.name }}</van-checkbox>
-              </van-checkbox-group>
-            </van-cell>
-          </van-collapse-item>
+          <van-checkbox-group v-model="result">
+            <van-checkbox v-for="(item1, index) in item.child" :key="index" checked-color="#55BABB" shape="square" icon-size="15px" :name="item1.id">
+              {{ item1.name }}
+            </van-checkbox>
+          </van-checkbox-group>
         </van-collapse-item>
       </van-collapse>
     </Panel>
@@ -50,34 +38,29 @@ export default {
     };
   },
   created() {
-    this.getAuthList();
-    this.getEditData();
+    this.getAuthData();
   },
   methods: {
     getEditData() {
-      this.activeNames = this.$route.query.data.auths;
-      this.result = this.$route.query.data.auths;
-      this.name = this.$route.query.data.name;
+      this.result = this.$route.params.data.auths;
+      this.name = this.$route.params.data.name;
     },
-    getAuthList() {
+    getAuthData() {
       this.$apis.authList().then(res => {
+        this.getEditData();
         this.perList = res.data;
+        this.hasChecked(res.data);
       });
     },
-    searchTree(List) {
+
+    hasChecked(List) {
       for (let i = 0; i < List.length; i++) {
         let child = List[i].child;
-        if (this.result.indexOf(List[i].id) != -1) {
-          if (List[i].parentId != 0 && this.result.indexOf(List[i].parentId) == -1) {
-            // console.log(List[i].name);
-            this.result.splice(
-              this.result.findIndex(item => item == List[i].id),
-              1
-            );
+        for (let j = 0; j < child.length; j++) {
+          if (this.result.indexOf(child[j].id) != -1) {
+            this.activeNames.push(List[i].id);
+            this.activeNames = [...new Set(this.activeNames)];
           }
-        }
-        if (child != []) {
-          this.searchTree(child);
         }
       }
     },
@@ -85,24 +68,17 @@ export default {
       let dataForm = {};
       dataForm.name = this.name;
       dataForm.auths = this.result;
-      dataForm.id = this.$route.query.data.id;
-      this.$apis.templateEdit(dataForm).then(res => {
+      dataForm.id = this.$route.params.data.id;
+      return this.$apis.templateEdit(dataForm).then(res => {
         console.log(res.data);
+        if (res.code == 1) {
+          this.$toast.success("权限模板保存成功！");
+          this.$router.go(-1);
+        } else {
+          this.$toast.fail("权限模板保存失败！");
+        }
       });
-      this.$router.go(-1);
     }
-  },
-  watch: {
-    result: {
-      handler: function() {
-        this.searchTree(this.perList);
-      },
-      deep: true,
-      immediate: true
-    }
-  },
-  components: {
-    // perList
   }
 };
 </script>

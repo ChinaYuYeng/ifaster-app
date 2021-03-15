@@ -1,6 +1,6 @@
 <template>
-  <AppLayout>
-    <!-- {{ dataForm }} -->
+  <AppLayout @onshow="getStaffDetail">
+    {{ this.$route.params.passFlag }}
     <Panel>
       <UserInfo class="user__info">
         <span>{{ staffData.cnName }}</span>
@@ -10,8 +10,9 @@
     <Panel>
       <van-cell title="姓名：" :value="staffData.cnName"></van-cell>
       <van-cell title="电话：" :value="staffData.mobile"></van-cell>
-      <van-cell title="选择权限模板：" is-link @click="gotoTemp"></van-cell>
-      <btnGroup :leftbtn="'删除店员'" :rightbtn="'保 存'" :leftFunc="deleteStaff" :rightFunc="save"></btnGroup>
+      <van-cell title="选择权限模板：" is-link @click="routerTo({ name: '/staff/template' })"></van-cell>
+      <van-cell title="个人权限" is-link @click="routerTo({ name: '/staff/authList' })"></van-cell>
+      <btnGroup :leftbtn="'删除店员'" :rightbtn="'确 定'" :leftFunc="deleteStaff" :rightFunc="save"></btnGroup>
     </Panel>
   </AppLayout>
 </template>
@@ -21,46 +22,38 @@ import btnGroup from "../components/btnGroup";
 export default {
   data() {
     return {
-      staffData: {},
-      templateName: "",
-      dataForm: {
-        id: "",
-        status: "",
-        template: ""
-      }
+      staffData: {}
     };
   },
-
   created() {
     this.staffData = this.getStaffInfo;
-    console.log(this.getTemplateInfo);
     this.getStaffDetail();
   },
   methods: {
-    gotoTemp() {
-      this.$router.push("/staff/template");
-    },
     getStaffDetail() {
       this.$apis.detail({ id: this.staffData.id }).then(res => {
-        // console.log(res.data);
-        this.templateName = res.data.templateName;
-        this.dataForm.id = this.staffData.id;
-        this.dataForm.status = 1;
-        this.dataForm.template = res.data.templateId;
+        this.saveMessage(res.data);
       });
     },
-
     save() {
-      this.$apis.audit(this.dataForm).then(res => {
-        console.log(res.data);
-        this.$router.push("/staff");
-      });
+      if (this.getPassFlag) {
+        this.$router.go(-1);
+        this.$router.go(-1);
+        this.savePassFlag(false);
+      } else {
+        this.$router.go(-1);
+      }
     },
     deleteStaff() {
-      this.$apis.audit({ id: this.staffData.id, status: 0 }).then(res => {
+      return this.$apis.audit({ id: this.staffData.id, status: 0 }).then(res => {
         console.log(res.data);
+        if (res.code == 1) {
+          this.$toast.success("已成功删除该店员！");
+          this.$router.push("/staff");
+        } else {
+          this.$toast.fail("删除店员失败！");
+        }
       });
-      this.$router.push("/staff");
     }
   },
   components: {

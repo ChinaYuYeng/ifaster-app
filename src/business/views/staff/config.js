@@ -1,4 +1,4 @@
-export default function({ post }) {
+export default function({ post, get }) {
   const apis = {
     scope: {
       list(params) {
@@ -27,55 +27,73 @@ export default function({ post }) {
       },
       point(params) {
         return post("/rent/device/point/list", params);
+      },
+      getRegisterRoleList() {
+        return get("/account/register/role");
       }
     }
   };
   const routes = {
     path: "/staff",
     meta: {
-      title: "店员管理"
+      title: "店员管理",
+      permisson: "staff:view"
     },
     children: [
       {
         path: "qrcode",
         component: "./QRcode/page.vue",
         meta: {
-          title: "邀请注册-店员"
+          title: "邀请注册-店员",
+          permisson: "staff:invite"
         }
       },
       {
         path: "detail",
         component: "./detail/page.vue",
         meta: {
-          title: "店员管理-详情"
+          title: "店员管理-详情",
+          permission: "staff:detail"
         }
       },
       {
         path: "permission",
         component: "./permission/page.vue",
         meta: {
-          title: "店员管理-权限"
+          title: "店员管理-权限",
+          permission: "staff:permission"
         }
       },
       {
         path: "template",
         component: "./template/page.vue",
         meta: {
-          title: "权限模板"
+          title: "权限模板",
+          permission: "staff:template"
         }
       },
       {
         path: "addtemp",
         component: "./addTemp/page.vue",
         meta: {
-          title: "新增模板"
+          title: "新增模板",
+          permission: "staff:template:add"
         }
       },
       {
         path: "editTemp",
         component: "./editTemp/page.vue",
         meta: {
-          title: "编辑模板"
+          title: "编辑模板",
+          permission: "staff:template:edit"
+        }
+      },
+      {
+        path: "authList",
+        component: "./authList/page.vue",
+        meta: {
+          title: "个人权限",
+          permission: "staff:auth"
         }
       }
     ]
@@ -83,7 +101,8 @@ export default function({ post }) {
   const store = {
     state: {
       staffInfo: {},
-      templateInfo: {}
+      templateInfo: {},
+      passFlag: false
     },
     getters: {
       getStaffInfo(state) {
@@ -91,6 +110,9 @@ export default function({ post }) {
       },
       getTemplateInfo(state) {
         return state.templateInfo;
+      },
+      getPassFlag(state) {
+        return state.passFlag;
       }
     },
     mutations: {
@@ -99,6 +121,9 @@ export default function({ post }) {
       },
       setTemplateInfo(state, data) {
         state.templateInfo = data;
+      },
+      setPassFlag(state, data) {
+        state.passFlag = data;
       }
     },
     actions: {
@@ -107,6 +132,9 @@ export default function({ post }) {
       },
       saveTempInfo({ commit }, data) {
         commit("setTemplateInfo", data);
+      },
+      savePassFlag({ commit }, data) {
+        commit("setPassFlag", data);
       }
     }
   };

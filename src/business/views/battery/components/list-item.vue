@@ -36,8 +36,8 @@ export default {
       if (is) {
         this.getTarget();
         this.$router.push({
-          path: this.routePath,
-          query: { data: this.listData, column: this.routeData }
+          name: this.routePath,
+          params: { data: this.listData }
         });
       }
     },

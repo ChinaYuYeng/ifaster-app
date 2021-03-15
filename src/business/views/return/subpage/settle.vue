@@ -12,10 +12,24 @@
         </UserInfo>
       </Panel>
       <Panel>
-        <van-form>
+        <van-form ref="form">
           <van-cell title="保证金:" :value="routeData.rentFeeTemplate.deposit" />
-          <van-field v-model="formData.deposit" label="保证金扣除:" placeholder="请输入金额" />
-          <van-field v-model="formData.note" center clearable label="验证码:" placeholder="请输入短信验证码" label-width="52px">
+          <van-field
+            v-model.number="formData.deposit"
+            label="保证金扣除:"
+            placeholder="请输入金额"
+            :rules="[{ validator: $regexp.money, message: '请输入正确的金额' }]"
+          />
+          <van-field
+            v-model="formData.note"
+            center
+            clearable
+            label="验证码:"
+            placeholder="请输入短信验证码"
+            label-width="52px"
+            :rules="[{ required: true, message: '请输入短信验证码' }]"
+            v-if="!!formData.deposit"
+          >
             <template #button>
               <van-button size="mini" type="primary" @click="getSms">发送验证码</van-button>
             </template>
@@ -41,8 +55,16 @@ export default {
   },
   methods: {
     onSubmit() {
-      return this.$apis.audit(this.formData).then(() => {
-        this.routerTo("/return");
+      return this.$refs.form.validate().then(() => {
+        return this.$apis.audit(this.formData).then(() => {
+          this.$toast({
+            duration: 1000,
+            message: "操作成功",
+            onClose: () => {
+              this.$router.go(-2);
+            }
+          });
+        });
       });
     },
     getSms() {

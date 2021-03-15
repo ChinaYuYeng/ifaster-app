@@ -1,37 +1,54 @@
 <template>
   <AppLayout>
-    <van-dropdown-menu class="select__bar" active-color="#78849E">
-      <van-dropdown-item v-model="value1" :options="option1" />
-    </van-dropdown-menu>
-    <div class="code__bar"></div>
-    <p class="code__intro">{{ value1 }}注册-唯一二维码</p>
+    <Select label="邀请注册" placeholder="请选择人员类型" v-model="roleId" :close-on-click-action="true" :options="options"></Select>
+    <div class="qrcode" ref="qrCodeUrl"></div>
   </AppLayout>
 </template>
+
 <script>
+import Select from "@@/components/form/select";
+import QRCode from "qrcodejs2";
 export default {
+  components: { Select },
   data() {
     return {
-      select: "",
-      option1: [
-        { text: "分账人员", value: "分账人员" },
-        { text: "店员（店员）", value: "店员（店员）" },
-        { text: "店员（店长）", value: "店员（店长）" }
-      ],
-      value1: "分账人员"
+      roleId: "",
+      options: []
     };
+  },
+  created() {
+    this.$apis.getRegisterRoleList().then(res => {
+      this.options = res.data;
+      this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
+        width: 160,
+        height: 160,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    });
+  },
+  methods: {
+    creatQrCode() {
+      let operator = this.$store.getters["home/getOperator"];
+      let url = `${window.location.host}/#/login/register?operator=${operator.operatorName}&operatorId=${operator.operatorId}&roleId=${this.roleId}`;
+      this.qrcode.clear();
+      this.qrcode.makeCode(url);
+    }
+  },
+  watch: {
+    roleId() {
+      this.creatQrCode();
+    }
   }
 };
 </script>
 
-<style scoped>
-.code__bar {
-  width: 60%;
-  height: 200px;
-  background-color: #dddd;
-  margin-left: 20%;
-  margin-top: 20px;
-}
-.code__intro {
-  text-align: center;
+<style lang="less" scoped>
+.qrcode {
+  display: flex;
+  height: 300px;
+  justify-content: center;
+  align-items: center;
 }
 </style>

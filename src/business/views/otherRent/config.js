@@ -19,6 +19,7 @@ export default function({ post }) {
 
   const store = {
     state: {
+      sideBarActive: 0,
       manager: {},
       batteryList: [],
       selectedInfo: {}
@@ -32,6 +33,9 @@ export default function({ post }) {
       },
       getSelectedInfo(state) {
         return state.selectedInfo;
+      },
+      getSideBarActive(state) {
+        return state.sideBarActive;
       }
     },
     mutations: {
@@ -43,6 +47,9 @@ export default function({ post }) {
       },
       setSelectedInfo(state, data) {
         state.selectedInfo = data;
+      },
+      setSideBarActive(state, data) {
+        state.sideBarActive = data;
       }
     },
     actions: {
@@ -54,6 +61,9 @@ export default function({ post }) {
       },
       setSelectedInfo({ commit }, data) {
         commit("setSelectedInfo", data);
+      },
+      setSideBarActive({ commit }, data) {
+        commit("setSideBarActive", data);
       }
     }
   };
@@ -62,14 +72,14 @@ export default function({ post }) {
     path: "/otherRent",
     component: "./page.vue",
     meta: {
-      title: "异地换车电池"
+      title: "异地还车电池"
     },
     children: [
       {
         path: "return",
         component: "./return/page.vue",
         meta: {
-          title: "异地换车电池"
+          title: "异地还车电池"
         }
       }
     ]

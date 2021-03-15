@@ -24,31 +24,49 @@ export default function({ post }) {
       },
       batteryPoint(params) {
         return post("/rent/device/point/list", params);
+      },
+      account(params) {
+        return post("/rent/device/funds/list", params);
       }
     }
   };
   const routes = {
     path: "/battery",
     meta: {
-      title: "电池管理"
+      title: "电池管理",
+      permission: "battery:view"
     },
     children: [
       {
         path: "detail",
         component: "./detail/page.vue",
         meta: {
-          title: "电池详情"
+          title: "电池详情",
+          permission: "battery:detail"
         }
-      },
-      {
-        path: "edit",
-        component: "./edit/page.vue"
       },
       {
         path: "log",
         component: "./log/page.vue",
         meta: {
-          title: "累计解锁"
+          title: "累计解锁",
+          permission: "battery:log"
+        }
+      },
+      {
+        path: "puton",
+        component: "./putOn/page.vue",
+        meta: {
+          title: "电池上架",
+          permission: "battery:puton"
+        }
+      },
+      {
+        path: "account",
+        component: "./account/page.vue",
+        meta: {
+          title: "分账信息",
+          permission: "battery:account"
         }
       }
     ]
@@ -56,7 +74,8 @@ export default function({ post }) {
   const store = {
     state: {
       batteryInfo: {},
-      batteryDetail: {}
+      batteryDetail: {},
+      flag: ""
     },
     getters: {
       getbatteryInfo(state) {
@@ -64,6 +83,9 @@ export default function({ post }) {
       },
       getbatteryDetail(state) {
         return state.batteryDetail;
+      },
+      getFlag(state) {
+        return state.flag;
       }
     },
     mutations: {
@@ -72,6 +94,9 @@ export default function({ post }) {
       },
       setbatteryDetail(state, data) {
         state.batteryDetail = data;
+      },
+      setFlag(state, data) {
+        state.flag = data;
       }
     },
     actions: {
@@ -80,6 +105,9 @@ export default function({ post }) {
       },
       saveDetail({ commit }, data) {
         commit("setbatteryDetail", data);
+      },
+      saveFlag({ commit }, data) {
+        commit("setFlag", data);
       }
     }
   };

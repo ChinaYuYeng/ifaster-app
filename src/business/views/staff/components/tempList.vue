@@ -23,8 +23,8 @@ export default {
   methods: {
     gotoEdit(item) {
       this.$router.push({
-        path: "/staff/editTemp",
-        query: { data: item }
+        name: "/staff/editTemp",
+        params: { data: item }
       });
     }
     // useTemp(item) {

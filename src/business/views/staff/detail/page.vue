@@ -30,12 +30,18 @@ export default {
   methods: {
     pass() {
       this.$router.push("/staff/permission");
+      this.savePassFlag(true);
     },
     reject() {
-      this.$apis.audit({ id: this.staffData.id, status: 0 }).then(res => {
+      return this.$apis.audit({ id: this.staffData.id, status: 0 }).then(res => {
         console.log(res.data);
+        if (res.code == 1) {
+          this.$toast.success("已成功拒绝！");
+          this.$router.push("/staff");
+        } else {
+          this.$toast.fail("拒绝失败！");
+        }
       });
-      this.$router.push("/staff");
     }
   },
   created() {

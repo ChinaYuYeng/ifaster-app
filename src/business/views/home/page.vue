@@ -16,7 +16,15 @@
               <small>历史充电收益</small>
               <h5 class="income__num">{{ operator.chargeCurrentIncome }}</h5>
               <small>当前充电收益</small>
-              <van-button round size="mini" @click="routerTo({ name: '/report', params: { orderType: 1 } })" class="mtop10">查看详情</van-button>
+              <van-button
+                round
+                size="mini"
+                @click="routerTo({ name: '/report', params: { orderType: 1 } })"
+                class="mtop10"
+                v-if="checkAuth('report:charge:view')"
+              >
+                查看详情
+              </van-button>
             </div>
           </van-col>
           <van-col span="12">
@@ -26,7 +34,15 @@
               <small>历史租赁收益</small>
               <h5 class="income__num">{{ operator.rentCurrentIncome }}</h5>
               <small>当前租赁收益</small>
-              <van-button round size="mini" @click="routerTo({ name: '/report', params: { orderType: 2 } })" class="mtop10">查看详情</van-button>
+              <van-button
+                round
+                size="mini"
+                @click="routerTo({ name: '/report', params: { orderType: 2 } })"
+                class="mtop10"
+                v-if="checkAuth('report:rent:view')"
+              >
+                查看详情
+              </van-button>
             </div>
           </van-col>
         </van-row>
@@ -76,15 +92,15 @@
       ></Links>
       <Links
         :links="[
-          { icon: '&#xe60a;', title: '收费设置', path: '' },
+          { icon: '&#xe60a;', title: '收费设置', path: 'charge' },
           { icon: '&#xe666;', title: '结算记录', path: '/settle' }
         ]"
       ></Links>
       <Links
         :links="[
-          { icon: '&#xe67f;', title: '仓库管理', path: '' },
-          { icon: '&#xe67f;', title: '上下架管理', path: '' },
-          { icon: '&#xe67f;', title: '异地还车管理', path: '' },
+          { icon: '&#xe67f;', title: '仓库管理', path: '/store' },
+          { icon: '&#xe67f;', title: '上下架管理', path: '/shelf' },
+          { icon: '&#xe67f;', title: '异地还车管理', path: '/otherRent' },
           { icon: '&#xe61a;', title: '我的租还点', path: '/rentMar' },
           { icon: '&#xe62b;', title: '店员管理', path: '/staff' },
           { icon: '&#xe619;', title: '下级管理', path: '/junior' }
@@ -103,7 +119,7 @@ export default {
       operator: {}
     };
   },
-  created() {
+  activated() {
     this.onRefresh();
   },
   methods: {
