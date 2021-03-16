@@ -2,21 +2,24 @@ export default function({ post, get }) {
   const routes = {
     path: "/charge",
     meta: {
-      title: "收费模板"
+      title: "收费模板",
+      permission: "rent:point:view"
     },
     children: [
       {
         path: "editrent",
         component: "./editrent/page.vue",
         meta: {
-          title: "新增/编辑-租赁收费模板"
+          title: "新增/编辑-租赁收费模板",
+          permission: "charge:editrent"
         }
       },
       {
         path: "editpile",
         component: "./editpile/page.vue",
         meta: {
-          title: "新增/编辑-充电收费模板"
+          title: "新增/编辑-充电收费模板",
+          permission: "charge:editpile"
         }
       }
     ]

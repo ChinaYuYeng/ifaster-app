@@ -84,7 +84,7 @@ contexts.keys().map(item => {
                   .join("-") || "root",
               beforeCreate() {
                 Object.defineProperty(this, "$apis", {
-                  value: Object.assign(Object.create(this.$api), apis.scope)
+                  value: Object.assign(Object.create(this.$apis), apis.scope)
                 });
                 // 当前页面的默认路径，用来判断当前路由是否在这个页面上
                 Object.defineProperty(this, "$pagePath", {

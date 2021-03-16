@@ -42,9 +42,15 @@ export default {
   data() {
     return {
       searchForm: {
-        status1: 1,
-        date: new Date().toUTCString(),
-        operator: ""
+        batteryImei: "",
+        batteryNo: "",
+        chargeType: [],
+        customerMobile: "",
+        isError: [],
+        number: "",
+        pileImei: "",
+        operator: "",
+        status: []
       }
     };
   },
