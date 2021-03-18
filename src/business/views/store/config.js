@@ -161,21 +161,24 @@ export default function({ post }) {
     path: "/store",
     component: "./page.vue",
     meta: {
-      title: "仓库管理"
+      title: "仓库管理",
+      permission: "store:view"
     },
     children: [
       {
         path: "transfer",
         component: "./transfer/page.vue",
         meta: {
-          title: "调拨"
+          title: "调拨",
+          permission: "store:transfer"
         },
         children: [
           {
             path: "select",
             component: "./transfer/select/index.vue",
             meta: {
-              title: "人员"
+              title: "人员",
+              permission: "store:select"
             }
           }
         ]
@@ -184,7 +187,8 @@ export default function({ post }) {
         path: "claim",
         component: "./claim/index.vue",
         meta: {
-          title: "认领"
+          title: "认领",
+          permission: "store:claim"
         }
       }
     ]

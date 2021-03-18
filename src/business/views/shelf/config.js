@@ -75,28 +75,32 @@ export default function({ post }) {
     path: "/shelf",
     component: "./page.vue",
     meta: {
-      title: "上下架管理"
+      title: "上下架管理",
+      permission: "shelf:view"
     },
     children: [
       {
         path: "onShelf",
         component: "./onShelf/page.vue",
         meta: {
-          title: "上架到门店"
+          title: "上架到门店",
+          permission: "shelf:onShelf"
         },
         children: [
           {
             path: "shop",
             component: "./onShelf/shop/page.vue",
             meta: {
-              title: "门店"
+              title: "门店",
+              permission: "shelf:shop"
             }
           },
           {
             path: "chargeTemplate",
             component: "./chargeTemplate/page.vue",
             meta: {
-              title: "收费模板"
+              title: "收费模板",
+              permission: "shelf:chargeTemplate"
             }
           }
         ]

@@ -1,4 +1,4 @@
-export default function({ post }) {
+export default function({ post, get }) {
   const apis = {
     getList(params) {
       return post("/rent/order/list", params);
@@ -8,6 +8,9 @@ export default function({ post }) {
     },
     audit(params) {
       return post("/rent/return/audit", params);
+    },
+    getModel(params) {
+      return get("/rent/order/model", params);
     }
   };
   const routes = {
