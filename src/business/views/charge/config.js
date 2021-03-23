@@ -46,6 +46,9 @@ export default function({ post, get }) {
     getRentExample(params) {
       return get("/rent/rate/example", params); //获取默认的收费模板
     },
+    getRentFence(params) {
+      return post("/rent/rate/fence", params); //获取还车围栏模板列表
+    },
     // 充电
     getPileList(params) {
       return post("/charge/rate/list", params); //获取收费模板列表
