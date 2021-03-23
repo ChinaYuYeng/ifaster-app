@@ -67,7 +67,8 @@ export default function({ post, get }) {
     state: {
       rent: {},
       pile: {},
-      active: 0
+      active: 0,
+      selectMod: false
     },
     getters: {
       getRentList(state) {
@@ -78,6 +79,9 @@ export default function({ post, get }) {
       },
       getActivat(state) {
         return state.active;
+      },
+      getSelectMod(state) {
+        return state.selectMod;
       }
     },
     mutations: {
@@ -89,6 +93,9 @@ export default function({ post, get }) {
       },
       setActivat(state, data) {
         state.active = data;
+      },
+      setSelectMod(state, data) {
+        state.selectMod = data;
       }
     },
     actions: {
