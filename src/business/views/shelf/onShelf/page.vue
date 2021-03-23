@@ -25,7 +25,7 @@
           label="收费模板"
           v-model="templateName"
           placeholder="选择收费模板"
-          @click="routerTo({ name: '/rentMar', params: { $$action: { selectItem } } })"
+          @click="routerTo({ name: '/charge', params: { $$action: { selectChargeItem } } })"
           input-align="right"
           right-icon="arrow"
         />
@@ -73,6 +73,11 @@ export default {
     this.getTemplateList();
   },
   methods: {
+    selectChargeItem(item) {
+      console.log(item);
+      this.templateName = item.name;
+      this.templateId = item.id;
+    },
     selectItem(item) {
       console.log(item);
       this.pointName = item.name;
