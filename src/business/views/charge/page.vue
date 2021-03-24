@@ -1,6 +1,6 @@
 <template>
   <AppLayout ref="report__wrap" :onRefresh="onRefresh" @onshow="onRefresh">
-    <van-tabs :before-change="beforeChange" :active="active" v-show="!getSelectMod">
+    <van-tabs :before-change="beforeChange" :active="active">
       <van-tab v-for="(t, index) in title" :key="index" :value="index">
         <template #title>
           <span class="iconfont" v-html="t.icon"></span>
@@ -48,9 +48,10 @@ export default {
   },
   activated() {
     this.routeAction = this.$route.params.$$action || {};
-    this.getRentData();
+    // this.getRentData();
     // 是否开启列表选择模式
     this.setSelectMod(!!this.routeAction.selectChargeItem);
+    this.onRefresh();
   },
   methods: {
     selectChargeItem(item) {

@@ -61,6 +61,7 @@ export default {
     },
     back() {
       let operate = "";
+      this.listData = [];
       operate = this.history[this.history.length - 2].id;
       this.history.length--;
       this.$apis.info({ operate: operate }).then(res => {

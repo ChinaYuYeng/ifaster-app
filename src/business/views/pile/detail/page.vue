@@ -20,8 +20,9 @@
       <listItem :listColumns="listColumns1" :listData="listData" routePath="/pile/edit"></listItem>
     </Panel>
     <Panel style="margin-top:10px">
-      <listItem :listColumns="listColumns2" :listData="listData" routePath=""></listItem>
+      <van-cell title="收费模板" is-link :value="listData.chargeFeeTemplateName" @click="setTemplate"></van-cell>
       <van-cell title="分账" is-link @click="checkAccount"></van-cell>
+      <van-cell title="运营" is-link></van-cell>
     </Panel>
     <van-popup v-model="isShowPicker" position="bottom" :style="{ height: '50%', width: '100%' }">
       <van-picker show-toolbar title="选择运营状态" :columns="selectList" @cancel="onCancel" @confirm="onConfirm" />
@@ -60,18 +61,6 @@ export default {
           prop: "rentChargeTimes"
         }
       ],
-      listColumns2: [
-        {
-          label: "收费模板",
-          prop: "chargeFeeTemplateName",
-          islink: true
-        },
-        {
-          label: "运营",
-          prop: "",
-          islink: true
-        }
-      ],
       listData: {}
     };
   },
@@ -95,6 +84,13 @@ export default {
         this.$toast.fail("当前权限不可操作");
       } else {
         this.$router.push({ name: "/pile/edit", params: { data: this.listData, flag: "name" } });
+      }
+    },
+    setTemplate() {
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作");
+      } else {
+        this.$router.push({ name: "/pile/template", params: { data: this.listData } });
       }
     },
     addressEdit() {

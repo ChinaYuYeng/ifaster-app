@@ -16,6 +16,7 @@
     </Panel>
     <Panel style="margin-top:10px">
       <van-cell title="电池上架" is-link @click="batteryPutOn"></van-cell>
+      <van-cell title="电池下架" is-link @click="batteryOff"></van-cell>
       <van-cell title="操作日志" :value="dataForm.unlock_time" is-link @click="checkLog"></van-cell>
       <listItem :listColumns="listColumns1" :listData="dataForm"></listItem>
     </Panel>
@@ -36,6 +37,17 @@
     <van-popup v-model="isShowPicker2" position="bottom" :style="{ height: '50%', width: '100%' }">
       <van-picker show-toolbar title="请选择临时解锁/锁定时间" :columns="selectColumn2" @confirm="onConfirm2" @cancel="onCancel2" />
     </van-popup>
+    <van-dialog
+      v-model="show"
+      title="下架电池"
+      message="是否下架该电池"
+      confirm-button-text="确定"
+      confirm-button-color="#55babb"
+      cancel-button-text="取消"
+      cancel-button-color="grey"
+      show-cancel-button
+      :before-close="beforeClose"
+    ></van-dialog>
   </AppLayout>
 </template>
 
@@ -46,6 +58,7 @@ import pileList from "../components/pileList";
 export default {
   data() {
     return {
+      show: false,
       isShowPicker: false,
       isShowPicker1: false,
       isShowPicker2: false,
@@ -130,7 +143,43 @@ export default {
       if (this.getFlag) {
         this.$toast.fail("当前权限不可操作！");
       } else {
-        this.$router.push({ name: "/battery/puton", params: { data: this.dataForm } });
+        if (this.dataForm.rentFeeTemplateId == 0) {
+          this.$router.push({ name: "/battery/puton", params: { data: this.dataForm } });
+        } else {
+          this.$toast.fail("该电池已上架，不可重复上架！");
+        }
+      }
+    },
+    batteryOff() {
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作！");
+      } else {
+        if (this.dataForm.rentFeeTemplateId !== 0) {
+          this.show = true;
+        } else {
+          this.$toast.fail("该电池未上架！");
+        }
+      }
+    },
+    beforeClose(action, done) {
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作！");
+      } else {
+        if (action === "confirm") {
+          // console.log(this.id);
+          this.$apis.Off({ ids: [this.dataForm.id] }).then(res => {
+            if (res.code == 1) {
+              this.$toast.success("电池已下架");
+              this.getBatteryDetail();
+              done();
+            } else {
+              this.$toast.fail("电池下架失败");
+              done();
+            }
+          });
+        } else if (action === "cancel") {
+          done();
+        }
       }
     },
     checkLog() {
