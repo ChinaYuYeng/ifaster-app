@@ -1,6 +1,7 @@
 <template>
   <AppLayout>
-    <Panel>
+    <span v-if="auditList.length == 0" class="audit__list_span">暂无审核信息</span>
+    <Panel v-if="auditList.length != 0">
       <div v-for="(item, index) in auditList" :key="index" style="margin-top:5px">
         <UserInfo>
           <span class="title__name">{{ item.name }}</span>
@@ -86,5 +87,11 @@ export default {
   float: right;
   margin-top: -30px;
   margin-right: 15px;
+}
+.audit__list_span {
+  display: inline-block;
+  width: 100%;
+  /* margin: 0 auto; */
+  text-align: center;
 }
 </style>

@@ -63,7 +63,7 @@ export default function({ post, get }) {
       return post("/charge/rate/save", params); //新增-编辑收费模板
     },
     getPileExample(params) {
-      return post("/charge/rate/example", params); //获取默认的收费模板
+      return get("/charge/rate/example", params); //获取默认的收费模板
     }
   };
   const store = {

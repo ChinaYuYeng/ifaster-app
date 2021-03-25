@@ -27,6 +27,12 @@ export default function({ post }) {
       },
       account(params) {
         return post("/rent/device/funds/list", params);
+      },
+      putOn(params) {
+        return post("/rent/putaway/up", params);
+      },
+      Off(params) {
+        return post("/rent/putaway/down", params);
       }
     }
   };
