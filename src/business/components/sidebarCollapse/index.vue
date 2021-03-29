@@ -137,7 +137,7 @@ export default {
     width: 100%;
   }
   .action-bar {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     text-align: center;
   }
