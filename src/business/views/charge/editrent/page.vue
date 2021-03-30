@@ -16,11 +16,12 @@
       <Panel>
         <div class="cell-h">押金</div>
         <van-field v-model.number="formData.price.deposit" type="number" label="预交押金：" placeholder="0.00" input-align="right" extra="A" />
-        <van-cell title="收费模式：">
+        <!-- <van-cell title="收费模式：">
           <van-dropdown-menu active-color="#55BABB">
             <van-dropdown-item v-model="formData.price.rentModel" :options="optionB" disabled />
           </van-dropdown-menu>
-        </van-cell>
+        </van-cell> -->
+        <van-cell title="收费模式：" :value="showContent" size="large" />
         <van-cell title="还车围栏:" is-link @click="showPopupFun" :value="columns.name" placeholder="选择还车围栏" v-model="templateName" />
         <van-popup v-model="showPicker" position="bottom" :style="{ height: '30%' }">
           <van-picker title="还车围栏" show-toolbar :columns="columns" @confirm="onConfirm" @cancel="showPicker = false" />
@@ -172,34 +173,27 @@ export default {
         centerBox: false, // 截图框是否被限制在图片里面
         infoTrue: false, // true 为展示真实输出图片宽高 false 展示看到的截图框宽高
         mode: "100% auto" // 图片默认渲染方式
-      },
-      optionB: [
-        { text: "保证金模式", value: 1 },
-        { text: "预付费模式", value: 2 }
-      ]
+      }
     };
   },
   created() {
     this.fileList = this.formData.img;
     if (this.$route.params.a == 1) {
-      console.log("进入--新增页面~");
+      // console.log("进入--新增页面~");
       this.$apis.getRentExample({}).then(res => {
         this.formData = res.data;
         this.formData.price.rentModel = 1;
         console.log(this.$route.params.a);
       });
     } else {
-      console.log("进入--详情页面~");
+      // console.log("进入--详情页面~");
       let routerData = this.getRentList;
       Object.assign(this.formData, routerData || {});
     }
     //获取还车围栏模板列表
     this.$apis.getRentFence({}).then(res => {
-      console.log("--------获取还车围栏模板列表--------");
+      // console.log("--------获取还车围栏模板列表--------");
       console.log(res.data);
-      // this.columns = res.data;
-      // console.log("--------columns--------");
-      // console.log(this.columns);
       this.columns = res.data.map(p => {
         return Object.assign(p, { text: p.name });
       });
@@ -216,6 +210,14 @@ export default {
       },
       set: function(v) {
         return [{ url: v.url }];
+      }
+    },
+    showContent() {
+      let a = this.formData.price.rentModel;
+      if (a === 1) {
+        return "保证金模式";
+      } else {
+        return "预付费模式";
       }
     }
   },
@@ -424,5 +426,12 @@ export default {
     align-items: center;
     justify-content: center;
   }
+}
+.popup_bottom .bottom_item {
+  color: #55babb;
+}
+.van-field__control:read-only {
+  cursor: default;
+  text-align: right;
 }
 </style>
