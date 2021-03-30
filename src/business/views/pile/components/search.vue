@@ -5,7 +5,7 @@
       <van-field label="电桩名称" label-width="100px" placeholder="请输入电桩名称" v-model="searchForm.name" />
       <van-field label="电桩地址" label-width="100px" placeholder="请输入电桩地址" v-model="searchForm.address" />
       <Select label-width="100px" label="设备类型" :options="modelList" v-model="searchForm.model"></Select>
-      <Select label-width="100px" label="收费模板" :options="template" v-model="searchForm.model"></Select>
+      <Select label-width="100px" label="收费模板" :options="template" v-model="searchForm.chargeFeeTemplateId"></Select>
       <MultiCheck label="设备关系" v-model="searchForm.type" :options="type"></MultiCheck>
       <MultiCheck label="在线状态" v-model="searchForm.isOnline" :options="isOnline"></MultiCheck>
       <MultiCheck label="运营状态" v-model="searchForm.status" :options="status"></MultiCheck>

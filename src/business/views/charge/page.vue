@@ -1,6 +1,6 @@
 <template>
   <AppLayout ref="report__wrap" :onRefresh="onRefresh" @onshow="onRefresh">
-    <van-tabs :before-change="beforeChange" :active="active">
+    <van-tabs :before-change="beforeChange" :active="active" v-show="!getSelectMod">
       <van-tab v-for="(t, index) in title" :key="index" :value="index">
         <template #title>
           <span class="iconfont" v-html="t.icon"></span>
@@ -51,6 +51,13 @@ export default {
     // this.getRentData();
     // 是否开启列表选择模式
     this.setSelectMod(!!this.routeAction.selectChargeItem);
+    if (this.$route.params.chooseFlag == 1) {
+      this.active = 1;
+      this.btnMessage = "新增充电收费模板";
+    } else {
+      this.active = 0;
+      this.btnMessage = "新增租赁收费模板";
+    }
     this.onRefresh();
   },
   methods: {

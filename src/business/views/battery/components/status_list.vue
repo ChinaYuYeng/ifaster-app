@@ -26,7 +26,7 @@
           临时解锁
         </p>
         <div class="font__bar">
-          <i class="iconfont">&#xe659;</i>
+          <i class="iconfont" :class="{ tlock: isTLock }">&#xe659;</i>
         </div>
         <p class="value">{{ this.statusData.lockStatusDesc }}</p>
         <button class="btn" @click="temporaryUnlock" v-if="checkAuth('battery:temporaryLock')">解锁</button>
@@ -40,7 +40,8 @@ export default {
   data() {
     return {
       isOnline: false,
-      isLock: false
+      isLock: false,
+      isTLock: false
     };
   },
   props: {
@@ -62,6 +63,11 @@ export default {
           this.isLock = true;
         } else {
           this.isLock = false;
+        }
+        if (this.statusData.isTemporarySwitch == 1) {
+          this.isTLock = true;
+        } else {
+          this.isTLock = false;
         }
       },
       deep: true
@@ -89,6 +95,9 @@ export default {
 }
 .lock {
   color: #e8433f;
+}
+.tlock {
+  color: #ff8000;
 }
 .title {
   color: #000000;

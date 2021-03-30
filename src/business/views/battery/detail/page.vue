@@ -17,6 +17,7 @@
     <Panel style="margin-top:10px">
       <van-cell title="电池上架" is-link @click="batteryPutOn"></van-cell>
       <van-cell title="电池下架" is-link @click="batteryOff"></van-cell>
+      <van-cell title="前往导航" is-link @click="goNavigation"></van-cell>
       <van-cell title="操作日志" :value="dataForm.unlock_time" is-link @click="checkLog"></van-cell>
       <listItem :listColumns="listColumns1" :listData="dataForm"></listItem>
     </Panel>
@@ -32,10 +33,7 @@
       <van-picker show-toolbar title="设置解锁/锁定" :columns="selectColumn1" @confirm="onConfirm1" @cancel="onCancel1" />
     </van-popup>
     <van-popup v-model="isShowPicker" position="bottom" :style="{ height: '50%', width: '100%' }">
-      <van-picker show-toolbar title="设置解锁/锁定" :columns="selectColumn1" @confirm="onConfirm" @cancel="onCancel" />
-    </van-popup>
-    <van-popup v-model="isShowPicker2" position="bottom" :style="{ height: '50%', width: '100%' }">
-      <van-picker show-toolbar title="请选择临时解锁/锁定时间" :columns="selectColumn2" @confirm="onConfirm2" @cancel="onCancel2" />
+      <van-picker show-toolbar title="请选择临时解锁时间" :columns="selectColumn2" @confirm="onConfirm2" @cancel="onCancel2" />
     </van-popup>
     <van-dialog
       v-model="show"
@@ -255,32 +253,6 @@ export default {
     onCancel() {
       this.isShowPicker = false;
     },
-    onConfirm(index, value) {
-      //运营商选择临时改变锁状态，解锁或锁定
-      this.temporaryLockStatus = value[0];
-      if (this.temporaryLockStatus == 1) {
-        //选择锁定
-        this.$apis
-          .temporary({
-            batteryId: this.getbatteryInfo.id,
-            temporaryLockStatus: this.temporaryLockStatus
-          })
-          .then(res => {
-            if (res.code == 1) {
-              this.$toast.success("运营商临时锁定成功！");
-              this.getBatteryDetail();
-              this.isShowPicker = false;
-            } else {
-              this.$toast.success("运营商临时锁定失败！");
-              this.isShowPicker = false;
-            }
-          });
-      } else {
-        //选择解锁
-        this.isShowPicker = false;
-        this.isShowPicker2 = true;
-      }
-    },
     onCancel1() {
       this.isShowPicker1 = false;
     },
@@ -290,22 +262,22 @@ export default {
       this.$apis
         .temporary({
           batteryId: this.getbatteryInfo.id,
-          temporaryLockStatus: this.temporaryLockStatus,
+          temporaryLockStatus: 0,
           temporaryLockTime: min
         })
         .then(res => {
           if (res.code == 1) {
             this.$toast.success("运营商临时解锁成功！");
             this.getBatteryDetail();
-            this.isShowPicker2 = false;
+            this.isShowPicker = false;
           } else {
             this.$toast.success("运营商临时解锁失败！");
-            this.isShowPicker2 = false;
+            this.isShowPicker = false;
           }
         });
     },
     onCancel2() {
-      this.isShowPicker2 = false;
+      this.isShowPicker = false;
     },
     getBatteryDetail() {
       let id = this.getbatteryInfo.id;
@@ -329,6 +301,10 @@ export default {
           })
         );
       });
+    },
+    goNavigation() {
+      const url = "https://uri.amap.com/marker?position=" + this.dataForm.lng + "," + this.dataForm.lat + "&src=mypage&coordinate=gaode&callnative=1";
+      window.open(url, "_blank");
     }
   },
   components: {
