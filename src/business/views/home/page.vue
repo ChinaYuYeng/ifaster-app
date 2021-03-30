@@ -19,7 +19,7 @@
               <van-button
                 round
                 size="mini"
-                @click="routerTo({ name: '/report', params: { orderType: 1 } })"
+                @click="routerTo({ name: '/report', params: { orderType: 2 } })"
                 class="mtop10"
                 v-if="checkAuth('report:charge:view')"
               >
@@ -37,7 +37,7 @@
               <van-button
                 round
                 size="mini"
-                @click="routerTo({ name: '/report', params: { orderType: 2 } })"
+                @click="routerTo({ name: '/report', params: { orderType: 1 } })"
                 class="mtop10"
                 v-if="checkAuth('report:rent:view')"
               >
