@@ -3,7 +3,7 @@
     <Info :obj="obj" :headImg="dataForm.info.img"></Info>
     <van-divider :style="{ height: '20px', lineHeight: '20px', color: '#fff', backgroundColor: '#fff' }"></van-divider>
     <van-row>
-      <van-col span="24"><Percent ref="percent"></Percent></van-col>
+      <van-col span="24"><Percent ref="percent" :operationType="operationType"></Percent></van-col>
     </van-row>
     <template #body-bottom class="wrap">
       <van-row>
@@ -30,12 +30,14 @@ export default {
         percent: {}
       },
       defaultImg: "",
-      obj: []
+      obj: [],
+      operationType: ""
     };
   },
   created() {
     // debugger;
     // 电池还是电桩
+    this.operationType = this.getOperationType;
     if (this.getOperationType == 0) {
       this.dataForm.info = this.getSelectedBatteryInfo;
     } else {
