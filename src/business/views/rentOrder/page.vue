@@ -41,8 +41,15 @@ export default {
   data() {
     return {
       searchForm: {
-        status1: 1,
-        date: new Date().toUTCString()
+        batteryImei: "",
+        batteryNo: "",
+        batteryModel: [],
+        customerMobile: "",
+        isTimeout: [],
+        number: "",
+        operator: "",
+        status: [],
+        rentPointId: []
       }
     };
   },

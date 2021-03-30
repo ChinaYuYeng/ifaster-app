@@ -1,5 +1,5 @@
 <template>
-  <AppLayout ref="report__wrap" :showHeader="true" :onRefresh="onRefresh">
+  <AppLayout ref="report__wrap" :showHeader="true" :onRefresh="onRefresh" @onshow="onRefresh">
     <LoadList :loadStatus="loadStatus">
       <van-cell v-for="(item, index) in dataList" :key="index" @click="goDetail(item)">
         <pileList :columns="list" :item1="item" imgProp="rentFeeTemplateImg"></pileList>

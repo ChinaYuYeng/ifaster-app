@@ -7,20 +7,21 @@
           <span>{{ t.name }}</span>
         </template>
       </van-tab>
-      <LoadList :loadStatus="loadStatus">
-        <Panel v-for="item in dataList" :key="item.id" class="mtop10">
-          <div class="content__item order__header" slot="header" @click="gotoDetail(item)">
-            <img class="list-img" :src="item.img" alt="" />
-            <div class="content_h3">
-              <h3>{{ item.name }}</h3>
-              <span class="tips" v-if="active == 0">{{ getTips(item.price.rentModel) }}</span>
-            </div>
-            <van-icon class="arrow-icon" name="arrow" size="20" color="#B2B2B2" />
-          </div>
-        </Panel>
-      </LoadList>
-      <van-button type="primary" size="large" @click="addM == true ? addRentM() : addPileM()">{{ btnMessage }}</van-button>
     </van-tabs>
+    <LoadList :loadStatus="loadStatus">
+      <Panel v-for="item in dataList" :key="item.id" class="mtop10">
+        <div class="content__item order__header" slot="header" @click="gotoDetail(item)">
+          <img class="list-img" :src="item.img" alt="" />
+          <div class="content_h3">
+            <h3>{{ item.name }}</h3>
+            <span class="tips" v-if="active == 0">{{ getTips(item.price.rentModel) }}</span>
+          </div>
+          <van-icon class="arrow-icon" name="arrow" size="20" color="#B2B2B2" />
+          <van-button size="small" icon="plus" style="margin-left:20px;" @click.stop="selectChargeItem(item)" v-if="getSelectMod"></van-button>
+        </div>
+      </Panel>
+    </LoadList>
+    <van-button type="primary" size="large" @click="addM == true ? addRentM() : addPileM()">{{ btnMessage }}</van-button>
   </AppLayout>
 </template>
 
@@ -45,10 +46,18 @@ export default {
       ]
     };
   },
-  created() {
-    this.getRentData();
+  activated() {
+    this.routeAction = this.$route.params.$$action || {};
+    // this.getRentData();
+    // 是否开启列表选择模式
+    this.setSelectMod(!!this.routeAction.selectChargeItem);
+    this.onRefresh();
   },
   methods: {
+    selectChargeItem(item) {
+      this.routeAction.selectChargeItem(item);
+      this.$router.back();
+    },
     gotoDetail(item) {
       if (this.active == 0) {
         this.SaveRentList(item);
@@ -85,19 +94,18 @@ export default {
       } else {
         this.getPileData();
       }
-      // return this.setListLoader();
     },
     // 加载--租赁--收费模板列表
     getRentData() {
-      this.dataList = [];
       this.setListLoader(paging => {
+        this.dataList = [];
         return this.$apis.getRentList({ ...paging });
       });
     },
     // 加载--电桩--收费模板列表
     getPileData() {
-      this.dataList = [];
       this.setListLoader(paging => {
+        this.dataList = [];
         return this.$apis.getPileList({ ...paging });
       });
     },

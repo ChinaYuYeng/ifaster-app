@@ -1,7 +1,8 @@
 <template>
   <AppLayout>
+    <!-- {{ topData }} -->
     <van-cell>
-      <pileList :columns="columns" :item1="topData" :hasArrow="false" :useRoute="false" imgProp="chargeFeeTemplateImg"></pileList>
+      <pileList :columns="columns" :item1="topData" :hasArrow="false" :useRoute="false" imgProp="rentFeeTemplateImg"></pileList>
     </van-cell>
     <Panel>
       <div v-for="(item, index) in accountList" :key="index" style="margin-top:20px">

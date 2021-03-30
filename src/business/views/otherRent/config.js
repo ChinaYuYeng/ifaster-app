@@ -72,14 +72,16 @@ export default function({ post }) {
     path: "/otherRent",
     component: "./page.vue",
     meta: {
-      title: "异地还车电池"
+      title: "异地还车电池",
+      permission: "otherRent:view"
     },
     children: [
       {
         path: "return",
         component: "./return/page.vue",
         meta: {
-          title: "异地还车电池"
+          title: "异地还车电池",
+          permission: "otherRent:return"
         }
       }
     ]

@@ -2,21 +2,24 @@ export default function({ post, get }) {
   const routes = {
     path: "/charge",
     meta: {
-      title: "收费模板"
+      title: "收费模板",
+      permission: "rent:point:view"
     },
     children: [
       {
         path: "editrent",
         component: "./editrent/page.vue",
         meta: {
-          title: "新增/编辑-租赁收费模板"
+          title: "新增/编辑-租赁收费模板",
+          permission: "charge:editrent"
         }
       },
       {
         path: "editpile",
         component: "./editpile/page.vue",
         meta: {
-          title: "新增/编辑-充电收费模板"
+          title: "新增/编辑-充电收费模板",
+          permission: "charge:editpile"
         }
       }
     ]
@@ -60,14 +63,15 @@ export default function({ post, get }) {
       return post("/charge/rate/save", params); //新增-编辑收费模板
     },
     getPileExample(params) {
-      return post("/charge/rate/example", params); //获取默认的收费模板
+      return get("/charge/rate/example", params); //获取默认的收费模板
     }
   };
   const store = {
     state: {
       rent: {},
       pile: {},
-      active: 0
+      active: 0,
+      selectMod: false
     },
     getters: {
       getRentList(state) {
@@ -78,6 +82,9 @@ export default function({ post, get }) {
       },
       getActivat(state) {
         return state.active;
+      },
+      getSelectMod(state) {
+        return state.selectMod;
       }
     },
     mutations: {
@@ -89,6 +96,9 @@ export default function({ post, get }) {
       },
       setActivat(state, data) {
         state.active = data;
+      },
+      setSelectMod(state, data) {
+        state.selectMod = data;
       }
     },
     actions: {
