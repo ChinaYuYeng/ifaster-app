@@ -96,6 +96,9 @@ export default {
       return false;
     }
   },
+  activated() {
+    this.showOtherRent();
+  },
   methods: {
     getActiveIndex(index) {
       if (index == 0) {
