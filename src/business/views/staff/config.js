@@ -30,6 +30,9 @@ export default function({ post, get }) {
       },
       getRegisterRoleList() {
         return get("/account/register/role");
+      },
+      bindStation(params) {
+        return post("/rent/point/staff/add", params);
       }
     }
   };
@@ -95,6 +98,13 @@ export default function({ post, get }) {
           title: "个人权限",
           permission: "staff:auth"
         }
+      },
+      {
+        path: "bindStation",
+        component: "./bindStation/page.vue",
+        meta: {
+          title: "绑定店员"
+        }
       }
     ]
   };
@@ -102,7 +112,8 @@ export default function({ post, get }) {
     state: {
       staffInfo: {},
       templateInfo: {},
-      passFlag: false
+      passFlag: false,
+      pointId: ""
     },
     getters: {
       getStaffInfo(state) {
@@ -113,6 +124,9 @@ export default function({ post, get }) {
       },
       getPassFlag(state) {
         return state.passFlag;
+      },
+      getPointId(state) {
+        return state.pointId;
       }
     },
     mutations: {
@@ -124,6 +138,9 @@ export default function({ post, get }) {
       },
       setPassFlag(state, data) {
         state.passFlag = data;
+      },
+      setPointId(state, data) {
+        state.pointId = data;
       }
     },
     actions: {
@@ -135,6 +152,9 @@ export default function({ post, get }) {
       },
       savePassFlag({ commit }, data) {
         commit("setPassFlag", data);
+      },
+      savePointId({ commit }, data) {
+        commit("setPointId", data);
       }
     }
   };
