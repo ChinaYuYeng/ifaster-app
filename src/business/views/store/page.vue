@@ -91,6 +91,9 @@ export default {
 
     this.defaultIcon = this.batteryImg;
   },
+  activated() {
+    this.showStore();
+  },
   methods: {
     updateData(bar, index) {
       this.collapseHeader = bar.name;

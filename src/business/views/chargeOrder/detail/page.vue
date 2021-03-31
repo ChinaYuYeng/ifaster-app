@@ -19,10 +19,6 @@
           <span>{{ routeData.rentPointName }}</span>
         </div>
         <div class="content__item">
-          <span>还点:</span>
-          <span>{{ routeData.returnPointName }}</span>
-        </div>
-        <div class="content__item">
           <span>用户姓名:</span>
           <span>{{ routeData.customerName }}</span>
         </div>
@@ -31,24 +27,24 @@
           <span>{{ routeData.customerMobile }}</span>
         </div>
         <div class="content__item">
-          <span>起租时间:</span>
+          <span>开始时间:</span>
           <span>{{ routeData.startTime }}</span>
         </div>
         <div class="content__item">
-          <span>归还时间:</span>
-          <span>{{ routeData.realEndTime }}</span>
+          <span>充电类型:</span>
+          <span>{{ routeData.chargeTypeName }}</span>
         </div>
         <div class="content__item">
-          <span>租赁类型:</span>
-          <span>{{ routeData.typeName }}</span>
+          <span>结束时间:</span>
+          <span>{{ routeData.endTime }}</span>
         </div>
         <div class="content__item">
           <span>收费模板:</span>
-          <span>{{ routeData.typeName }}</span>
+          <span>{{ routeData.chargeTemplateName }}</span>
         </div>
         <div class="content__item">
-          <span>公司赠送积分:</span>
-          <span>{{ routeData.typeName }}</span>
+          <span>支付方式:</span>
+          <span>{{ routeData.payTypeName }}</span>
         </div>
         <div class="content__item order__footer" slot="footer">
           <span>{{ routeData.returnTime }}</span>

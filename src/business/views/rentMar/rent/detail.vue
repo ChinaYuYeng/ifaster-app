@@ -21,25 +21,29 @@
       </Panel>
       <Panel v-if="!getSelectMod">
         <van-cell title="店员人数" is-link :value="routerData.staffNum" @click="routerTo({ name: '/staff', params: { id: routerData.id } })" />
+        <van-cell title="绑定店员" is-link @click="routerTo({ name: '/staff', params: { id: 0, pointId: routerData.id, status: 1 } })" />
         <van-cell
           title="已租设备"
           is-link
           :value="routerData.rentDeviceNum"
-          @click="routerTo({ name: '/battery', params: { rentStatus: [3], id: [routerData.id] } })"
+          @click="routerTo({ name: '/battery', params: { rentStatus: [2], id: [routerData.id] } })"
         />
         <van-cell
           title="空闲设备"
           is-link
           :value="routerData.freeDeviceNum"
-          @click="routerTo({ name: '/battery', params: { rentStatus: [1, 2], id: [routerData.id] } })"
+          @click="routerTo({ name: '/battery', params: { rentStatus: [0, 1], id: [routerData.id] } })"
         />
         <van-cell title="分佣设置" is-link @click="routerTo({ name: '/rentMar/detail/assign' })" />
       </Panel>
     </PanelGroup>
+    <div class="qrcode" ref="qrCodeUrl"></div>
+    <div style="text-align:center;">还车二维码</div>
   </AppLayout>
 </template>
 
 <script>
+import QRCode from "qrcodejs2";
 export default {
   data() {
     return {
@@ -77,9 +81,24 @@ export default {
           })
         );
       });
+      this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
+        width: 100,
+        height: 100,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+      this.qrcode.makeCode("dffdfdf");
     }
   }
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.qrcode {
+  display: flex;
+  height: 120px;
+  justify-content: center;
+  align-items: center;
+}
+</style>

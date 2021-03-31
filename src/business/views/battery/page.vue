@@ -34,19 +34,21 @@ export default {
       searchForm: {
         operator: "",
         imei: "",
-        isOnline: [],
+        isOnline: [0, 1],
         model: "",
         number: "",
         onRentPointId: [],
         rentFeeTemplateId: [],
-        rentStatus: [],
-        type: []
+        rentStatus: [0, 1, 2],
+        type: [2, 3],
+        isError: [0, 1]
       },
       list: [
-        { label: "电池imei", prop: "imei" },
+        { label: "电池imei", prop: "imei", aprop: "soc" },
         { label: "所属门店", prop: "onRentPointName" },
         { label: "收费模板", prop: "rentFeeTemplateName" },
-        { label: "租赁状态", prop: "rentStatusDesc" }
+        { label: "设备关系", prop: "operatorBatteryDesc" },
+        { label: "设备状态", prop: "rentStatusDesc", aprop: "errorDesc" }
       ],
       dataform: []
     };
@@ -55,20 +57,19 @@ export default {
     this.getModel();
     this.getPoint();
     this.saveFlag(this.$route.params.flag);
-    console.log(this.getFlag);
     if (this.$route.params.rentStatus) {
       let { id, rentStatus } = this.$route.params;
       this.searchForm.onRentPointId = id || [];
       this.searchForm.rentStatus = rentStatus || [];
     }
     this.searchForm.operator = this.$route.params.id || "";
+    console.log(this.searchForm);
     this.setListLoader(paging => {
       return this.$apis.list({ ...this.searchForm, ...paging });
     });
   },
   beforeDestroy() {
     this.setFlag("");
-    console.log(this.getFlag);
   },
   methods: {
     onRefresh() {
@@ -92,6 +93,11 @@ export default {
     getPoint() {
       this.$apis.batteryPoint({}).then(res => {
         this.pointList = res.data;
+        let list = [];
+        res.data.map(n => {
+          list.push(n.value);
+        });
+        this.searchForm.onRentPointId = list;
       });
     },
     goDetail(item) {

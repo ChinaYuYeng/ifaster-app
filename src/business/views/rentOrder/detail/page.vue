@@ -7,10 +7,6 @@
           <span>{{ routeData.statusName }}</span>
         </div>
         <div class="content__item">
-          <span>电桩imei:</span>
-          <span>{{ routeData.pileImei }}</span>
-        </div>
-        <div class="content__item">
           <span>电池imei:</span>
           <span>{{ routeData.batteryImei }}</span>
         </div>
@@ -80,8 +76,12 @@
       </van-collapse-item>
       <van-collapse-item title="收支详情" name="1">
         <div class="content__item">
+          <span>押金:</span>
+          <span>{{ rentFeeTemplate.deposit }}元</span>
+        </div>
+        <div class="content__item">
           <span>营收:</span>
-          <span>{{ routeData.payFee }}元</span>
+          <span>{{ routeData.payFee - rentFeeTemplate.deposit }}元</span>
         </div>
         <div class="content__item">
           <span>支出:</span>

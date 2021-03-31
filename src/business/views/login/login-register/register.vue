@@ -146,12 +146,19 @@ export default {
 .label {
   width: 84%;
   margin-left: 8%;
+  margin-top: 10px;
 }
 .input {
   /* border-bottom: 1px solid #DDDDDD; */
   width: 92%;
   margin-left: 4%;
   margin-top: 0.5rem;
+  background-color: #f5f5f5;
+  border-radius: 15px;
+}
+.input ::placeholder {
+  color: #888888;
+  font-size: 15px;
 }
 .label {
   font-size: 15px;
@@ -163,7 +170,7 @@ export default {
   color: #55babb;
   border: 1px solid #55babb;
   border-radius: 5px;
-  font-size: 15px;
+  font-size: 10px;
   padding: 5px 20px;
 }
 .check {

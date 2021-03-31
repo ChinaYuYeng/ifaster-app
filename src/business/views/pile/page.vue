@@ -32,7 +32,7 @@ export default {
       modelList: [],
       tempList: [],
       list: [
-        { label: "电桩编号", prop: "number" },
+        { label: "电桩IMEI", prop: "imei" },
         { label: "所在地点", prop: "address" },
         { label: "收费模板", prop: "chargeFeeTemplateName" },
         { label: "状态", prop: "chargeStatusDesc" }
