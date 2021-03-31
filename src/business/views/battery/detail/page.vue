@@ -108,6 +108,10 @@ export default {
         {
           label: "当前容量(Ah)",
           prop: "currentCapacity"
+        },
+        {
+          label: "异常状态",
+          prop: "errorDesc"
         }
       ],
       listColumns2: [

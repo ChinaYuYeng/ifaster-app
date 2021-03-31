@@ -13,7 +13,7 @@
     </div>
     <BtnGroup style="margin-bottom:20px">
       <SubmitBtn text="搜索" size="small" :onSubmit="submit" width="30%"></SubmitBtn>
-      <button class="reset" @click="reset">重置</button>
+      <button class="reset__btn" @click="reset">重置</button>
     </BtnGroup>
   </van-form>
 </template>
@@ -79,7 +79,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.reset {
+.reset__btn {
   width: 30%;
   border: 1px solid #55babb;
   background-color: #fff;
