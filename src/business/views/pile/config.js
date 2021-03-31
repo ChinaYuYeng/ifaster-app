@@ -27,6 +27,9 @@ export default function({ post }) {
       },
       account(params) {
         return post("/charge/device/funds/list", params);
+      },
+      template(params) {
+        return post("/charge/device/update/template", params);
       }
     }
   };
@@ -59,6 +62,14 @@ export default function({ post }) {
         meta: {
           title: "分账信息",
           permission: "pile:account"
+        }
+      },
+      {
+        path: "template",
+        component: "./setTemplate/page.vue",
+        meta: {
+          title: "设置电桩收费模板",
+          permission: "pile:template"
         }
       }
     ]

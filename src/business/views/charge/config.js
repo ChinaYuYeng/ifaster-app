@@ -46,6 +46,9 @@ export default function({ post, get }) {
     getRentExample(params) {
       return get("/rent/rate/example", params); //获取默认的收费模板
     },
+    getRentFence(params) {
+      return post("/rent/rate/fence", params); //获取还车围栏模板列表
+    },
     // 充电
     getPileList(params) {
       return post("/charge/rate/list", params); //获取收费模板列表
@@ -60,14 +63,15 @@ export default function({ post, get }) {
       return post("/charge/rate/save", params); //新增-编辑收费模板
     },
     getPileExample(params) {
-      return post("/charge/rate/example", params); //获取默认的收费模板
+      return get("/charge/rate/example", params); //获取默认的收费模板
     }
   };
   const store = {
     state: {
       rent: {},
       pile: {},
-      active: 0
+      active: 0,
+      selectMod: false
     },
     getters: {
       getRentList(state) {
@@ -78,6 +82,9 @@ export default function({ post, get }) {
       },
       getActivat(state) {
         return state.active;
+      },
+      getSelectMod(state) {
+        return state.selectMod;
       }
     },
     mutations: {
@@ -89,6 +96,9 @@ export default function({ post, get }) {
       },
       setActivat(state, data) {
         state.active = data;
+      },
+      setSelectMod(state, data) {
+        state.selectMod = data;
       }
     },
     actions: {
