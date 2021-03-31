@@ -36,6 +36,12 @@ export default {
   activated() {
     this.getPointList();
     this.searchForm.rentPointId = this.$route.params.id || "";
+    this.searchForm.status = this.$route.params.status || "";
+    if (this.$route.params.pointId) {
+      this.savePointId(this.$route.params.pointId);
+    } else {
+      this.savePointId("");
+    }
     this.setListLoader(paging => {
       return this.$apis.list({ ...this.searchForm, ...paging });
     });
@@ -53,7 +59,6 @@ export default {
     },
     getPointList() {
       this.$apis.point({}).then(res => {
-        // console.log(res.data);
         this.pointList = res.data;
       });
     },
@@ -66,14 +71,20 @@ export default {
     },
     routeTo(item) {
       this.saveMessage(item);
-      if (item.status == 0) {
+      if (this.getPointId !== "") {
         this.$router.push({
-          path: "/staff/detail"
+          path: "/staff/bindStation"
         });
-      } else if (item.status == 1) {
-        this.$router.push({
-          path: "/staff/permission"
-        });
+      } else {
+        if (item.status == 0) {
+          this.$router.push({
+            path: "/staff/detail"
+          });
+        } else if (item.status == 1) {
+          this.$router.push({
+            path: "/staff/permission"
+          });
+        }
       }
     },
     gotoAdd() {

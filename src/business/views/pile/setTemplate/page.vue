@@ -8,7 +8,7 @@
       input-align="right"
       right-icon="arrow"
       v-model="templateName"
-      @click="routerTo({ name: '/charge', params: { $$action: { selectChargeItem } } })"
+      @click="routerTo({ name: '/charge', params: { $$action: { selectChargeItem }, chooseFlag: 1 } })"
     />
     <template #body-bottom>
       <SubmitBtn :onSubmit="submit" text="确定"></SubmitBtn>

@@ -6,6 +6,7 @@
         <span class="label">{{ item.label }} :</span>
       </div>
       <span class="data">{{ item1[item.prop] }}</span>
+      <span v-if="item.aprop">{{ "(" + item1[item.aprop] + ")" }}</span>
     </div>
     <van-icon v-if="hasArrow" class="arrow-icon" name="arrow" size="20" color="#B2B2B2" />
   </div>

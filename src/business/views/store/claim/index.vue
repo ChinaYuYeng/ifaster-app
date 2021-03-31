@@ -1,8 +1,8 @@
 <template>
   <AppLayout>
     <Info :obj="obj" :headImg="dataForm.info.img"></Info>
-    <van-divider :style="{ height: '20px', lineHeight: '20px', color: '#fff', backgroundColor: '#fff' }"></van-divider>
-    <van-row class="rw">
+    <van-divider :style="{ height: '20px', lineHeight: '20px', color: '#fff', backgroundColor: '#fff' }" v-if="getOperationType == 0"></van-divider>
+    <van-row class="rw" v-if="getOperationType == 0">
       <van-col span="12" class="rw-right">认领为：</van-col>
       <van-col span="12" class="rw-left">
         <van-radio-group v-model="dataForm.saleType" direction="horizontal" checked-color="#55BABB">
@@ -11,12 +11,9 @@
         </van-radio-group>
       </van-col>
     </van-row>
-    <van-row class="rw">
+    <van-row class="rw" v-if="getOperationType == 0">
       <van-col span="12" offset="12">注意：一经确定，无法修改</van-col>
     </van-row>
-    <!-- <van-row v-if="dataForm.saleType == 1">
-      <van-col span="24"><Percent ref="percent"></Percent></van-col>
-    </van-row> -->
     <template #body-bottom class="wrap">
       <van-row>
         <van-col span="8" offset="8">
@@ -44,7 +41,6 @@ export default {
     };
   },
   created() {
-    debugger;
     if (this.getOperationType == 0) {
       this.dataForm.info = this.getSelectedBatteryInfo;
     } else {
@@ -76,7 +72,6 @@ export default {
           saleType: this.dataForm.saleType,
           targetOperatorId: 0
         };
-        debugger;
         this.$apis.battery.operate(params).then(res => {
           if (res.code == "1") {
             this.$toast.success(res.msg);

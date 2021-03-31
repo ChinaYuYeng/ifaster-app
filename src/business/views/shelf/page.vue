@@ -41,6 +41,9 @@ export default {
       sideBarActive: ""
     };
   },
+  activated() {
+    this.showShelf();
+  },
   created() {
     this.sideBarActive = 0;
     this.getPointInfo();

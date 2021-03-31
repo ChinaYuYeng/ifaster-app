@@ -71,7 +71,7 @@ export default {
   },
   computed: {
     chartData() {
-      return this.dataList.map((v, index) => ({ genre: index, sold: v.realIncome }));
+      return this.dataList.map((v, index) => ({ x: index, y: v.realIncome }));
     }
   },
   methods: {
@@ -91,14 +91,16 @@ export default {
           width,
           height: 200
         }));
+        chart.axis("x", false);
         chart.legend(false);
 
         chart.source(this.chartData || []);
 
         chart
           .interval()
-          .position("genre*sold")
-          .color("genre", ["#55BABB"]);
+          .size("x", [6, 6])
+          .position("x*y")
+          .color("x", ["#55BABB"]);
 
         chart.render();
       });
