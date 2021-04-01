@@ -35,19 +35,20 @@ export default {
         { label: "电桩IMEI", prop: "imei" },
         { label: "所在地点", prop: "address" },
         { label: "收费模板", prop: "chargeFeeTemplateName" },
-        { label: "状态", prop: "chargeStatusDesc" }
+        { label: "状态", prop: "chargeStatusDesc" },
+        { label: "设备关系", prop: "operatorPileDesc" }
       ],
       searchForm: {
         operator: "",
         address: "",
         chargeFeeTemplateId: "",
-        chargeStatus: [],
-        isOnline: [],
+        chargeStatus: [0, 1],
+        isOnline: [0, 1],
         model: "",
         name: "",
         number: "",
-        status: [],
-        type: []
+        status: [-1, 0, 1],
+        type: [2, 3]
       },
       dataList: []
     };
@@ -55,7 +56,7 @@ export default {
   activated() {
     this.setFlag(this.$route.params.flag);
     console.log(this.getFlag);
-    this.searchForm.operator = this.$route.params.id || "";
+    this.searchForm.operator = this.$route.params.operId || "";
     this.setListLoader(paging => {
       return this.$apis.list({ ...this.searchForm, ...paging });
     });
@@ -79,15 +80,16 @@ export default {
     },
     resetForm() {
       this.searchForm = {
+        operator: "",
         address: "",
         chargeFeeTemplateId: "",
-        chargeStatus: [],
-        isOnline: [],
+        chargeStatus: [0, 1],
+        isOnline: [0, 1],
         model: "",
         name: "",
         number: "",
-        status: [],
-        type: []
+        status: [-1, 0, 1],
+        type: [2, 3]
       };
     },
     getModel() {
