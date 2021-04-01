@@ -39,6 +39,8 @@ function routerControll(router, store) {
   router.beforeEach((to, from, next) => {
     if (to.path === "/login/login") {
       next();
+    } else if (to.path === "/login/register") {
+      next();
     } else if (store.getters["login/getToken"]) {
       next();
     } else {
