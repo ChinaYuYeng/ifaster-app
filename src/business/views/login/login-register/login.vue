@@ -60,6 +60,13 @@ export default {
           required: true,
           message: "验证码不能为空",
           trigger: "onBlur"
+        },
+        {
+          validator: value => {
+            return /^[0-9]{6}$/.test(value);
+          },
+          message: "请输入正确的验证码",
+          trigger: "onBlur"
         }
       ],
       dataForm: {
@@ -141,10 +148,6 @@ export default {
   margin-top: 0.5rem;
   background-color: #f5f5f5;
   border-radius: 15px;
-}
-.input ::placeholder {
-  color: #888888;
-  font-size: 15px;
 }
 .label {
   font-size: 15px;

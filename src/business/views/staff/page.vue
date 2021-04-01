@@ -5,7 +5,7 @@
         <staffList :item="item"></staffList>
       </div>
     </LoadList>
-    <template #body-bottom>
+    <template #body-bottom v-if="!this.$route.params.id && this.getPointId == ''">
       <van-button text="新增店员" @click="gotoAdd"></van-button>
     </template>
     <template #search="scope">
