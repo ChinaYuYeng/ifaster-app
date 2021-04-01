@@ -50,10 +50,14 @@ export default {
     };
   },
   mounted() {
-    this.fetchData();
-    setTimeout(() => {
-      this.initMap();
-    }, 200);
+    this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
+      width: 100,
+      height: 100,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+    this.onRefresh();
   },
 
   methods: {
@@ -63,6 +67,7 @@ export default {
     fetchData() {
       return this.$apis.getPointDetail({ id: this.routerData.id }).then(res => {
         this.routerData = res.data;
+        this.qrcode.makeCode(this.routerData.qrcode);
       });
     },
     initMap() {
@@ -80,14 +85,6 @@ export default {
           })
         );
       });
-      this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
-        width: 100,
-        height: 100,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
-      });
-      this.qrcode.makeCode("dffdfdf");
     }
   }
 };
