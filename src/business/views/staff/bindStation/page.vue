@@ -40,7 +40,7 @@ export default {
     },
     save() {
       console.log(this.getPointId, this.staffData.id);
-      return this.$apis.bindStation({ rentPointId: 45, staffId: 51 }).then(res => {
+      return this.$apis.bindStation({ rentPointId: this.getPointId, staffId: this.staffData.id }).then(res => {
         console.log(res.data);
         if (res.code == 1) {
           this.$toast.success("租还点成功添加店员！");

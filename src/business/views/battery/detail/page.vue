@@ -91,7 +91,7 @@ export default {
         },
         {
           label: "设备名称",
-          prop: "remark"
+          prop: "rentFeeTemplateName"
         },
         {
           label: "当前温度(°C)",
@@ -145,10 +145,14 @@ export default {
       if (this.getFlag) {
         this.$toast.fail("当前权限不可操作！");
       } else {
-        if (this.dataForm.rentFeeTemplateId == 0) {
-          this.$router.push({ name: "/battery/puton", params: { data: this.dataForm } });
+        if (this.dataForm.relationType == 1) {
+          if (this.dataForm.rentFeeTemplateId == 0) {
+            this.$router.push({ name: "/battery/puton", params: { data: this.dataForm } });
+          } else {
+            this.$toast.fail("该电池已上架，不可重复上架！");
+          }
         } else {
-          this.$toast.fail("该电池已上架，不可重复上架！");
+          this.$toast.fail("当前用户不是运营人员，无法操作！");
         }
       }
     },
@@ -156,10 +160,14 @@ export default {
       if (this.getFlag) {
         this.$toast.fail("当前权限不可操作！");
       } else {
-        if (this.dataForm.rentFeeTemplateId !== 0) {
-          this.show = true;
+        if (this.dataForm.relationType == 1) {
+          if (this.dataForm.rentFeeTemplateId !== 0) {
+            this.show = true;
+          } else {
+            this.$toast.fail("该电池未上架！");
+          }
         } else {
-          this.$toast.fail("该电池未上架！");
+          this.$toast.fail("当前用户不是运营人员，无法操作！");
         }
       }
     },
@@ -188,7 +196,11 @@ export default {
       if (this.getFlag) {
         this.$toast.fail("当前权限不可操作！");
       } else {
-        this.$router.push({ name: "/battery/log", params: { data: this.dataForm } });
+        if (this.dataForm.relationType == 1) {
+          this.$router.push({ name: "/battery/log", params: { data: this.dataForm } });
+        } else {
+          this.$toast.fail("当前用户不是运营人员，无法操作！");
+        }
       }
     },
     checkAccount() {
@@ -238,7 +250,7 @@ export default {
         this.selectColumn2[0].values.push(i + "小时");
       }
       for (let i = 0; i < 59; i++) {
-        this.selectColumn2[1].values.push(i + 1 + "分钟");
+        this.selectColumn2[1].values.push(i + "分钟");
       }
     },
     onConfirm1(index, value) {
@@ -307,8 +319,17 @@ export default {
       });
     },
     goNavigation() {
-      const url = "https://uri.amap.com/marker?position=" + this.dataForm.lng + "," + this.dataForm.lat + "&src=mypage&coordinate=gaode&callnative=1";
-      window.open(url, "_blank");
+      if (this.getFlag) {
+        this.$toast.fail("当前权限不可操作！");
+      } else {
+        if (this.dataForm.relationType == 1) {
+          const url =
+            "https://uri.amap.com/marker?position=" + this.dataForm.lng + "," + this.dataForm.lat + "&src=mypage&coordinate=gaode&callnative=1";
+          window.open(url, "_blank");
+        } else {
+          this.$toast.fail("当前用户不是运营人员，无法操作！");
+        }
+      }
     }
   },
   components: {
