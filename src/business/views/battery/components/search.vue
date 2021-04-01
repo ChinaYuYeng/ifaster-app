@@ -3,26 +3,33 @@
     <div style="height:450px;overflow:scroll">
       <van-field label="电池IMEI" label-width="100px" placeholder="请输入电池IMEI" v-model="searchForm.imei" />
       <van-field label="电池编号" label-width="100px" placeholder="请输入电池编号" v-model="searchForm.number" />
-      <Select label-width="100px" label="设备类型" v-model="searchForm.model" :options="modelList"></Select>
+      <!-- <Select label-width="100px" label="设备类型" v-model="searchForm.model" :options="modelList"></Select> -->
+      <van-collapse v-model="activeNames">
+        <van-collapse-item name="1" title="设备类型">
+          <MultiCheck label-width="100px" v-model="searchForm.model" :options="modelList"></MultiCheck>
+        </van-collapse-item>
+      </van-collapse>
       <MultiCheck label="设备关系" v-model="searchForm.type" :options="type"></MultiCheck>
       <MultiCheck label-width="100px" label="所属租还点" v-model="searchForm.onRentPointId" :options="point"></MultiCheck>
       <MultiCheck label="电池状态" v-model="searchForm.isOnline" :options="isOnline"></MultiCheck>
+      <MultiCheck label="异常状态" v-model="searchForm.isError" :options="isError"></MultiCheck>
       <MultiCheck label="租赁状态" v-model="searchForm.rentStatus" :options="rentStatus"></MultiCheck>
     </div>
     <BtnGroup style="margin-bottom:20px">
       <SubmitBtn text="搜索" size="small" :onSubmit="submit" width="30%"></SubmitBtn>
-      <button class="reset" @click="reset">重置</button>
+      <button class="reset__btn" @click="reset">重置</button>
     </BtnGroup>
   </van-form>
 </template>
 
 <script>
 import MultiCheck from "@@/components/form/multiCheck";
-import Select from "@@/components/form/select";
+// import Select from "@@/components/form/select";
 export default {
-  components: { MultiCheck, Select },
+  components: { MultiCheck },
   data() {
     return {
+      activeNames: [1],
       modelList: [],
       type: [
         { name: "闲置", value: 1 },
@@ -32,6 +39,10 @@ export default {
       isOnline: [
         { name: "离线", value: 0 },
         { name: "在线", value: 1 }
+      ],
+      isError: [
+        { name: "异常", value: 0 },
+        { name: "正常", value: 1 }
       ],
       rentStatus: [
         { name: "未上架", value: 0 },
@@ -74,7 +85,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.reset {
+.reset__btn {
   width: 30%;
   border: 1px solid #55babb;
   background-color: #fff;

@@ -1,14 +1,14 @@
 <template>
   <AppLayout ref="report__wrap" :onRefresh="onRefresh" @onshow="onRefresh">
-    <van-tabs :before-change="beforeChange" :active="active" v-show="!getSelectMod">
-      <van-tab v-for="(t, index) in title" :key="index" :value="index">
-        <template #title>
-          <span class="iconfont" v-html="t.icon"></span>
-          <span>{{ t.name }}</span>
-        </template>
-      </van-tab>
-    </van-tabs>
     <LoadList :loadStatus="loadStatus">
+      <van-tabs :before-change="beforeChange" :active="active" v-show="!getSelectMod">
+        <van-tab v-for="(t, index) in title" :key="index" :value="index">
+          <template #title>
+            <span class="iconfont" v-html="t.icon"></span>
+            <span>{{ t.name }}</span>
+          </template>
+        </van-tab>
+      </van-tabs>
       <Panel v-for="item in dataList" :key="item.id" class="mtop10">
         <div class="content__item order__header" slot="header" @click="gotoDetail(item)">
           <img class="list-img" :src="item.img" alt="" />
@@ -48,17 +48,23 @@ export default {
   },
   activated() {
     this.routeAction = this.$route.params.$$action || {};
-    // this.getRentData();
     // 是否开启列表选择模式
     this.setSelectMod(!!this.routeAction.selectChargeItem);
     if (this.$route.params.chooseFlag == 1) {
       this.active = 1;
       this.btnMessage = "新增充电收费模板";
+      this.addM = false;
+      this.setListLoader(paging => {
+        return this.$apis.getPileList({ ...paging });
+      });
     } else {
       this.active = 0;
       this.btnMessage = "新增租赁收费模板";
+      this.addM = true;
+      this.setListLoader(paging => {
+        return this.$apis.getRentList({ ...paging });
+      });
     }
-    this.onRefresh();
   },
   methods: {
     selectChargeItem(item) {
@@ -95,12 +101,7 @@ export default {
       }
     },
     onRefresh() {
-      this.dataList = [];
-      if (this.active == 0) {
-        this.getRentData();
-      } else {
-        this.getPileData();
-      }
+      return this.setListLoader();
     },
     // 加载--租赁--收费模板列表
     getRentData() {
@@ -118,12 +119,10 @@ export default {
     },
     //进入新增--租赁--模板页面
     addRentM() {
-      // console.log("11--进入新增--租赁--模板页面");
       this.$router.push({ name: "/charge/editrent", params: { a: 1 } });
     },
     //进入新增--充电--模板页面
     addPileM() {
-      // console.log("22--进入新增--充电--模板页面");
       this.$router.push({ name: "/charge/editpile", params: { a: 1 } });
     },
     // 操作Tab选项卡按钮时的方法
