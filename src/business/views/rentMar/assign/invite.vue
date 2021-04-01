@@ -31,7 +31,7 @@ export default {
   methods: {
     creatQrCode() {
       let operator = this.$store.getters["home/getOperator"];
-      let url = `${window.location.host}/#/login/register?operator=${operator.operatorName}&operatorId=${operator.operatorId}&roleId=${this.roleId}`;
+      let url = `${window.location.protocol}//${window.location.host}${window.location.pathname}#/login/register?operator=${operator.operatorName}&operatorId=${operator.operatorId}&roleId=${this.roleId}`;
       this.qrcode.clear();
       this.qrcode.makeCode(url);
     }
