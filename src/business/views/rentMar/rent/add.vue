@@ -10,12 +10,11 @@
         placeholder="请输入租还点名称"
         :rules="[{ required: true, message: '请输入租还点名称' }]"
       />
-      <van-field
-        v-model="formData.address"
-        label="租还点地址："
-        placeholder="请输入租还点地址"
-        :rules="[{ required: true, message: '请输入租还点地址' }]"
-      />
+      <van-field label="租还点地址：" :rules="[{ required: true, message: '请输入租还点地址' }]">
+        <template #input>
+          <input id="addressInput" v-model="formData.address" class="van-field__control" placeholder="请输入租还点地址" />
+        </template>
+      </van-field>
       <van-field
         v-model="formData.contact"
         label="联系电话："
@@ -97,7 +96,7 @@ export default {
       let lnglat = this.formData.lng && this.formData.lat && [this.formData.lng, this.formData.lat];
       AMapLoader.load({
         key: "21a1ca7e415887a172fe8399bd114b28",
-        plugins: ["AMap.Geocoder", "AMap.Geolocation"],
+        plugins: ["AMap.AutoComplete", "AMap.Geolocation", "AMap.PlaceSearch"],
         version: "2.0"
       }).then(AMap => {
         this.map = new AMap.Map("rentMar__map-add", {
@@ -107,7 +106,8 @@ export default {
           const LocMark = (this.LocMark = new AMap.Marker({
             position: lnglat,
             draggable: true,
-            raiseOnDrag: true
+            raiseOnDrag: true,
+            zIndex: 100
           })).on("dragend", () => {
             const newPos = LocMark.getPosition();
             this.formData.lng = newPos.lng;
@@ -115,8 +115,25 @@ export default {
           });
           this.map.add(LocMark);
           this.map.setCenter(lnglat);
-          this.geoc = new AMap.Geocoder({
-            batch: false
+          this.map.on("click", e => {
+            this.formData.lng = e.lnglat.lng;
+            this.formData.lat = e.lnglat.lat;
+            this.LocMark.setPosition([this.formData.lng, this.formData.lat]);
+          });
+          this.AutoComplete = new AMap.AutoComplete({ input: "addressInput" });
+          this.placeSearch = new AMap.PlaceSearch({
+            // map: this.map,
+          });
+          this.AutoComplete.on("select", e => {
+            this.placeSearch.search(e.poi.name, (status, result) => {
+              if (status == "complete") {
+                let { lng, lat } = result.poiList.pois[0].location;
+                this.formData.lng = lng;
+                this.formData.lat = lat;
+                this.LocMark.setPosition([lng, lat]);
+                this.map.setCenter([lng, lat]);
+              }
+            });
           });
         };
         if (!lnglat) {
@@ -147,24 +164,6 @@ export default {
   },
   beforeDestroy() {
     this.map && this.map.destroy();
-  },
-  watch: {
-    "formData.address"(val) {
-      if (val && this.geoc) {
-        this.geoc.getLocation(val, (status, result) => {
-          if (status === "complete") {
-            let { lat, lng } = result.geocodes[0].location;
-            this.formData.lat = lat;
-            this.formData.lng = lng;
-            this.formData.areaCode = result.geocodes[0].adcode;
-            this.LocMark.setPosition([lng, lat]);
-            this.map.setCenter([lng, lat]);
-          } else {
-            console.log(status);
-          }
-        });
-      }
-    }
   }
 };
 </script>
