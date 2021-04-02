@@ -40,11 +40,11 @@
         </div>
         <div class="content__item">
           <span>收费模板:</span>
-          <span>{{ routeData.typeName }}</span>
+          <span>{{ routeData.rentTemplateName }}</span>
         </div>
         <div class="content__item">
           <span>公司赠送积分:</span>
-          <span>{{ routeData.typeName }}</span>
+          <span>{{ routeData.points }}</span>
         </div>
         <div class="content__item order__footer" slot="footer">
           <span>{{ routeData.returnTime }}</span>
@@ -81,7 +81,7 @@
         </div>
         <div class="content__item">
           <span>营收:</span>
-          <span>{{ routeData.payFee - rentFeeTemplate.deposit }}元</span>
+          <span>{{ routeData.payFee }}元</span>
         </div>
         <div class="content__item">
           <span>支出:</span>
