@@ -5,7 +5,7 @@
         <staffList :item="item"></staffList>
       </div>
     </LoadList>
-    <template #body-bottom v-if="!this.$route.params.id && this.getPointId == ''">
+    <template #body-bottom v-if="!this.getisUnbindStation && this.getPointId == ''">
       <van-button text="新增店员" @click="gotoAdd"></van-button>
     </template>
     <template #search="scope">
@@ -37,6 +37,11 @@ export default {
     this.getPointList();
     this.searchForm.rentPointId = this.$route.params.id || "";
     this.searchForm.status = this.$route.params.status || "";
+    if (this.$route.params.id) {
+      this.saveisUnbindStation(true);
+    } else {
+      this.saveisUnbindStation(false);
+    }
     if (this.$route.params.pointId) {
       this.savePointId(this.$route.params.pointId);
     } else {

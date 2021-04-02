@@ -33,6 +33,9 @@ export default function({ post, get }) {
       },
       bindStation(params) {
         return post("/rent/point/staff/add", params);
+      },
+      deletePointStaff(params) {
+        return post("/rent/point/staff/delete", params);
       }
     }
   };
@@ -113,7 +116,8 @@ export default function({ post, get }) {
       staffInfo: {},
       templateInfo: {},
       passFlag: false,
-      pointId: ""
+      pointId: "",
+      isUnbindStation: false
     },
     getters: {
       getStaffInfo(state) {
@@ -127,6 +131,9 @@ export default function({ post, get }) {
       },
       getPointId(state) {
         return state.pointId;
+      },
+      getisUnbindStation(state) {
+        return state.isUnbindStation;
       }
     },
     mutations: {
@@ -141,6 +148,9 @@ export default function({ post, get }) {
       },
       setPointId(state, data) {
         state.pointId = data;
+      },
+      setisUnbindStation(state, data) {
+        state.isUnbindStation = data;
       }
     },
     actions: {
@@ -155,6 +165,9 @@ export default function({ post, get }) {
       },
       savePointId({ commit }, data) {
         commit("setPointId", data);
+      },
+      saveisUnbindStation({ commit }, data) {
+        commit("setisUnbindStation", data);
       }
     }
   };

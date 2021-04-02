@@ -35,7 +35,7 @@
       </Panel>
     </LoadList>
     <template #search="scope">
-      <Search :onSearch="onSearch.bind(this, scope)" :searchForm="searchForm"></Search>
+      <Search :model="modelList" :point="pointList" :onSearch="onSearch.bind(this, scope)" :searchForm="searchForm"></Search>
     </template>
   </AppLayout>
 </template>
@@ -48,13 +48,23 @@ export default {
   mixins: [loadList],
   data() {
     return {
+      modelList: [],
+      pointList: [],
       searchForm: {
-        status1: 1,
-        date: new Date().toUTCString()
+        batteryImei: "",
+        batteryModel: [],
+        batteryNo: "",
+        customerMobile: "",
+        isTimeout: [],
+        number: "",
+        operator: "",
+        rentPointId: [],
+        status: []
       }
     };
   },
   created() {
+    this.getSearchData();
     this.setListLoader(paging => {
       return this.$apis.getList({ ...this.searchForm, ...paging });
     });
@@ -65,6 +75,14 @@ export default {
     },
     onSearch({ close }) {
       return this.setListLoader().then(close);
+    },
+    getSearchData() {
+      this.$apis.getModel().then(res => {
+        this.modelList = res.data;
+      });
+      this.$apis.getPoint().then(res => {
+        this.pointList = res.data;
+      });
     }
   }
 };

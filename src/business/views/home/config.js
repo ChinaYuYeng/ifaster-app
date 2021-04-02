@@ -3,6 +3,9 @@ export default function({ post }) {
     apis: {
       getInfo(params) {
         return post("account/homepage/info", params);
+      },
+      setPoint(params) {
+        return post("/account/staff/choose/point", params);
       }
     },
     store: {

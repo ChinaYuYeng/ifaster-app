@@ -4,13 +4,12 @@
       <div id="rentMar__map-add" style="width:100%; height:200px;"></div>
     </Panel>
     <van-form label-width="70px" ref="form" validate-trigger="onSubmit" :show-error-message="false">
-      <van-field
-        v-if="this.$route.params.flag == 'address'"
-        v-model="formData.address"
-        label="电桩地址:"
-        placeholder="请输入电桩地址"
-        :rules="[{ required: true, message: '请输入电桩地址' }]"
-      />
+      <van-field v-if="this.$route.params.flag == 'address'" label="电桩地址:" :rules="[{ required: true, message: '请输入电桩地址' }]">
+        <template #input>
+          <input id="addressInput" v-model="formData.address" class="van-field__control" placeholder="请输入电桩地址" />
+        </template>
+      </van-field>
+
       <van-field
         v-if="this.$route.params.flag == 'name'"
         v-model="formData.name"
@@ -54,29 +53,72 @@ export default {
   },
   methods: {
     initMap() {
-      const lnglat = [this.formData.lng || 120.755511, this.formData.lat || 30.746992];
+      let lnglat = this.formData.lng && this.formData.lat && [this.formData.lng, this.formData.lat];
       AMapLoader.load({
         key: "21a1ca7e415887a172fe8399bd114b28",
-        plugins: ["AMap.Geocoder"],
+        plugins: ["AMap.AutoComplete", "AMap.Geolocation", "AMap.PlaceSearch"],
         version: "2.0"
       }).then(AMap => {
-        const location = (this.LocMark = new AMap.Marker({
-          position: lnglat,
-          draggable: true,
-          raiseOnDrag: true
-        })).on("dragend", () => {
-          const newPos = location.getPosition();
-          this.formData.lng = newPos.lng;
-          this.formData.lat = newPos.lat;
-        });
         this.map = new AMap.Map("rentMar__map-add", {
-          zoom: 18,
-          center: lnglat
+          zoom: 18
         });
-        this.map.add(location);
-        this.geoc = new AMap.Geocoder({
-          batch: false
-        });
+        let showMap = () => {
+          const LocMark = (this.LocMark = new AMap.Marker({
+            position: lnglat,
+            draggable: true,
+            raiseOnDrag: true,
+            zIndex: 100
+          })).on("dragend", () => {
+            const newPos = LocMark.getPosition();
+            this.formData.lng = newPos.lng;
+            this.formData.lat = newPos.lat;
+          });
+          this.map.add(LocMark);
+          this.map.setCenter(lnglat);
+          this.map.on("click", e => {
+            this.formData.lng = e.lnglat.lng;
+            this.formData.lat = e.lnglat.lat;
+            this.LocMark.setPosition([this.formData.lng, this.formData.lat]);
+          });
+          this.AutoComplete = new AMap.AutoComplete({ input: "addressInput" });
+          this.placeSearch = new AMap.PlaceSearch({
+            // map: this.map,
+          });
+          this.AutoComplete.on("select", e => {
+            this.placeSearch.search(e.poi.name, (status, result) => {
+              if (status == "complete") {
+                let { lng, lat } = result.poiList.pois[0].location;
+                this.formData.lng = lng;
+                this.formData.lat = lat;
+                this.LocMark.setPosition([lng, lat]);
+                this.map.setCenter([lng, lat]);
+              }
+            });
+          });
+        };
+        if (!lnglat) {
+          const location = new AMap.Geolocation({
+            enableHighAccuracy: true,
+            timeout: 4000,
+            buttonOffset: new AMap.Pixel(10, 20),
+            zoomToAccuracy: true,
+            buttonPosition: "RB",
+            showButton: false,
+            showMarker: false,
+            showCircle: false,
+            panToLocation: false
+          });
+          location.getCurrentPosition((status, result) => {
+            if (status == "complete") {
+              lnglat = [result.position.lng, result.position.lat];
+            } else {
+              lnglat = [120.755511, 30.746992];
+            }
+            showMap();
+          });
+        } else {
+          showMap();
+        }
       });
     },
     setDataForm() {

@@ -10,9 +10,10 @@
     <Panel>
       <van-cell title="姓名：" :value="staffData.cnName"></van-cell>
       <van-cell title="电话：" :value="staffData.mobile"></van-cell>
-      <van-cell title="选择权限模板：" is-link @click="routerTo({ name: '/staff/template' })"></van-cell>
-      <van-cell title="个人权限" is-link @click="routerTo({ name: '/staff/authList' })"></van-cell>
+      <van-cell v-if="!this.getisUnbindStation" title="选择权限模板：" is-link @click="routerTo({ name: '/staff/template' })"></van-cell>
+      <van-cell v-if="!this.getisUnbindStation" title="个人权限" is-link @click="routerTo({ name: '/staff/authList' })"></van-cell>
       <btnGroup :leftbtn="'删除店员'" :rightbtn="'确 定'" :leftFunc="deleteStaff" :rightFunc="save"></btnGroup>
+      <!-- <btnGroup v-if="this.getisUnbindStation" :leftbtn="''" :rightbtn="'确 定'" :leftFunc="deleteStaff" :rightFunc="save"></btnGroup> -->
     </Panel>
   </AppLayout>
 </template>
@@ -45,15 +46,27 @@ export default {
       }
     },
     deleteStaff() {
-      return this.$apis.audit({ id: this.staffData.id, status: 0 }).then(res => {
-        console.log(res.data);
-        if (res.code == 1) {
-          this.$toast.success("已成功删除该店员！");
-          this.$router.push("/staff");
-        } else {
-          this.$toast.fail("删除店员失败！");
-        }
-      });
+      console.log(this.getStaffInfo);
+      if (this.getisUnbindStation) {
+        return this.$apis.deletePointStaff({ id: this.getStaffInfo.id }).then(res => {
+          if (res.code == 1) {
+            this.$toast.success("该店员已成功解绑！");
+            this.$router.go(-1);
+          } else {
+            this.$toast.fail("店员解绑失败！");
+          }
+        });
+      } else {
+        return this.$apis.audit({ id: this.getStaffInfo.id, status: 0, authList: this.getStaffInfo.authList }).then(res => {
+          console.log(res.data);
+          if (res.code == 1) {
+            this.$toast.success("已成功删除该店员！");
+            this.$router.go(-1);
+          } else {
+            this.$toast.fail("删除店员失败！");
+          }
+        });
+      }
     }
   },
   components: {

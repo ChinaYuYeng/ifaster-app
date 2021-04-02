@@ -6,7 +6,7 @@
     </UserInfo>
     <van-icon name="arrow" size="15px" class="arrow__icon" v-if="hasArrow" />
     <div class="list__item">
-      <span>订单数量:{{ dataItem.rentOrderCount }}</span>
+      <span>订单数量:{{ dataItem.rentOrderCount + dataItem.chargeOrderCount }}</span>
       <span>租还点数量:{{ dataItem.rentPointCount }}</span>
     </div>
     <div class="list__item">

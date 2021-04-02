@@ -173,10 +173,10 @@ export default {
         key: "21a1ca7e415887a172fe8399bd114b28",
         version: "2.0"
       }).then(AMap => {
-        new AMap.Map("rentMar__map", {
+        (this.map = new AMap.Map("rentMar__map", {
           zoom: 15,
           center: lnglat
-        }).add(
+        })).add(
           new AMap.Marker({
             position: lnglat
           })

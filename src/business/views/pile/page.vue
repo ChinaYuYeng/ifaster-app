@@ -42,12 +42,12 @@ export default {
         operator: "",
         address: "",
         chargeFeeTemplateId: "",
-        chargeStatus: [0, 1],
-        isOnline: [0, 1],
+        chargeStatus: [],
+        isOnline: [],
         model: "",
         name: "",
         number: "",
-        status: [-1, 0, 1],
+        status: [],
         type: [2, 3]
       },
       dataList: []
@@ -62,6 +62,7 @@ export default {
     });
     this.getModel();
     this.getTemp();
+    this.resetForm();
   },
   beforeDestroy() {
     this.setFlag("");
@@ -83,12 +84,12 @@ export default {
         operator: "",
         address: "",
         chargeFeeTemplateId: "",
-        chargeStatus: [0, 1],
-        isOnline: [0, 1],
+        chargeStatus: [],
+        isOnline: [],
         model: "",
         name: "",
         number: "",
-        status: [-1, 0, 1],
+        status: [],
         type: [2, 3]
       };
     },
