@@ -33,6 +33,7 @@ module.exports = {
     }
   ],
   globals: {
-    AMapLoader: true
+    AMapLoader: true,
+    AMap:true
   }
 };
