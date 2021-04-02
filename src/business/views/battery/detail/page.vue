@@ -274,23 +274,42 @@ export default {
     },
     onConfirm2(index, value) {
       //运营商临时解锁选择时间
-      let min = value[0] * 60 + value[1] + 1;
-      this.$apis
-        .temporary({
-          batteryId: this.getbatteryInfo.id,
-          temporaryLockStatus: 0,
-          temporaryLockTime: min
-        })
-        .then(res => {
-          if (res.code == 1) {
-            this.$toast.success("运营商临时解锁成功！");
-            this.getBatteryDetail();
-            this.isShowPicker = false;
-          } else {
-            this.$toast.success("运营商临时解锁失败！");
-            this.isShowPicker = false;
-          }
-        });
+      let min = value[0] * 60 + value[1];
+      // console.log(min);
+      if (min == 0) {
+        this.$apis
+          .temporaryLock({
+            batteryId: this.getbatteryInfo.id,
+            temporaryLockStatus: 1
+          })
+          .then(res => {
+            if (res.code == 1) {
+              this.$toast.success("运营商临时锁定成功！");
+              this.getBatteryDetail();
+              this.isShowPicker = false;
+            } else {
+              this.$toast.success("运营商临时锁定失败！");
+              this.isShowPicker = false;
+            }
+          });
+      } else {
+        this.$apis
+          .temporary({
+            batteryId: this.getbatteryInfo.id,
+            temporaryLockStatus: 0,
+            temporaryLockTime: min
+          })
+          .then(res => {
+            if (res.code == 1) {
+              this.$toast.success("运营商临时解锁成功！");
+              this.getBatteryDetail();
+              this.isShowPicker = false;
+            } else {
+              this.$toast.success("运营商临时解锁失败！");
+              this.isShowPicker = false;
+            }
+          });
+      }
     },
     onCancel2() {
       this.isShowPicker = false;

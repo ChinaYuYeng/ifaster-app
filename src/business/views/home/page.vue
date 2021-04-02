@@ -7,6 +7,15 @@
         <span>{{ operator.operatorMobile }}</span>
         <span>{{ operator.operatorNo }}</span>
       </UserInfo>
+      <div class="change_point_btn" v-if="operator.isStaff !== 0">
+        <Select
+          label="当前租还点："
+          placeholder="请选择租还点"
+          v-model="point"
+          :options="operator.staffPoints"
+          :close-on-click-action="true"
+        ></Select>
+      </div>
       <Panel>
         <van-row gutter="10">
           <van-col span="12">
@@ -111,12 +120,15 @@
 </template>
 
 <script>
+import Select from "@@/components/form/select";
 import Links from "./components/links";
 export default {
-  components: { Links },
+  components: { Links, Select },
   data() {
     return {
-      operator: {}
+      operator: {},
+      point: "",
+      options: []
     };
   },
   activated() {
@@ -127,7 +139,28 @@ export default {
       return this.$apis.getInfo().then(res => {
         this.operator = res.data;
         this.doOperator(this.operator);
+        this.point = this.operator.staffChoosePointId;
       });
+    },
+    setPoint() {
+      this.$apis.setPoint({ id: this.point }).then(res => {
+        if (res.code == 1) {
+          this.$toast.success("切换当前租还点成功！");
+          this.onRefresh();
+        } else {
+          this.$toast.success("切换租还点失败！");
+        }
+      });
+    }
+  },
+  watch: {
+    point: {
+      handler: function() {
+        if (this.point !== this.operator.staffChoosePointId) {
+          this.setPoint();
+        }
+      },
+      deep: true
     }
   }
 };

@@ -19,6 +19,9 @@ export default function({ post }) {
       temporary(params) {
         return post("/rent/device/switch/temporary", params);
       },
+      temporaryLock(params) {
+        return post("/rent/device/switch/temporary/lock", params);
+      },
       batteryModel(params) {
         return post("/rent/device/model/list", params);
       },

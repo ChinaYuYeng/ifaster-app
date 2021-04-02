@@ -34,14 +34,14 @@ export default {
       searchForm: {
         operator: "",
         imei: "",
-        isOnline: [0, 1],
+        isOnline: [],
         model: [],
         number: "",
         onRentPointId: [],
         rentFeeTemplateId: [],
-        rentStatus: [0, 1, 2],
+        rentStatus: [],
         type: [2, 3],
-        isError: [0, 1]
+        isError: []
       },
       list: [
         { label: "电池imei", prop: "imei", aprop: "soc" },
@@ -54,8 +54,8 @@ export default {
     };
   },
   activated() {
-    // this.getModel();
-    // this.getPoint();
+    this.getModel();
+    this.getPoint();
     this.resetForm();
     this.saveFlag(this.$route.params.flag);
     if (this.$route.params.rentStatus) {
@@ -64,24 +64,9 @@ export default {
       this.searchForm.rentStatus = rentStatus || [];
     }
     this.searchForm.operator = this.$route.params.operId || "";
-    this.$apis.batteryPoint({}).then(res => {
-      this.pointList = res.data;
-      let list = [];
-      this.pointList.map(n => {
-        list.push(n.value);
-      });
-      this.searchForm.onRentPointId = list;
-      this.$apis.batteryModel({}).then(res => {
-        this.modelList = res.data;
-        let list = [];
-        this.modelList.map(n => {
-          list.push(n);
-        });
-        this.searchForm.model = list;
-        this.setListLoader(paging => {
-          return this.$apis.list({ ...this.searchForm, ...paging });
-        });
-      });
+
+    this.setListLoader(paging => {
+      return this.$apis.list({ ...this.searchForm, ...paging });
     });
   },
   beforeDestroy() {
@@ -103,25 +88,15 @@ export default {
       this.searchForm = {
         operator: "",
         imei: "",
-        isOnline: [0, 1],
+        isOnline: [],
         model: [],
         number: "",
         onRentPointId: [],
         rentFeeTemplateId: [],
-        rentStatus: [0, 1, 2],
+        rentStatus: [],
         type: [2, 3],
-        isError: [0, 1]
+        isError: []
       };
-      let list1 = [];
-      let list2 = [];
-      this.pointList.map(n => {
-        list1.push(n.value);
-      });
-      this.modelList.map(n => {
-        list2.push(n);
-      });
-      this.searchForm.onRentPointId = list1;
-      this.searchForm.model = list2;
     },
     getPoint() {
       this.$apis.batteryPoint({}).then(res => {
