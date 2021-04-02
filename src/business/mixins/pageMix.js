@@ -2,7 +2,7 @@ import Vue from "vue";
 import { getStore } from "@/store";
 
 const store = getStore();
-const exclude = ["/home", "/login/login"];
+const exclude = ["/home", "/login/login", "/login/register"];
 function checkAuth(permission) {
   const permissions = store.getters["login/getPermissions"];
   if (permissions.length === 1 && permissions[0] === "admin") {
@@ -39,5 +39,8 @@ export default {
       this.$router[method](route);
     },
     checkAuth
+  },
+  beforeDestroy() {
+    this._vnode && this._vnode.componentOptions && this._vnode.componentOptions.tag == "AppLayout" && this._vnode.componentInstance.$destroy();
   }
 };

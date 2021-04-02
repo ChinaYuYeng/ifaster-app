@@ -157,7 +157,7 @@
         </div>
         <div class="content__item">
           <span>电池编号:</span>
-          <span>{{ routeData.batteryModel }}</span>
+          <span>{{ routeData.batteryNo }}</span>
         </div>
       </van-collapse-item>
     </van-collapse>

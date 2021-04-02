@@ -50,7 +50,7 @@
             type="info"
             size="mini"
             @click="routerTo({ name: '/report/statement/chargeDetail', params: item })"
-            v-if="routeData.orderType == 1"
+            v-if="routeData.orderType == 2"
           >
             查看详情
           </van-button>
