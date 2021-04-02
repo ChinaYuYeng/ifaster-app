@@ -41,6 +41,6 @@ export default {
     checkAuth
   },
   beforeDestroy() {
-    this._vnode.componentOptions.tag == "AppLayout" && this._vnode.componentInstance.$destroy();
+    this._vnode && this._vnode.componentOptions && this._vnode.componentOptions.tag == "AppLayout" && this._vnode.componentInstance.$destroy();
   }
 };
