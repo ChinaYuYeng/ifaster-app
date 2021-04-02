@@ -21,6 +21,7 @@
       </Panel>
       <Panel v-if="!getSelectMod">
         <van-cell title="店员人数" is-link :value="routerData.staffNum" @click="routerTo({ name: '/staff', params: { id: routerData.id } })" />
+        <van-cell title="绑定店员" is-link @click="routerTo({ name: '/staff', params: { pointId: routerData.id, status: 1 } })" />
         <van-cell
           title="已租设备"
           is-link
