@@ -57,13 +57,6 @@ export default {
   },
   mounted() {
     this.setCurrentPointId(this.routerData.id);
-    this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
-      width: 100,
-      height: 100,
-      colorDark: "#000000",
-      colorLight: "#ffffff",
-      correctLevel: QRCode.CorrectLevel.H
-    });
     this.onRefresh();
   },
 
@@ -74,7 +67,14 @@ export default {
     fetchData() {
       return this.$apis.getPointDetail({ id: this.routerData.id }).then(res => {
         this.routerData = res.data;
-        this.qrcode.makeCode(this.routerData.qrcode);
+        this.qrcode && this.qrcode.clear();
+        this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
+          width: 100,
+          height: 100,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H
+        }).makeCode(this.routerData.qrcode);
       });
     },
     initMap() {

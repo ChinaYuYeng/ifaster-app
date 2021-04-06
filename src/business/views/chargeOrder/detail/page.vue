@@ -99,7 +99,7 @@
       <van-collapse-item title="设备信息" name="4">
         <div class="content__item">
           <span>设备关系:</span>
-          <span>{{ routeData.batteryModel }}</span>
+          <span>{{ routeData.deviceRelation }}</span>
         </div>
         <div class="content__item">
           <span>电池imei:</span>
@@ -107,7 +107,7 @@
         </div>
         <div class="content__item">
           <span>电池编号:</span>
-          <span>{{ routeData.batteryModel }}</span>
+          <span>{{ routeData.batteryNo }}</span>
         </div>
       </van-collapse-item>
     </van-collapse>
