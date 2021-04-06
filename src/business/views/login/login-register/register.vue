@@ -97,6 +97,10 @@ export default {
       }
     };
   },
+  created() {
+    this.dataForm.operator = this.$route.query.operator;
+    // console.log(this.dataForm);
+  },
   methods: {
     showPopup() {
       this.show = true;
@@ -117,16 +121,21 @@ export default {
         .catch(() => {
           this.$notify("请先填写手机号");
         });
-
       // this.$apis.sms({ mobile: this.dataForm.mobile, type: 2 });
     },
     register() {
       if (this.checked) {
-        this.$refs.form.validate().then(() => {
-          this.$apis.register(this.dataForm);
+        return this.$refs.form.validate().then(() => {
+          return this.$apis
+            .register(this.dataForm)
+            .then(() => {})
+            .catch(err => {
+              this.$notify(err.msg);
+            });
         });
       } else {
         this.$notify("请阅读并同意协议");
+        return Promise.resolve();
       }
       // this.$apis.register(this.dataForm);
     }

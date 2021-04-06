@@ -65,7 +65,9 @@ export default {
     });
     this.onRefresh();
   },
-
+  activated() {
+    this.onRefresh();
+  },
   methods: {
     onRefresh() {
       this.fetchData().then(this.initMap);
