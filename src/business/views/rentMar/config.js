@@ -38,7 +38,17 @@ export default function({ post, get }) {
                   meta: {
                     title: "新增人员",
                     permission: "rent:commission:add"
-                  }
+                  },
+                  children: [
+                    {
+                      path: "edit",
+                      component: "./assign/detail.vue",
+                      meta: {
+                        title: "分佣设置",
+                        permission: "rent:commission:detail"
+                      }
+                    }
+                  ]
                 },
                 {
                   path: "invite",
@@ -86,14 +96,20 @@ export default function({ post, get }) {
       getAssignList(params) {
         return post("/rent/point/commission/list", params);
       },
+      getIviteList(params) {
+        return post("/rent/point/commission/operator", params);
+      },
+      addAssign(params) {
+        return post("/rent/point/commission/add", params);
+      },
       delAssign(params) {
-        return post("/rent/point/commission/list", params);
+        return post("/rent/point/commission/delete", params);
       },
       saveAssign(params) {
-        return post("/rent/point/commission/list", params);
+        return post("/rent/point/commission/edit", params);
       },
       getAssignDetail(params) {
-        return post("/rent/point/commission/list", params);
+        return post("/rent/point/commission/detail", params);
       },
       getRegisterRoleList(params) {
         return get("/account/register/role", params);
@@ -101,16 +117,23 @@ export default function({ post, get }) {
     },
     store: {
       state: {
-        selectMod: false
+        selectMod: false,
+        currentPointId: ""
       },
       getters: {
         getSelectMod(state) {
           return state.selectMod;
+        },
+        currentPointId(state) {
+          return state.currentPointId;
         }
       },
       mutations: {
         setSelectMod(state, data) {
           state.selectMod = data;
+        },
+        setCurrentPointId(state, data) {
+          state.currentPointId = data;
         }
       }
     }

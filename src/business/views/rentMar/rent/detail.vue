@@ -56,6 +56,7 @@ export default {
     };
   },
   mounted() {
+    this.setCurrentPointId(this.routerData.id);
     this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
       width: 100,
       height: 100,

@@ -6,10 +6,10 @@
     <LoadList :loadStatus="loadStatus">
       <van-cell center v-for="item in dataList" :key="item.id">
         <UserInfo>
-          <span style="font-size:12px;line-height: 12px;">{{ item.name }}</span>
+          <span style="font-size:12px;line-height: 12px;">{{ item.cnName }}</span>
           <span style="font-size:12px;line-height: 12px;">{{ item.mobile }}</span>
           <template #otherInfo>
-            <van-button text="添加" size="mini"></van-button>
+            <van-button text="添加" size="mini" @click="add(item)"></van-button>
           </template>
         </UserInfo>
       </van-cell>
@@ -32,12 +32,21 @@ export default {
 
   created() {
     this.setListLoader(paging => {
-      return this.$apis.getAssignList({ ...this.searchForm, ...paging });
+      return this.$apis.getIviteList({ ...this.searchForm, ...paging });
     });
   },
   methods: {
     onSearch() {
       return this.setListLoader().then(close);
+    },
+    add(item) {
+      this.routerTo({ name: "/rentMar/detail/assign/add/edit", params: item });
+    }
+  },
+  watch: {
+    "searchForm.mobile"() {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(this.onSearch, 500);
     }
   }
 };

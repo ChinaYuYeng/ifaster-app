@@ -10,7 +10,7 @@
         placeholder="请输入租还点名称"
         :rules="[{ required: true, message: '请输入租还点名称' }]"
       />
-      <van-field label="租还点地址：" :rules="[{ required: true, message: '请输入租还点地址' }]">
+      <van-field label="租还点地址：" :value="formData.address" :rules="[{ required: true, message: '请输入租还点地址' }]">
         <template #input>
           <input id="addressInput" v-model="formData.address" class="van-field__control" placeholder="请输入租还点地址" />
         </template>

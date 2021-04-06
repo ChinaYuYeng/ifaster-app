@@ -1,7 +1,7 @@
 <template>
-  <AppLayout :onRefresh="onRefresh">
+  <AppLayout :onRefresh="onRefresh" @onshow="onRefresh">
     <LoadList :loadStatus="loadStatus">
-      <van-cell is-link center @click="routerTo({ name: '/rentMar/detail/assign/detail' })" v-for="item in dataList" :key="item.id">
+      <van-cell is-link center @click="routerTo({ name: '/rentMar/detail/assign/detail', params: item })" v-for="item in dataList" :key="item.id">
         <UserInfo>
           <span style="font-size:12px;line-height: 12px;">{{ item.name }}</span>
           <span style="font-size:12px;line-height: 12px;">{{ item.mobile }}</span>
@@ -36,6 +36,7 @@ export default {
     };
   },
   created() {
+    this.searchForm.pointId = this.currentPointId;
     this.setListLoader(paging => {
       return this.$apis.getAssignList({ ...this.searchForm, ...paging });
     });
