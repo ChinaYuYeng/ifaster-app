@@ -92,6 +92,8 @@ export default {
       dataForm: {
         operator: "",
         cnName: "",
+        operatorId: "",
+        roleId: "",
         mobile: "",
         verifyCode: ""
       }
@@ -99,7 +101,8 @@ export default {
   },
   created() {
     this.dataForm.operator = this.$route.query.operator;
-    // console.log(this.dataForm);
+    this.dataForm.operatorId = this.$route.query.operatorId;
+    this.dataForm.roleId = this.$route.query.roleId;
   },
   methods: {
     showPopup() {
@@ -127,8 +130,15 @@ export default {
       if (this.checked) {
         return this.$refs.form.validate().then(() => {
           return this.$apis
-            .register(this.dataForm)
-            .then(() => {})
+            .other_register(this.dataForm)
+            .then(res => {
+              if (res.code == 1) {
+                this.$toast.success("注册成功！");
+                this.routerTo("/login/login");
+              } else {
+                this.$toast.fail("注册失败！");
+              }
+            })
             .catch(err => {
               this.$notify(err.msg);
             });
