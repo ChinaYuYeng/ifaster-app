@@ -10,7 +10,7 @@
           <van-field class="input" v-model="dataForm.mobile" :rules="telRules" name="mobile" placeholder="请输入手机号码" />
           <span class="label">验证码</span>
           <van-field class="input" v-model="dataForm.verifyCode" :rules="codeRules" placeholder="请输入验证码">
-            <button slot="button" class="get-code" @click="getSms">获取验证码</button>
+            <button slot="button" class="get-code" @click="getSms" :disabled="code_btn_disable">{{ code_btn_msg }}</button>
           </van-field>
         </van-form>
       </div>
@@ -41,6 +41,9 @@ export default {
     return {
       checked: false,
       show: false,
+      code_btn_msg: "获取验证码",
+      code_btn_disable: false,
+      time: 30,
       telRules: [
         {
           required: true,
@@ -97,6 +100,7 @@ export default {
         return Promise.resolve();
       }
     },
+
     getSms() {
       this.$refs.form
         .validate("mobile")
@@ -104,7 +108,19 @@ export default {
           this.$apis
             .sms({ mobile: this.dataForm.mobile, type: 1 })
             .then(res => {
-              console.log(res);
+              if (res.code == 1) {
+                this.timer = setInterval(() => {
+                  this.time--;
+                  this.code_btn_disable = true;
+                  this.code_btn_msg = "剩余" + this.time + "s";
+                  if (this.time === 0) {
+                    clearInterval(this.timer);
+                    this.code_btn_msg = "获取验证码";
+                    this.time = 30;
+                    this.code_btn_disable = false;
+                  }
+                }, 1000);
+              }
             })
             .catch(err => {
               this.$notify(err.msg);
