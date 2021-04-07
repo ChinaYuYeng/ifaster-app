@@ -6,29 +6,39 @@
     </template>
     <LoadList :loadStatus="loadStatus">
       <van-cell
-        is-link
         center
         v-for="item in dataList"
         :key="item.date"
         @click="routerTo({ name: '/report/statement', params: { ...item, ...routeData } })"
+        style="border-bottom:1px solid #ddd;"
       >
-        <van-grid>
-          <van-grid-item>
+        <van-row>
+          <van-col span="6">
             <span v-html="item.date.replace(/(\d+)-/, '<b>$1</b><br>')"></span>
-          </van-grid-item>
-          <van-grid-item>
+          </van-col>
+          <van-col span="6">
             <span>营收</span>
+            <br />
             <span>{{ item.payFee }}</span>
-          </van-grid-item>
-          <van-grid-item>
+          </van-col>
+          <van-col span="6">
             <span>分账</span>
+            <br />
             <span>{{ item.settle }}</span>
-          </van-grid-item>
-          <van-grid-item>
+          </van-col>
+          <van-col span="6">
+            <span>实收</span>
+            <br />
+            <span>{{ item.payFee }}</span>
+          </van-col>
+        </van-row>
+        <template #right-icon>
+          <div style="text-align:center;padding-top:1px;">
             <span>支出</span>
-            <span>{{ item.expend }}</span>
-          </van-grid-item>
-        </van-grid>
+            <br />
+            <van-icon name="arrow-down" />
+          </div>
+        </template>
       </van-cell>
     </LoadList>
     <template #search="scope">
@@ -71,7 +81,7 @@ export default {
   },
   computed: {
     chartData() {
-      return this.dataList.map((v, index) => ({ x: index, y: v.realIncome }));
+      return this.dataList.map(v => ({ x: v.date, y: v.realIncome }));
     }
   },
   methods: {
@@ -91,7 +101,12 @@ export default {
           width,
           height: 200
         }));
-        chart.axis("x", false);
+        chart.axis("x", {
+          labelOffset: 10,
+          label: {
+            rotate: 0
+          }
+        });
         chart.legend(false);
 
         chart.source(this.chartData || []);

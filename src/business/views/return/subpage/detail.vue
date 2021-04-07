@@ -55,7 +55,7 @@
       <Panel>
         <van-cell-group title="设备信息">
           <van-cell title="电池imei：" :value="routeData.batteryImei" />
-          <van-cell title="电池编号：" :value="routeData.batteryModel" />
+          <van-cell title="电池编号：" :value="routeData.batteryNo" />
         </van-cell-group>
       </Panel>
     </PanelGroup>

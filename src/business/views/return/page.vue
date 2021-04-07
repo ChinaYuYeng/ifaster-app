@@ -63,7 +63,7 @@ export default {
       }
     };
   },
-  created() {
+  activated() {
     this.getSearchData();
     this.setListLoader(paging => {
       return this.$apis.getList({ ...this.searchForm, ...paging });
