@@ -10,12 +10,20 @@
       :collapseHeader="collapseHeader"
       :sideBarActive="sideBarActive"
     ></SidebarCollapse>
+    <template #body-bottom class="wrap" v-if="showScan">
+      <van-row>
+        <van-col span="12" offset="6">
+          <van-button type="default" @click="scan" size="mini" block plain text="扫一扫" :icon="scanImg"></van-button>
+        </van-col>
+      </van-row>
+    </template>
   </AppLayout>
 </template>
 
 <script>
-// import SidebarCollapse from "@@/components/sidebarCollapse";
+import scanImg from "./img/scan.png";
 import batteryImg from "../../../assets/images/battery.png";
+import wx from "weixin-jsapi";
 export default {
   name: "shelf",
   provide() {
@@ -28,6 +36,7 @@ export default {
   data() {
     return {
       batteryImg,
+      scanImg,
       bOperatorList: [],
       batteries: [],
       pOperatorList: [],
@@ -38,13 +47,25 @@ export default {
       btns: [],
       summary: null,
       defaultIcon: "",
-      sideBarActive: ""
+      sideBarActive: "",
+      showScan: true,
+      wxReady: false
     };
   },
   activated() {
     this.showShelf();
+    let url = "";
+    let ua = navigator.userAgent.toLowerCase();
+    if (/iphone|ipad|ipod/.test(ua)) {
+      url = window.location.href.split("#")[0];
+    } else if (/android/.test(ua)) {
+      url = window.location.href;
+    }
+    this.getWxReady(url);
   },
   created() {
+    //this.scanImg.width = 20;
+    console.log(this.$refs);
     this.sideBarActive = 0;
     this.getPointInfo();
     // 底部按钮
@@ -53,7 +74,6 @@ export default {
       id: 1,
       name: "批量下架",
       click: function() {
-        console.log("1234");
         _this.getDown();
       }
     };
@@ -90,8 +110,59 @@ export default {
       });
     });
   },
-  computed: {},
+  computed: {
+    // showScan() {
+    //   return !this.$refs.mySidebarCollapse.showAction;
+    // }
+  },
   methods: {
+    scan() {
+      let _this = this;
+      if (this.wxReady) {
+        wx.scanQRCode({
+          needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+          scanType: ["qrCode"], // 可以指定扫二维码还是一维码，默认二者都有
+          success(res) {
+            var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+            // alert("扫描结果：" + result);
+            _this.$apis.detail({ qrcode: result }).then(rs => {
+              if (rs.code == "1" && rs.data && rs.data.id) {
+                let bInfo = {
+                  ids: [rs.data.id]
+                };
+                _this.setSelectedInfo(bInfo);
+                _this.getOn();
+              } else {
+                _this.$toast(rs.msg);
+              }
+            });
+          }
+        });
+      }
+    },
+    getWxReady(url) {
+      this.$apis.jsTicket({ url: url }).then(res => {
+        var jsondata = res.data;
+        wx.config({
+          // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          debug: false,
+          // 必填，公众号的唯一标识
+          appId: jsondata.appId,
+          // 必填，生成签名的时间戳
+          timestamp: "" + jsondata.timestamp,
+          // 必填，生成签名的随机串
+          nonceStr: jsondata.noncestr,
+          // 必填，签名
+          signature: jsondata.signature,
+          // 必填，需要使用的JS接口列表，所有JS接口列表
+          jsApiList: ["checkJsApi", "scanQRCode"]
+        });
+
+        wx.ready(() => {
+          this.wxReady = true;
+        });
+      });
+    },
     getOn() {
       this.$router.push({ path: "/shelf/onShelf" });
     },
@@ -132,6 +203,10 @@ export default {
               route: "/shelf/getOn"
             });
           }
+        });
+
+        this.$watch("$refs.mySidebarCollapse.showAction", val => {
+          this.showScan = !val;
         });
       });
     },
