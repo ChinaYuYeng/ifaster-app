@@ -97,7 +97,7 @@ export default {
   beforeDestroy() {
     this.map.destroy();
     this.map = null;
-    this.qrcode.clear();
+    this.qrcode && this.qrcode.clear();
     this.qrcode = null;
   }
 };
