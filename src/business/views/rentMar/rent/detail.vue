@@ -59,7 +59,9 @@ export default {
     this.setCurrentPointId(this.routerData.id);
     this.onRefresh();
   },
-
+  activated() {
+    this.onRefresh();
+  },
   methods: {
     onRefresh() {
       this.fetchData().then(this.initMap);

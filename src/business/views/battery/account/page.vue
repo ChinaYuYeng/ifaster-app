@@ -7,7 +7,7 @@
     <Panel>
       <div v-for="(item, index) in accountList" :key="index" style="margin-top:20px">
         <span>{{ item.operatorName }}</span>
-        <van-cell title="分账比例(%)" :value="item.percent * 100"></van-cell>
+        <van-cell title="分账比例(%)" :value="(item.percent * 100).toFixed()"></van-cell>
         <van-cell title="单次金额上限(长租)" :value="item.amount"></van-cell>
       </div>
     </Panel>

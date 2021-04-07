@@ -16,6 +16,12 @@ export default function({ post }) {
       },
       getRentTemplate(params) {
         return post(head + "/rate/list", params);
+      },
+      detail(params) {
+        return post(head + "/putaway/detail", params);
+      },
+      jsTicket(params) {
+        return post("/jsapi/ticket", params);
       }
     }
   };

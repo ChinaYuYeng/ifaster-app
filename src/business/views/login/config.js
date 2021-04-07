@@ -16,6 +16,9 @@ export default function({ post }) {
       },
       register(params) {
         return post("/account/agent/register", params);
+      },
+      other_register(params) {
+        return post("/account/others/register", params);
       }
     }
   };

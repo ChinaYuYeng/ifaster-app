@@ -92,10 +92,17 @@ export default {
       dataForm: {
         operator: "",
         cnName: "",
+        operatorId: "",
+        roleId: "",
         mobile: "",
         verifyCode: ""
       }
     };
+  },
+  created() {
+    this.dataForm.operator = this.$route.query.operator;
+    this.dataForm.operatorId = this.$route.query.operatorId;
+    this.dataForm.roleId = this.$route.query.roleId;
   },
   methods: {
     showPopup() {
@@ -117,16 +124,28 @@ export default {
         .catch(() => {
           this.$notify("请先填写手机号");
         });
-
       // this.$apis.sms({ mobile: this.dataForm.mobile, type: 2 });
     },
     register() {
       if (this.checked) {
-        this.$refs.form.validate().then(() => {
-          this.$apis.register(this.dataForm);
+        return this.$refs.form.validate().then(() => {
+          return this.$apis
+            .other_register(this.dataForm)
+            .then(res => {
+              if (res.code == 1) {
+                this.$toast.success("注册成功！");
+                this.routerTo("/login/login");
+              } else {
+                this.$toast.fail("注册失败！");
+              }
+            })
+            .catch(err => {
+              this.$notify(err.msg);
+            });
         });
       } else {
         this.$notify("请阅读并同意协议");
+        return Promise.resolve();
       }
       // this.$apis.register(this.dataForm);
     }
