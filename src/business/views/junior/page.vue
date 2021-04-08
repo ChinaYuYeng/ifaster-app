@@ -1,5 +1,5 @@
 <template>
-  <AppLayout>
+  <AppLayout @onshow="getInfo">
     <Panel>
       <item :dataItem="listTop" :hasDetail="true" :godetail="godetail" :hasArrow="false"></item>
     </Panel>
@@ -73,6 +73,8 @@ export default {
     },
     getInfo() {
       this.$apis.info({ operate: "" }).then(res => {
+        this.history = [];
+        this.listData = [];
         this.listTop = res.data[0];
         this.history.push(this.listTop);
         for (let i = 1; i < res.data.length; i++) {
