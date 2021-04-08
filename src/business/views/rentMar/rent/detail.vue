@@ -62,7 +62,9 @@ export default {
     this.onRefresh();
   },
   activated() {
-    this.onRefresh();
+    this.$apis.getPointDetail({ id: this.routerData.id }).then(res => {
+      this.routerData = res.data;
+    });
   },
   methods: {
     onRefresh() {
