@@ -42,7 +42,7 @@
         <van-cell title="分佣设置" is-link @click="routerTo({ name: '/rentMar/detail/assign' })" />
       </Panel>
     </PanelGroup>
-    <div class="qrcode" ref="qrCodeUrl"></div>
+    <div id="rentMar_qrCode"></div>
     <div style="text-align:center;">还车二维码</div>
   </AppLayout>
 </template>
@@ -56,6 +56,8 @@ export default {
     };
   },
   mounted() {
+    this.initMap();
+    this.initCode();
     this.setCurrentPointId(this.routerData.id);
     this.onRefresh();
   },
@@ -64,28 +66,39 @@ export default {
   },
   methods: {
     onRefresh() {
-      this.fetchData().then(this.initMap);
+      this.fetchData().then(() => {
+        document.getElementById("rentMar__map").replaceChildren(this.divMap);
+        document.getElementById("rentMar_qrCode").replaceChildren(this.divQrcode);
+      });
     },
     fetchData() {
       return this.$apis.getPointDetail({ id: this.routerData.id }).then(res => {
         this.routerData = res.data;
-        this.qrcode && this.qrcode.clear();
-        this.qrcode = new QRCode(this.$refs.qrCodeUrl, {
-          width: 100,
-          height: 100,
-          colorDark: "#000000",
-          colorLight: "#ffffff",
-          correctLevel: QRCode.CorrectLevel.H
-        }).makeCode(this.routerData.qrcode);
+        this.qrcode.makeCode(this.routerData.qrcode);
       });
+    },
+    initCode() {
+      this.divQrcode = document.createElement("div");
+      this.divQrcode.style.cssText = `display: flex;height: 120px;justify-content: center;align-items: center;`;
+      this.qrcode = new QRCode(this.divQrcode, {
+        width: 100,
+        height: 100,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+      document.getElementById("rentMar_qrCode").appendChild(this.divQrcode);
     },
     initMap() {
       const lnglat = [this.routerData.lng || 120.755511, this.routerData.lat || 30.746992];
+      this.divMap = document.createElement("div");
+      this.divMap.style.cssText = "width:100%; height:100%;";
+      document.getElementById("rentMar__map").appendChild(this.divMap);
       AMapLoader.load({
         key: "21a1ca7e415887a172fe8399bd114b28",
         version: "2.0"
       }).then(AMap => {
-        (this.map = new AMap.Map("rentMar__map", {
+        (this.map = new AMap.Map(this.divMap, {
           zoom: 15,
           center: lnglat
         })).add(
@@ -99,17 +112,14 @@ export default {
   beforeDestroy() {
     this.map.destroy();
     this.map = null;
+    this.divMap.remove();
+    this.divMap = null;
     this.qrcode && this.qrcode.clear();
     this.qrcode = null;
+    this.divQrcode.remove();
+    this.divQrcode = null;
   }
 };
 </script>
 
-<style lang="less" scoped>
-.qrcode {
-  display: flex;
-  height: 120px;
-  justify-content: center;
-  align-items: center;
-}
-</style>
+<style lang="less" scoped></style>
