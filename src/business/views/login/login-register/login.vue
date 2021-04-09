@@ -52,7 +52,7 @@ export default {
         },
         {
           validator: value => {
-            return /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(value);
+            return /^1[0-9]{10}$/.test(value);
           },
           message: "请输入正确的手机号码",
           trigger: "onBlur"
