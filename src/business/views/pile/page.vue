@@ -46,7 +46,7 @@ export default {
         isOnline: [],
         model: "",
         name: "",
-        number: "",
+        imei: "",
         status: [],
         type: [2, 3]
       },
@@ -88,7 +88,7 @@ export default {
         isOnline: [],
         model: "",
         name: "",
-        number: "",
+        imei: "",
         status: [],
         type: [2, 3]
       };
