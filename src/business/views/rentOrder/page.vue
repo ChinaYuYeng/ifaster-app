@@ -7,8 +7,8 @@
           <span>{{ item.statusName }}</span>
         </div>
         <div class="content__item">
-          <span>电桩名称:</span>
-          <span>{{ item.pileNo }}</span>
+          <span>电池名称:</span>
+          <span>{{ item.rentTemplateName }}</span>
         </div>
         <div class="content__item">
           <span>用户姓名:</span>

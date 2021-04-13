@@ -25,16 +25,12 @@ export default function({ post }) {
 
   const store = {
     state: {
-      menu: null,
       logined: false,
-      token: "",
+      token: window.localStorage.getItem("ifaster_token") || "",
       userInfo: {},
-      permissions: []
+      permissions: JSON.parse(window.localStorage.getItem("ifaster_permissions") || "[]")
     },
     getters: {
-      getMenu(state) {
-        return state.menu;
-      },
       getLogined(state) {
         return state.logined;
       },
@@ -49,9 +45,6 @@ export default function({ post }) {
       }
     },
     mutations: {
-      setMenu(state, data) {
-        state.menu = data;
-      },
       setLogined(state, data) {
         state.logined = data;
       },
@@ -60,15 +53,25 @@ export default function({ post }) {
       },
       setToken(state, data) {
         state.token = data;
+        window.localStorage.setItem("ifaster_token", data);
       },
       setPermissions(state, data) {
         state.permissions = data;
+        window.localStorage.setItem("ifaster_permissions", JSON.stringify(data));
       }
     },
     actions: {
       doLogin({ commit }, data) {
         commit("setToken", data.token);
         commit("setPermissions", data.loginAuthVos);
+      },
+      loginOut(context, router) {
+        router.replace("/login/login");
+        context.commit("setToken", "");
+        context.commit("setPermissions", []);
+        context.commit("setLogined", false);
+        context.commit("setUserInfo", {});
+        // window.location.reload();
       }
     }
   };

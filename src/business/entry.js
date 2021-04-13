@@ -50,10 +50,13 @@ function routerControll(router, store) {
   router.afterEach(() => {
     // console.log(to, store);
   });
+  window.addEventListener("load", () => {
+    router.replace("/home");
+  });
 }
 
 /*  接口拦截 */
-function requestInterceptor(request, store) {
+function requestInterceptor(request, store, router) {
   request.defaults.timeout = 2 * 60 * 1000;
   request.defaults.baseURL = "/ifaster-v2-wechat";
   request.interceptors.request.use(
@@ -77,6 +80,9 @@ function requestInterceptor(request, store) {
         case "A0400":
         case "B0001":
           return Promise.reject(res);
+        case "A0200":
+          store.dispatch("login/loginOut", router);
+          return Promise.reject(res);
         default:
           return Promise.resolve(res);
       }
@@ -92,5 +98,5 @@ export default function(request, router, store) {
   setRem();
   setLoginRouter();
   routerControll(router, store);
-  requestInterceptor(request, store);
+  requestInterceptor(request, store, router);
 }

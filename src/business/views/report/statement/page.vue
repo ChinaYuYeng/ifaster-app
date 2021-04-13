@@ -5,7 +5,8 @@
         <van-cell center>
           <van-grid>
             <van-grid-item>
-              <span>{{ routeData.date }}</span>
+              <span>实收</span>
+              <span>{{ routeData.payFee }}</span>
             </van-grid-item>
             <van-grid-item>
               <span>营收</span>
@@ -29,9 +30,13 @@
           <span>订单编号：{{ item.number }}</span>
           <span>{{ item.statusName }}</span>
         </div>
-        <div class="content__item">
+        <div class="content__item" v-if="routeData.orderType == 1">
+          <span>电池名称:</span>
+          <span>{{ item.deviceName }}</span>
+        </div>
+        <div class="content__item" v-else>
           <span>电桩名称:</span>
-          <span>{{ item.pileNo }}</span>
+          <span>{{ item.deviceName }}</span>
         </div>
         <div class="content__item">
           <span>用户姓名:</span>
