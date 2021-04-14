@@ -51,7 +51,8 @@ function routerControll(router, store) {
     // console.log(to, store);
   });
   window.addEventListener("load", () => {
-    router.replace("/home");
+    // 刷新页面会有2次相同的路由，系统报错，但无影响
+    router.replace("/home").catch(() => {});
   });
 }
 

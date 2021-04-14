@@ -39,8 +39,5 @@ export default {
       this.$router[method](route);
     },
     checkAuth
-  },
-  beforeDestroy() {
-    this._vnode && this._vnode.componentOptions && this._vnode.componentOptions.tag == "AppLayout" && this._vnode.componentInstance.$destroy();
   }
 };

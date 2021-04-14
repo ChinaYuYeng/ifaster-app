@@ -70,9 +70,6 @@ export default {
   deactivated() {
     this.pageActived = false;
   },
-  destroyed() {
-    this._vnode.elm = null;
-  },
   components: {
     HeaderNav,
     BodyContent,

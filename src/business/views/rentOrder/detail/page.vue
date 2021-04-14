@@ -80,6 +80,10 @@
           <span>{{ rentFeeTemplate.deposit }}元</span>
         </div>
         <div class="content__item">
+          <span>押金扣除:</span>
+          <span>{{ routeData.deductDeposit }}元</span>
+        </div>
+        <div class="content__item">
           <span>营收:</span>
           <span>{{ routeData.payFee }}元</span>
         </div>

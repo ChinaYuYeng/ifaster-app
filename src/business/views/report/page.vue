@@ -29,7 +29,7 @@
           <van-col span="6">
             <span>实收</span>
             <br />
-            <span>{{ item.payFee }}</span>
+            <span>{{ item.realIncome }}</span>
           </van-col>
         </van-row>
         <template #right-icon>

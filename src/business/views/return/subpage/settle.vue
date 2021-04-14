@@ -31,7 +31,9 @@
             v-if="!!formData.deposit"
           >
             <template #button>
-              <van-button size="mini" type="primary" @click="getSms">发送验证码</van-button>
+              <van-button size="mini" type="primary" @click="getSms" :disabled="!!countDown">
+                {{ countDown ? `剩余 ${countDown} s` : "发送验证码" }}
+              </van-button>
             </template>
           </van-field>
         </van-form>
@@ -50,7 +52,8 @@ export default {
         note: "",
         id: this.$route.params.id
       },
-      routeData: this.$route.params
+      routeData: this.$route.params,
+      countDown: 0
     };
   },
   methods: {
@@ -68,6 +71,11 @@ export default {
       });
     },
     getSms() {
+      this.countDown = 60;
+      this.timer = setInterval(() => {
+        this.countDown--;
+        if (this.countDown <= 0) clearInterval(this.timer);
+      }, 1000);
       this.$apis.sms({ mobile: this.routeData.customerMobile, type: 4 });
     }
   }
