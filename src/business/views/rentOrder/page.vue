@@ -1,5 +1,6 @@
 <template>
   <AppLayout ref="report__wrap" :onRefresh="onRefresh">
+    <p class="total__num">合计数量:{{ this.total }}</p>
     <LoadList :loadStatus="loadStatus">
       <Panel v-for="item in dataList" :key="item.id" class="mtop10">
         <div class="content__item order__header" slot="header">
@@ -81,4 +82,9 @@ export default {
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.total__num {
+  text-align: center;
+  width: 100%;
+}
+</style>

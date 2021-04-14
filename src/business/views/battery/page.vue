@@ -1,5 +1,6 @@
 <template>
   <AppLayout ref="report__wrap" :showHeader="true" :onRefresh="onRefresh" @onshow="onRefresh">
+    <p class="total__num">合计数量:{{ this.total }}</p>
     <LoadList :loadStatus="loadStatus">
       <van-cell v-for="(item, index) in dataList" :key="index" @click="goDetail(item)">
         <pileList :columns="list" :item1="item" imgProp="rentFeeTemplateImg"></pileList>
@@ -64,7 +65,6 @@ export default {
       this.searchForm.rentStatus = rentStatus || [];
     }
     this.searchForm.operator = this.$route.params.operId || "";
-
     this.setListLoader(paging => {
       return this.$apis.list({ ...this.searchForm, ...paging });
     });
@@ -111,4 +111,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.total__num {
+  text-align: center;
+  width: 100%;
+}
+</style>

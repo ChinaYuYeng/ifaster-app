@@ -56,21 +56,21 @@
             <van-switch v-model="formData.price.isPolicy" size="20" active-color="#55BABB" />
           </template>
         </van-field>
-        <van-field label="是否异地还车:">
+        <!-- <van-field label="是否异地还车:">
           <template #button>
             <van-switch v-model="formData.price.otherPlaceReturn" size="20" active-color="#55BABB" />
           </template>
-        </van-field>
+        </van-field> -->
         <van-field label="是否异点还车:">
           <template #button>
             <van-switch v-model="formData.price.otherPointReturn" size="20" active-color="#55BABB" />
           </template>
         </van-field>
-        <van-field label="是否短租免费充电:">
+        <!-- <van-field label="是否短租免费充电:">
           <template #button>
             <van-switch v-model="formData.price.freeCharge" size="20" active-color="#55BABB" />
           </template>
-        </van-field>
+        </van-field> -->
       </Panel>
     </van-form>
     <div class="btn-group">
