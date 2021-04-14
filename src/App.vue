@@ -5,6 +5,18 @@ export default {
       currentModule: "default_root"
     };
   },
+  created() {
+    window.onload = function() {
+      document.addEventListener("touchstart", function(event) {
+        if (event.touches.length > 1) {
+          event.preventDefault();
+        }
+      });
+      document.addEventListener("gesturestart", function(event) {
+        event.preventDefault();
+      });
+    };
+  },
   render() {
     const _ = (
       <div id="app">
