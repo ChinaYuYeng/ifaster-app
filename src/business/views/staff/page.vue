@@ -1,5 +1,6 @@
 <template>
   <AppLayout :onRefresh="onRefresh" @onshow="onRefresh">
+    <p class="total__num">合计数量:{{ this.total }}</p>
     <LoadList :loadStatus="loadStatus">
       <div v-for="(item, index) in dataList" :key="index" @click="routeTo(item)">
         <staffList :item="item"></staffList>
@@ -99,4 +100,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.total__num {
+  text-align: center;
+  width: 100%;
+}
+</style>

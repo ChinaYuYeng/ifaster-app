@@ -311,7 +311,7 @@ export default {
                 // percent: d.percent * 100 + "%",
                 model: d.model,
                 name: "设备类型：" + d.model,
-                title: "设备类型：" + d.model
+                title: "设备类型：" + d.model + " 数量：" + lists.length
               };
               this.children.push(child);
             }

@@ -54,13 +54,19 @@ export default {
   margin: 0;
   padding: 0;
 }
+.pilelist {
+  height: 100px;
+}
 .list-img {
   width: 25%;
   border: 1px solid #dddddd;
   float: left;
-  margin-top: 20px;
-  margin-left: 10px;
-  margin-bottom: 20px;
+  /* margin-top: 20px; */
+  margin-bottom: 15px;
+  margin-right: 10px;
+  position: absolute;
+  /* margin-top: 10%; */
+  /* transform: translateY(10%); */
 }
 .arrow-icon {
   position: absolute;
@@ -74,9 +80,10 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  position: relative;
-  top: 18px;
-  left: 10px;
+  margin-left: 30%;
+  /* position: relative; */
+  /* top: 18px;
+  left: 10px; */
 }
 .label-bar {
   float: left;

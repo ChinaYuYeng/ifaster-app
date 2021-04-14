@@ -1,7 +1,7 @@
 <template>
   <van-form label-width="34px" ref="form" validate-trigger="onSubmit">
     <div style="height:450px;overflow:scroll">
-      <van-field label="电桩编号" label-width="100px" placeholder="请输入电桩编号" v-model="searchForm.number" />
+      <van-field label="电桩imei" label-width="100px" placeholder="请输入电桩编imei" v-model="searchForm.imei" />
       <van-field label="电桩名称" label-width="100px" placeholder="请输入电桩名称" v-model="searchForm.name" />
       <van-field label="电桩地址" label-width="100px" placeholder="请输入电桩地址" v-model="searchForm.address" />
       <Select label-width="100px" label="设备类型" :options="modelList" v-model="searchForm.model"></Select>

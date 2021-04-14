@@ -1,5 +1,6 @@
 <template>
   <AppLayout ref="report__wrap" :showHeader="true" :onRefresh="onRefresh">
+    <p class="total__num">合计数量:{{ this.total }}</p>
     <LoadList :loadStatus="loadStatus">
       <van-cell v-for="(item, index) in dataList" :key="index" @click="goDetail(item)">
         <pileList :columns="list" :item1="item" imgProp="chargeFeeTemplateImg" class="pile"></pileList>
@@ -46,7 +47,7 @@ export default {
         isOnline: [],
         model: "",
         name: "",
-        number: "",
+        imei: "",
         status: [],
         type: [2, 3]
       },
@@ -88,7 +89,7 @@ export default {
         isOnline: [],
         model: "",
         name: "",
-        number: "",
+        imei: "",
         status: [],
         type: [2, 3]
       };
@@ -107,4 +108,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.total__num {
+  text-align: center;
+  width: 100%;
+}
+</style>
