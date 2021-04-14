@@ -1,5 +1,6 @@
 <template>
   <AppLayout :onRefresh="onRefresh" @onshow="onRefresh">
+    <p class="total__num">合计数量:{{ this.total }}</p>
     <LoadList :loadStatus="loadStatus">
       <van-cell center v-for="(item, index) in dataList" :key="index" is-link @click="routerTo({ name: '/rentMar/detail', params: item })">
         <template #title>
@@ -63,4 +64,9 @@ export default {
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.total__num {
+  text-align: center;
+  width: 100%;
+}
+</style>

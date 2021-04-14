@@ -112,6 +112,10 @@ export default {
         {
           label: "异常状态",
           prop: "errorDesc"
+        },
+        {
+          label: "上传时间",
+          prop: "updateTime"
         }
       ],
       listColumns2: [
