@@ -3,7 +3,7 @@ export default function({ post }) {
   const apis = {
     scope: {
       pointList(params) {
-        return post(head + "/point/all", params);
+        return post(head + "/putaway/point", params);
       },
       putawayList(params) {
         return post(head + "/putaway/list", params);

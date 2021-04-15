@@ -35,6 +35,7 @@ export default {
       this.loading = true;
       this.active = index;
       this.updateData(this.bars[index], index);
+      this.$emit("CancelSearch");
     }
   },
   watch: {}

@@ -1,8 +1,13 @@
 <template>
   <div class="wrap">
     <van-row class="row">
-      <van-col span="6"><SidebarIndex :bars="bars" ref="leftSidebar" :sideBarActive="sideBarActive"></SidebarIndex></van-col>
+      <van-col span="6"><SidebarIndex :bars="bars" ref="leftSidebar" :sideBarActive="sideBarActive" @CancelSearch="onCancel"></SidebarIndex></van-col>
       <van-col span="18">
+        <van-row>
+          <van-col class="row">
+            <van-search v-if="showSearch" v-model="searchIMEI" show-action placeholder="请输入搜索IMEI" @search="onSearch" @cancel="onCancel" />
+          </van-col>
+        </van-row>
         <van-row v-if="collapseHeader != ''">
           <van-col class="row">
             <van-cell-group>
@@ -11,7 +16,9 @@
           </van-col>
         </van-row>
         <van-row>
-          <van-col class="row"><CollapseIndex :collapses="children" :errIcon="errIcon" :activeIndex="0"></CollapseIndex></van-col>
+          <van-col class="row">
+            <CollapseIndex :collapses="children" :errIcon="errIcon" :activeIndex="0"></CollapseIndex>
+          </van-col>
         </van-row>
       </van-col>
     </van-row>
@@ -53,6 +60,14 @@ export default {
     sideBarActive: {
       type: Number,
       default: 0
+    },
+    showSearch: {
+      type: Boolean,
+      default: false
+    },
+    searchFun: {
+      type: Function,
+      default: null
     }
   },
   inject: ["setSelected"],
@@ -61,7 +76,8 @@ export default {
       // 默认选中的哪一类
       headChekedIndex: -1,
       // summary: "",
-      actives: []
+      actives: [],
+      searchIMEI: ""
     };
   },
   created() {},
@@ -77,7 +93,19 @@ export default {
     //   });
     // });
   },
-  methods: {},
+  methods: {
+    onCancel() {
+      this.searchIMEI = "";
+      if (this.searchFun != null) {
+        this.searchFun(this.searchIMEI);
+      }
+    },
+    onSearch() {
+      if (this.searchFun != null) {
+        this.searchFun(this.searchIMEI);
+      }
+    }
+  },
   computed: {
     summary() {
       let sum = "";
