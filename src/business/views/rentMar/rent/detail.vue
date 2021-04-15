@@ -110,7 +110,7 @@ export default {
     }
   },
   beforeDestroy() {
-    this.map.destroy();
+    this.map && this.map.destroy();
     this.map = null;
     this.divMap.remove();
     this.divMap = null;

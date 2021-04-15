@@ -4,7 +4,7 @@
       <pileList :columns="columns" :item1="dataForm" :hasArrow="false" :useRoute="false" imgProp="chargeFeeTemplateImg"></pileList>
     </van-cell>
     <Panel @touchmove.native.stop.prevent>
-      <div id="rentMar__map" style="width:100%; height:200px;"></div>
+      <div id="pile__map" style="width:100%; height:200px;"></div>
     </Panel>
     <Panel>
       <statusList
@@ -169,11 +169,14 @@ export default {
     },
     initMap() {
       const lnglat = [this.listData.lng || 120.755511, this.listData.lat || 30.746992];
+      this.divMap = document.createElement("div");
+      this.divMap.style.cssText = "width:100%; height:100%;";
+      document.getElementById("pile__map").appendChild(this.divMap);
       AMapLoader.load({
         key: "21a1ca7e415887a172fe8399bd114b28",
         version: "2.0"
       }).then(AMap => {
-        (this.map = new AMap.Map("rentMar__map", {
+        (this.map = new AMap.Map(this.divMap, {
           zoom: 15,
           center: lnglat
         })).add(
@@ -188,6 +191,12 @@ export default {
     statusList,
     listItem,
     pileList
+  },
+  beforeDestroy() {
+    this.map && this.map.destroy();
+    this.map = null;
+    this.divMap.remove();
+    this.divMap = null;
   }
 };
 </script>

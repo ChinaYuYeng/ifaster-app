@@ -93,13 +93,16 @@ export default {
       });
     },
     initMap() {
+      this.divMap = document.createElement("div");
+      this.divMap.style.cssText = "width:100%; height:100%;";
+      document.getElementById("rentMar__map-add").appendChild(this.divMap);
       let lnglat = this.formData.lng && this.formData.lat && [this.formData.lng, this.formData.lat];
       AMapLoader.load({
         key: "21a1ca7e415887a172fe8399bd114b28",
         plugins: ["AMap.AutoComplete", "AMap.Geolocation", "AMap.PlaceSearch"],
         version: "2.0"
       }).then(AMap => {
-        this.map = new AMap.Map("rentMar__map-add", {
+        this.map = new AMap.Map(this.divMap, {
           zoom: 18
         });
         let showMap = () => {
@@ -126,7 +129,7 @@ export default {
           });
           this.AutoComplete.on("select", e => {
             this.placeSearch.search(e.poi.name, (status, result) => {
-              if (status == "complete") {
+              if (status == "complete" && result.poiList.pois[0]) {
                 let { lng, lat } = result.poiList.pois[0].location;
                 this.formData.lng = lng;
                 this.formData.lat = lat;
@@ -163,7 +166,10 @@ export default {
     }
   },
   beforeDestroy() {
+    this.divMap.remove();
+    this.divMap = null;
     this.map && this.map.destroy();
+    this.map = null;
   }
 };
 </script>
