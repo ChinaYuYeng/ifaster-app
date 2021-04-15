@@ -19,6 +19,8 @@
       :errIcon="defaultIcon"
       :collapseHeader="collapseHeader"
       :sideBarActive="activeSideBarIndex"
+      :showSearch="showSearch"
+      :searchFun="searchFun"
     ></SidebarCollapse>
   </AppLayout>
 </template>
@@ -54,7 +56,9 @@ export default {
       btns: [],
       summary: null,
       defaultIcon: "",
-      activeSideBarIndex: 0
+      activeSideBarIndex: 0,
+      showSearch: true,
+      searchFun: null
     };
   },
   provide() {
@@ -90,19 +94,33 @@ export default {
     this.btns.push(btnClaimB);
 
     this.defaultIcon = this.batteryImg;
+    this.searchFun = this.searchIMEI;
   },
   activated() {
     this.showStore();
+    this.searchFun = this.searchIMEI;
   },
   methods: {
+    searchIMEI(imei) {
+      debugger;
+      let barIndex = this.getSideBarActive;
+      if (this.active == 0) {
+        // 电池
+        this.getOperatorBatteryInfo(this.bars[barIndex], imei);
+      } else {
+        // 电桩
+        this.getOperatorPileInfo(this.bars[barIndex], imei);
+      }
+    },
     updateData(bar, index) {
+      // 清楚搜索条件
       this.collapseHeader = bar.name;
       if (this.active == 0) {
         // 电池
-        this.getOperatorBatteryInfo(bar);
+        this.getOperatorBatteryInfo(bar, "");
       } else {
         // 电桩
-        this.getOperatorPileInfo(bar);
+        this.getOperatorPileInfo(bar, "");
       }
       this.activeSideBarIndex = index;
       this.setSideBarActive(index);
@@ -189,7 +207,7 @@ export default {
             this.bars = r.data;
             if (r.data.length > 0) {
               this.collapseHeader = r.data[this.getSideBarActive].name;
-              this.getOperatorBatteryInfo(r.data[this.getSideBarActive]);
+              this.getOperatorBatteryInfo(r.data[this.getSideBarActive], "");
             } else {
               this.children = [];
               this.collapseHeader = "";
@@ -201,10 +219,10 @@ export default {
       this.defaultIcon = this.batteryImg;
       // console.log(this.defaultIcon);
     },
-    getOperatorBatteryInfo(operator) {
+    getOperatorBatteryInfo(operator, imei) {
       this.setBatteryOperatorInfo(operator);
       this.$apis.battery
-        .repositoryList({ id: operator.value })
+        .repositoryList({ id: operator.value, imei: imei })
         .then(res => {
           this.children = [];
           if (res.code == "1" && res.data && res.data.length > 0) {
@@ -260,7 +278,7 @@ export default {
             this.bars = r.data;
             if (r.data.length > 0) {
               this.collapseHeader = r.data[this.sideBarActive].name;
-              this.getOperatorPileInfo(r.data[this.sideBarActive]);
+              this.getOperatorPileInfo(r.data[this.sideBarActive], "");
             } else {
               this.children = [];
               this.collapseHeader = "";
@@ -271,10 +289,10 @@ export default {
 
       this.defaultIcon = this.chargingImg;
     },
-    getOperatorPileInfo(operator) {
+    getOperatorPileInfo(operator, imei) {
       this.setPileOperatorInfo(operator);
       this.$apis.pile
-        .repositoryList({ id: operator.value })
+        .repositoryList({ id: operator.value, imei: imei })
         .then(res => {
           this.children = [];
           if (res.code == "1" && res.data && res.data.length > 0) {

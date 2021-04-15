@@ -9,6 +9,8 @@
       :errIcon="defaultIcon"
       :collapseHeader="collapseHeader"
       :sideBarActive="sideBarActive"
+      :showSearch="showSearch"
+      :searchFun="searchFun"
     ></SidebarCollapse>
     <template #body-bottom class="wrap" v-if="showScan">
       <van-row>
@@ -49,7 +51,9 @@ export default {
       defaultIcon: "",
       sideBarActive: "",
       showScan: true,
-      wxReady: false
+      wxReady: false,
+      showSearch: true,
+      searchFun: null
     };
   },
   activated() {
@@ -62,6 +66,7 @@ export default {
       url = window.location.href;
     }
     this.getWxReady(url);
+    this.searchFun = this.searchIMEI;
   },
   created() {
     //this.scanImg.width = 20;
@@ -82,6 +87,7 @@ export default {
 
     this.defaultIcon = this.batteryImg;
     this.setPointIndex(0);
+    this.searchFun = this.searchIMEI;
   },
   mounted() {
     const _this = this;
@@ -116,6 +122,10 @@ export default {
     // }
   },
   methods: {
+    searchIMEI(imei) {
+      let barIndex = this.getPointIndex;
+      this.getPointPutawayList(this.bars[barIndex].id, imei);
+    },
     scan() {
       let _this = this;
       if (this.wxReady) {
@@ -214,7 +224,7 @@ export default {
       // let bar = this.bars[index];
       this.setPointIndex(index);
       this.collapseHeader = bar.name;
-      this.getPointPutawayList(bar.id);
+      this.getPointPutawayList(bar.id, "");
     },
     // 保存选择信息
     setSelected() {
@@ -248,10 +258,10 @@ export default {
           if (r.code == "1") {
             this.setPointList(r.data);
             this.bars = r.data;
-            this.bars.push({ id: 0, name: "未上架", shortName: "未上架" });
+            // this.bars.push({ id: 0, name: "未上架", shortName: "未上架" });
             if (r.data.length > 0) {
               this.collapseHeader = r.data[this.getPointIndex].name;
-              this.getPointPutawayList(r.data[this.getPointIndex].id);
+              this.getPointPutawayList(r.data[this.getPointIndex].id, "");
             } else {
               this.collapseHeader = "";
             }
@@ -261,9 +271,9 @@ export default {
 
       this.defaultIcon = this.batteryImg;
     },
-    getPointPutawayList(id) {
+    getPointPutawayList(id, imei) {
       this.$apis
-        .putawayList({ pointId: id })
+        .putawayList({ pointId: id, imei: imei })
         .then(res => {
           this.children = [];
           if (res.code == "1") {
