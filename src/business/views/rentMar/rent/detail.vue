@@ -112,11 +112,11 @@ export default {
   beforeDestroy() {
     this.map && this.map.destroy();
     this.map = null;
-    this.divMap.remove();
+    this.divMap && this.divMap.remove();
     this.divMap = null;
     this.qrcode && this.qrcode.clear();
     this.qrcode = null;
-    this.divQrcode.remove();
+    this.divQrcode && this.divQrcode.remove();
     this.divQrcode = null;
   }
 };

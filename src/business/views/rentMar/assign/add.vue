@@ -32,7 +32,7 @@ export default {
 
   created() {
     this.setListLoader(paging => {
-      return this.$apis.getIviteList({ ...this.searchForm, ...paging });
+      return this.searchForm.mobile ? this.$apis.getIviteList({ ...this.searchForm, ...paging }) : Promise.resolve({ data: { rows: [], total: 1 } });
     });
   },
   methods: {
