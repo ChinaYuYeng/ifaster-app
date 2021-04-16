@@ -86,7 +86,7 @@
               </van-col>
               <van-col class="index__manager-item">
                 <span>{{ operator.freeBatteryCount }}</span>
-                <span>空闲电池</span>
+                <span>未租电池</span>
               </van-col>
             </van-row>
           </Panel>
