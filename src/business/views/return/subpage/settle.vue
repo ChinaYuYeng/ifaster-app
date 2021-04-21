@@ -12,7 +12,7 @@
         </UserInfo>
       </Panel>
       <Panel>
-        <van-form ref="form">
+        <van-form ref="form" :show-error-message="false">
           <van-cell title="保证金:" :value="routeData.rentFeeTemplate.deposit" />
           <van-field
             v-model.number="formData.deposit"

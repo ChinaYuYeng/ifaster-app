@@ -35,17 +35,17 @@
         dateType="time"
         :rules="[{ required: true, message: '请选择结束时间' }]"
       ></DatePick>
-      <van-field label="异地还车：">
+      <!-- <van-field label="异地还车：">
         <template #button>
           <van-switch v-model="formData.otherPlaceReturn" size="20" />
         </template>
-      </van-field>
+      </van-field> -->
       <van-field label="异点还车：">
         <template #button>
           <van-switch v-model="formData.otherPointReturn" size="20" />
         </template>
       </van-field>
-      <van-field v-model="formData.otherReturnPrice" label="异地还车收费：" />
+      <!-- <van-field v-model="formData.otherReturnPrice" label="异地还车收费：" /> -->
       <BtnGroup class="mtop10">
         <SubmitBtn text="保存" size="small" :onSubmit="submit" block></SubmitBtn>
       </BtnGroup>
@@ -80,7 +80,7 @@ export default {
   },
   mounted() {
     // 解决地图和页面切换效果同时进行卡顿的问题
-    setTimeout(() => {
+    this.timer = setTimeout(() => {
       this.initMap();
     }, 300);
   },
@@ -166,10 +166,12 @@ export default {
     }
   },
   beforeDestroy() {
-    this.divMap.remove();
-    this.divMap = null;
+    // 延迟能保证动画流畅，但是在执行前页面退出就会报错了，因此需要clear
+    clearTimeout(this.timer);
     this.map && this.map.destroy();
     this.map = null;
+    this.divMap.remove();
+    this.divMap = null;
   }
 };
 </script>

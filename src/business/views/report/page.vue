@@ -9,7 +9,7 @@
         center
         v-for="item in dataList"
         :key="item.date"
-        @click="routerTo({ name: '/report/statement', params: { ...item, ...routeData } })"
+        @click="routerTo({ name: '/report/statement', params: { ...item, ...routeData, earningType: searchForm.earningType } })"
         style="border-bottom:1px solid #ddd;"
       >
         <van-row>
@@ -81,7 +81,7 @@ export default {
   },
   computed: {
     chartData() {
-      return this.dataList.map(v => ({ x: v.date, y: v.realIncome }));
+      return this.dataList.map(v => ({ x: v.date.slice(5), y: v.realIncome }));
     }
   },
   methods: {

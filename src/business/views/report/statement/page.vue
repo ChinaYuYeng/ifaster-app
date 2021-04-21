@@ -6,7 +6,7 @@
           <van-grid>
             <van-grid-item>
               <span>实收</span>
-              <span>{{ routeData.payFee }}</span>
+              <span>{{ routeData.realIncome }}</span>
             </van-grid-item>
             <van-grid-item>
               <span>营收</span>

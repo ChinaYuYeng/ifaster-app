@@ -190,6 +190,7 @@ export default {
       this.children = [];
       this.sideBarActive = this.getPointIndex;
       this.getPointInfo();
+      this.showScan = true;
       const _this = this;
       this.$nextTick(() => {
         this.$watch("$refs.mySidebarCollapse.$refs.leftSidebar.active", val => {
