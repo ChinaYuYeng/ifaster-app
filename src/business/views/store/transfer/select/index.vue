@@ -77,14 +77,19 @@ export default {
           saleType: 0,
           targetOperatorId: id
         };
-        this.$apis.pile.operate(params).then(res => {
-          if (res.code == "1") {
-            this.$toast.success(res.msg);
-            this.$router.push({ path: "/store" });
-          } else {
+        this.$apis.pile
+          .operate(params)
+          .then(res => {
+            if (res.code == "1") {
+              this.$toast.success(res.msg);
+              this.$router.push({ path: "/store" });
+            } else {
+              this.$toast.fail(res.msg);
+            }
+          })
+          .catch(res => {
             this.$toast.fail(res.msg);
-          }
-        });
+          });
       }
     }
   }

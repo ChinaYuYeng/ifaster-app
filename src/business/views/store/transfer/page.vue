@@ -3,7 +3,7 @@
     <Info :obj="obj" :headImg="dataForm.info.img"></Info>
     <van-divider :style="{ height: '20px', lineHeight: '20px', color: '#fff', backgroundColor: '#fff' }"></van-divider>
     <van-row>
-      <van-col span="24"><Percent ref="percent" :operationType="operationType"></Percent></van-col>
+      <van-col span="24"><Percent ref="percent" :operationType="operationType" :onSubmit="onSubmit"></Percent></van-col>
     </van-row>
     <template #body-bottom class="wrap">
       <van-row>
@@ -50,8 +50,9 @@ export default {
   },
   methods: {
     next() {
-      // 保存数据
-      console.log(this.getSelectedBatteryInfo);
+      this.$refs.percent.toSubmit();
+    },
+    onSubmit() {
       if (this.getOperationType == 0) {
         let bInfo = {
           ids: this.getSelectedBatteryInfo.ids,
