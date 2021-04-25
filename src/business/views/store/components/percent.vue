@@ -1,16 +1,29 @@
 <template>
   <div>
-    <van-row>
-      我的
-      <van-cell-group>
-        <van-field v-model="dataForm.percent" label="分账比例" placeholder="请输入分账比例" input-align="right" label-width="200">
-          <template #extra>%</template>
-        </van-field>
-        <van-field v-model="dataForm.limit" :label="limitLabel" placeholder="请输入上限" input-align="right" label-width="200">
-          <template #extra>元</template>
-        </van-field>
-      </van-cell-group>
-    </van-row>
+    <van-form ref="form" @submit="toSubmit" :show-error-message="false">
+      <van-field
+        v-model="dataForm.percent"
+        label="分账比例"
+        placeholder="请输入分账比例"
+        input-align="right"
+        label-width="200"
+        :rules="[{ required: true, message: '请填写分账比例' }]"
+        name="percent"
+      >
+        <template #extra>%</template>
+      </van-field>
+      <van-field
+        v-model="dataForm.limit"
+        :label="limitLabel"
+        placeholder="请输入上限"
+        input-align="right"
+        label-width="200"
+        :rules="[{ required: true, message: '请填写上限' }]"
+        name="limit"
+      >
+        <template #extra>元</template>
+      </van-field>
+    </van-form>
   </div>
 </template>
 
@@ -21,6 +34,10 @@ export default {
     operationType: {
       type: Number,
       default: 0
+    },
+    onSubmit: {
+      type: Function,
+      default: null
     }
   },
   created() {
@@ -38,7 +55,19 @@ export default {
       limitLabel: "单次金额上限"
     };
   },
-  methods: {}
+  methods: {
+    toSubmit() {
+      this.$refs.form
+        .validate()
+        .then(() => {
+          if (this.onSubmit != null) {
+            this.onSubmit();
+          }
+        })
+        .catch(res => {
+          console.log(res);
+        });
+    }
+  }
 };
 </script>
-<style lang="less" scoped></style>
