@@ -258,10 +258,10 @@ export default {
               let child = {
                 checked: false,
                 list: lists,
-                percent: d.percent * 100 + "%",
+                percent: (d.percent * 100).toFixed(0) + "%",
                 model: d.model,
-                name: "比例：" + d.percent * 100 + "%",
-                title: "比例：" + d.percent * 100 + "%" + "（" + d.model + "）" + "数量：" + lists.length
+                name: "比例：" + (d.percent * 100).toFixed(0) + "%",
+                title: "比例：" + (d.percent * 100).toFixed(0) + "%" + "（" + d.model + "）" + "数量：" + lists.length
               };
               this.children.push(child);
             }
@@ -329,10 +329,10 @@ export default {
               let child = {
                 checked: false,
                 list: lists,
-                percent: d.percent * 100 + "%",
+                percent: (d.percent * 100).toFixed(0) + "%",
                 model: d.model,
-                name: "比例：" + d.percent * 100 + "%",
-                title: "比例：" + d.percent * 100 + "%" + "（" + d.model + "）" + "数量：" + lists.length
+                name: "比例：" + (d.percent * 100).toFixed(0) + "%",
+                title: "比例：" + (d.percent * 100).toFixed(0) + "%" + "（" + d.model + "）" + "数量：" + lists.length
               };
               this.children.push(child);
             }
