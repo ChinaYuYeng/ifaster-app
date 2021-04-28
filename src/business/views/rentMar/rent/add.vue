@@ -127,6 +127,7 @@ export default {
           this.placeSearch = new AMap.PlaceSearch({
             // map: this.map,
           });
+          // 没有找到this.AutoComplete如何解绑事件，这里会形成闭包引用this这个vm对象，组件销毁后vm也无法释放
           this.AutoComplete.on("select", e => {
             this.placeSearch.search(e.poi.name, (status, result) => {
               if (status == "complete" && result.poiList.pois[0]) {
@@ -172,6 +173,7 @@ export default {
     this.map = null;
     this.divMap.remove();
     this.divMap = null;
+    this.AutoComplete.off("select");
   }
 };
 </script>
