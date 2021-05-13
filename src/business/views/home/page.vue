@@ -115,6 +115,9 @@
         ]"
       ></Links>
     </div>
+    <BtnGroup class="mtop10">
+      <SubmitBtn text="退出登录" :onSubmit="loginout" block></SubmitBtn>
+    </BtnGroup>
   </AppLayout>
 </template>
 
@@ -151,6 +154,9 @@ export default {
           this.$toast.success("切换租还点失败！");
         }
       });
+    },
+    loginout() {
+      return this.$store.dispatch("login/loginOut", () => this.routerTo("login/login", "replace"));
     }
   },
   watch: {

@@ -65,12 +65,12 @@ export default function({ post }) {
         commit("setToken", data.token);
         commit("setPermissions", data.loginAuthVos);
       },
-      loginOut(context, router) {
-        router.replace("/login/login");
+      loginOut(context, cb) {
         context.commit("setToken", "");
         context.commit("setPermissions", []);
         context.commit("setLogined", false);
         context.commit("setUserInfo", {});
+        cb && cb();
         // window.location.reload();
       }
     }

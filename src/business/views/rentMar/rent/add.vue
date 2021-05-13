@@ -46,9 +46,7 @@
         </template>
       </van-field>
       <!-- <van-field v-model="formData.otherReturnPrice" label="异地还车收费：" /> -->
-      <BtnGroup class="mtop10">
-        <SubmitBtn text="保存" size="small" :onSubmit="submit" block></SubmitBtn>
-      </BtnGroup>
+      <SubmitBtn text="保存" size="small" :onSubmit="submit" block></SubmitBtn>
     </van-form>
   </AppLayout>
 </template>
@@ -129,6 +127,7 @@ export default {
           });
           // 没有找到this.AutoComplete如何解绑事件，这里会形成闭包引用this这个vm对象，组件销毁后vm也无法释放
           this.AutoComplete.on("select", e => {
+            this.placeSearch.setCity(e.poi.adcode);
             this.placeSearch.search(e.poi.name, (status, result) => {
               if (status == "complete" && result.poiList.pois[0]) {
                 let { lng, lat } = result.poiList.pois[0].location;

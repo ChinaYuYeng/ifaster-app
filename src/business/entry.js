@@ -82,7 +82,7 @@ function requestInterceptor(request, store, router) {
         case "B0001":
           return Promise.reject(res);
         case "A0200":
-          store.dispatch("login/loginOut", router);
+          store.dispatch("login/loginOut", () => router.replace("/login/login"));
           return Promise.reject(res);
         default:
           return Promise.resolve(res);
