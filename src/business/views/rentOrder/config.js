@@ -11,6 +11,18 @@ export default function({ post, get }) {
     },
     getModel(params) {
       return get("/rent/order/model", params);
+    },
+    exchangeBattery(params) {
+      return post("/rent/order/change/battery", params);
+    },
+    getExchangeList(params) {
+      return post("/rent/order/change/battery/list", params);
+    },
+    jsTicket(params) {
+      return post("/jsapi/ticket", params);
+    },
+    getBatteryByScan(params) {
+      return post("/rent/order/change/scan", params);
     }
   };
   const routes = {
@@ -35,6 +47,14 @@ export default function({ post, get }) {
             component: "./detail/settle.vue",
             meta: {
               title: "异常订单结算",
+              permission: "rent:order:stop"
+            }
+          },
+          {
+            path: "exchange",
+            component: "./detail/exchange.vue",
+            meta: {
+              title: "设备替换",
               permission: "rent:order:stop"
             }
           }

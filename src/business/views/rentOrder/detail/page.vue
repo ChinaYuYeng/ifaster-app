@@ -163,6 +163,17 @@
           <span>电池编号:</span>
           <span>{{ routeData.batteryNo }}</span>
         </div>
+        <div class="content__item" v-if="$route.fullPath === '/rentOrder/detail' && routeData.status == 1">
+          <span>操作:</span>
+          <span>
+            <van-button
+              text="替换设备"
+              size="mini"
+              type="primary"
+              @click="routerTo({ name: '/rentOrder/detail/exchange', params: routeData })"
+            ></van-button>
+          </span>
+        </div>
       </van-collapse-item>
     </van-collapse>
   </AppLayout>
