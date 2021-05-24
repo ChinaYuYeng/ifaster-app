@@ -19,6 +19,8 @@ import HeaderNav from "./components/headerNav";
 import BodyContent from "./components/bodyContent";
 import FooterMenu from "./components/footerMenu";
 import Search from "./components/search";
+import vhCheck from "@/assets/lib/vh-check";
+vhCheck();
 export default {
   props: {
     showHeader: {
@@ -97,8 +99,8 @@ export default {
 .layout__main {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  overflow: hidden;
+  height: calc(100vh - var(--vh-offset));
+  overflow-y: hidden;
   position: relative;
 }
 </style>
