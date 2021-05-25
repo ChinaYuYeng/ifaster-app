@@ -1,4 +1,5 @@
 const path = require("path");
+const WebpackBundleAnalyzer = require("webpack-bundle-analyzer");
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
@@ -24,6 +25,9 @@ module.exports = {
         options.hotReload = true;
         return options;
       });
+    if (process.env.use_analyzer) {
+      config.plugin("webpack-bundle-analyzer").use(WebpackBundleAnalyzer.BundleAnalyzerPlugin);
+    }
   },
   css: {
     loaderOptions: {
