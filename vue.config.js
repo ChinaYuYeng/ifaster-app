@@ -1,5 +1,6 @@
 const path = require("path");
 const WebpackBundleAnalyzer = require("webpack-bundle-analyzer");
+const CompressionPlugin = require("compression-webpack-plugin");
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
@@ -27,6 +28,25 @@ module.exports = {
       });
     if (process.env.use_analyzer) {
       config.plugin("webpack-bundle-analyzer").use(WebpackBundleAnalyzer.BundleAnalyzerPlugin);
+    }
+
+    if (process.env.NODE_ENV === "production") {
+      config.plugin("CompressionPlugin").use(CompressionPlugin, [
+        {
+          // 压缩后的文件名
+          filename: "[path].gz[query]",
+          //压缩算法
+          algorithm: "gzip",
+          //匹配文件
+          test: /\.js$|\.css$|\.html$/,
+          // 对超过10k的数据压缩
+          threshold: 10240,
+          // 压缩率小于1才会压缩
+          minRatio: 0.8,
+          //删除原始文件只保留压缩后的文件
+          deleteOriginalAssets: false
+        }
+      ]);
     }
   },
   css: {

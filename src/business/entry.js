@@ -2,6 +2,7 @@
  entry.js 和 views文件夹（内部文件除外）被引用了,不能删除*/
 import Vue from "vue";
 import { loadRouters } from "@/router";
+//import "@/assets/UI/vant"; // 使用这种方式引入某种ui，同时引入这个ui下一些封装好的组件
 import Vant from "vant";
 import "vant/lib/index.less";
 import "@@/style/main.less";
